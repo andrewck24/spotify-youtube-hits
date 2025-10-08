@@ -56,7 +56,7 @@
   - 建立 `tsconfig.json`（strict mode, paths alias `@/*` → `src/*`）
   - 設定 target: ES2020, module: ESNext, jsx: react-jsx
 
-- [ ] **T004** [P] 配置 ESLint + typescript-eslint
+- [x] **T004** [P] 配置 ESLint + typescript-eslint
 
   - 建立 `eslint.config.js`（ESLint 9.x flat config）
   - 安裝 @typescript-eslint/parser, @typescript-eslint/eslint-plugin
