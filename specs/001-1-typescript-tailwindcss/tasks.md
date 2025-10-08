@@ -174,7 +174,7 @@
   - 實作 `isTokenValid()`, `refreshToken()` 方法
   - 匯出 singleton instance: `export const spotifyApi = new SpotifyApiService()`
 
-- [ ] **T021** 實作資料載入 Service（骨架）
+- [x] **T021** 實作資料載入 Service（骨架）
 
   - 建立 `src/services/data-loader.ts`
   - 實作 `loadTracksDatabase()` 函數（fetch `/data/tracks.json`）
