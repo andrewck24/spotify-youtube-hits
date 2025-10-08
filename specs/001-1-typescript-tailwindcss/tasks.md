@@ -130,37 +130,37 @@
   - 配置 `configureStore`，設定 middleware（處理 Fuse.js 不可序列化）
   - 匯出 `RootState`, `AppDispatch`, `useAppDispatch`, `useAppSelector` typed hooks
 
-- [ ] **T012** [P] 建立 Artist Redux Slice 骨架
+- [ ] **T014** [P] 建立 Artist Redux Slice 骨架
 
   - 建立 `src/features/artist/artist-slice.ts`（初始 state、reducers 骨架）
   - 建立 `src/features/artist/artist-types.ts`（ArtistState 介面）
   - 建立 `src/features/artist/artist-selectors.ts`（selectCurrentArtist, selectArtistLoading）
 
-- [ ] **T013** [P] 建立 Track Redux Slice 骨架
+- [ ] **T015** [P] 建立 Track Redux Slice 骨架
 
   - 建立 `src/features/track/track-slice.ts`
   - 建立 `src/features/track/track-types.ts`（TrackState 介面）
   - 建立 `src/features/track/track-selectors.ts`（selectCurrentTrack, selectTrackLoading）
 
-- [ ] **T014** [P] 建立 Search Redux Slice 骨架
+- [ ] **T016** [P] 建立 Search Redux Slice 骨架
 
   - 建立 `src/features/search/search-slice.ts`
   - 建立 `src/features/search/search-types.ts`（SearchState 介面，包含 fuseInstance）
   - 建立 `src/features/search/search-selectors.ts`（selectSearchResults, selectSearchQuery）
 
-- [ ] **T015** [P] 建立 Data Redux Slice 骨架
+- [ ] **T017** [P] 建立 Data Redux Slice 骨架
 
   - 建立 `src/features/data/data-slice.ts`（管理資料載入狀態）
   - 建立 `src/features/data/data-types.ts`（DataState 介面）
   - 建立 `src/features/data/data-selectors.ts`（selectDataLoaded, selectDataLoading, selectTracks）
 
-- [ ] **T016** [P] 建立 Spotify Redux Slice 骨架
+- [ ] **T018** [P] 建立 Spotify Redux Slice 骨架
 
   - 建立 `src/features/spotify/spotify-slice.ts`（管理 Spotify API token）
   - 建立 `src/features/spotify/spotify-types.ts`（SpotifyState 介面）
   - 建立 `src/features/spotify/spotify-selectors.ts`（selectSpotifyToken, selectTokenValid）
 
-- [ ] **T017** 整合所有 Redux Slices 至 Store
+- [ ] **T019** 整合所有 Redux Slices 至 Store
 
   - 在 `src/app/store.ts` 中匯入所有 reducers
   - 配置 reducer 組合：`{ artist, track, search, data, spotify }`
@@ -240,21 +240,21 @@
 
 #### T025-T030: 資料載入與搜尋引擎 (US1 核心依賴)
 
-- [ ] **T025** [US1] 實作資料載入邏輯（Data Slice）
+- [ ] **T027** [US1] 實作資料載入邏輯（Data Slice）
 
   - 在 `src/features/data/data-slice.ts` 新增 `loadLocalData` async thunk
   - 呼叫 `data-loader.ts` 的 `loadTracksDatabase()`
   - 載入成功後儲存至 Redux state (`tracks` array)
   - 處理載入失敗（顯示錯誤）
 
-- [ ] **T026** [US1] 整合 sessionStorage 快取至資料載入
+- [ ] **T028** [US1] 整合 sessionStorage 快取至資料載入
 
   - 在 `loadLocalData` thunk 中，先檢查 sessionStorage
   - 若快取存在且版本正確，直接使用快取
   - 若快取不存在或版本過期，下載並快取至 sessionStorage
   - 更新 Data Slice 的 loading 狀態
 
-- [ ] **T027** [US1] 實作 Fuse.js 搜尋引擎服務
+- [ ] **T029** [US1] 實作 Fuse.js 搜尋引擎服務
 
   - 建立 `src/features/search/search-service.ts`
   - 實作 `createSearchIndex(tracks)` 函數（回傳 Fuse instance）
@@ -264,21 +264,21 @@
     - `includeScore: true`
   - 實作 `searchArtists(fuse, query, limit = 12)` 函數
 
-- [ ] **T028** [US1] 整合搜尋引擎至 Search Slice
+- [ ] **T030** [US1] 整合搜尋引擎至 Search Slice
 
   - 在 `src/features/search/search-slice.ts` 新增 `initializeSearch` reducer
   - 接收 Fuse instance 並儲存至 state（標記為不可序列化）
   - 新增 `performSearch` reducer（接收 query，呼叫 `searchArtists`，更新 results）
   - 新增 `clearSearch` reducer
 
-- [ ] **T029** [US1] 實作資料載入 Hook
+- [ ] **T031** [US1] 實作資料載入 Hook
 
   - 建立 `src/hooks/use-data-loader.ts`
   - 在 component mount 時 dispatch `loadLocalData`
   - 資料載入成功後 dispatch `initializeSearch`（建立 Fuse index）
   - 回傳 `{ dataLoaded, dataLoading, error }`
 
-- [ ] **T030** [US1] 建立 Loading 畫面元件
+- [ ] **T032** [US1] 建立 Loading 畫面元件
   - 建立 `src/components/layout/loading-fallback.tsx`
   - 顯示 Spinner + 載入訊息（"載入音樂資料庫..."）
   - 顯示 Dashboard Skeleton 預覽（根據 research.md 設計）
@@ -286,7 +286,7 @@
 
 #### T031-T036: Spotify API 整合 (US1 即時資料)
 
-- [ ] **T031** [P] [US1] 實作 Spotify API - getArtist
+- [ ] **T033** [P] [US1] 實作 Spotify API - getArtist
 
   - 在 `src/services/spotify-api.ts` 實作 `getArtist(artistId)` 方法
   - 呼叫 `GET https://api.spotify.com/v1/artists/{id}`
@@ -294,33 +294,33 @@
   - 處理錯誤（401, 429, 404）→ 拋出 `SpotifyApiError`
   - 驗證回應（使用 type guard `isValidSpotifyArtist`）
 
-- [ ] **T032** [P] [US1] 實作 Spotify API - getTrack
+- [ ] **T034** [P] [US1] 實作 Spotify API - getTrack
 
   - 在 `src/services/spotify-api.ts` 實作 `getTrack(trackId)` 方法
   - 呼叫 `GET https://api.spotify.com/v1/tracks/{id}`
   - 驗證回應（使用 `isValidSpotifyTrack`）
 
-- [ ] **T033** [P] [US1] 實作 Spotify API - getAudioFeatures
+- [ ] **T035** [P] [US1] 實作 Spotify API - getAudioFeatures
 
   - 在 `src/services/spotify-api.ts` 實作 `getAudioFeatures(trackId)` 方法
   - 呼叫 `GET https://api.spotify.com/v1/audio-features/{id}`
   - 驗證回應（使用 `isValidAudioFeatures`）
 
-- [ ] **T034** [US1] 整合 getArtist 至 Artist Slice
+- [ ] **T036** [US1] 整合 getArtist 至 Artist Slice
 
   - 在 `src/features/artist/artist-slice.ts` 新增 `fetchArtist` async thunk
   - 呼叫 `spotifyApi.getArtist(artistId)`
   - 成功後更新 state (`currentArtist`)
   - 處理錯誤（儲存 error message）
 
-- [ ] **T035** [US1] 整合 getTrack 至 Track Slice
+- [ ] **T037** [US1] 整合 getTrack 至 Track Slice
 
   - 在 `src/features/track/track-slice.ts` 新增 `fetchTrackDetails` async thunk
   - 呼叫 `spotifyApi.getTrack(trackId)`
   - 提取專輯資訊（album name, cover URL, release date）
   - 更新 `currentTrack.album` 欄位
 
-- [ ] **T036** [US1] 整合 getAudioFeatures 至 Track Slice
+- [ ] **T038** [US1] 整合 getAudioFeatures 至 Track Slice
   - 在 `src/features/track/track-slice.ts` 新增 `fetchAudioFeatures` async thunk
   - 呼叫 `spotifyApi.getAudioFeatures(trackId)`
   - 更新 `currentTrack.features` 欄位
@@ -328,7 +328,7 @@
 
 #### T037-T042: 搜尋 UI 元件
 
-- [ ] **T037** [P] [US1] 建立搜尋列元件
+- [ ] **T039** [P] [US1] 建立搜尋列元件
 
   - 建立 `src/components/search/search-bar.tsx`
   - 使用 shadcn/ui Input 元件
@@ -336,7 +336,7 @@
   - dispatch `performSearch` action
   - 顯示搜尋 icon（magnifying glass）
 
-- [ ] **T038** [P] [US1] 建立搜尋結果元件
+- [ ] **T040** [P] [US1] 建立搜尋結果元件
 
   - 建立 `src/components/search/search-results.tsx`
   - 顯示藝人清單（最多 12 筆）
@@ -344,42 +344,42 @@
   - 點擊藝人 → dispatch `setCurrentArtist` + navigate
   - 無結果時顯示「查無相關藝人」
 
-- [ ] **T039** [US1] 實作搜尋 Hook
+- [ ] **T041** [US1] 實作搜尋 Hook
 
   - 建立 `src/hooks/use-search.ts`
   - 整合 `useAppSelector(selectSearchResults)`, `useAppDispatch`
   - 提供 `search(query)` 函數
   - 回傳 `{ results, searching, search, clearSearch }`
 
-- [ ] **T040** [US1] 建立 Header 布局元件
+- [ ] **T042** [US1] 建立 Header 布局元件
 
   - 建立 `src/components/layout/header.tsx`
   - 包含應用 Logo（"Spotify YouTube Hits"）
   - 嵌入 `SearchBar` 元件
   - 使用 Spotify 主題（深黑背景 #121212）
 
-- [ ] **T041** [US1] 建立 Dashboard 布局元件
+- [ ] **T043** [US1] 建立 Dashboard 布局元件
 
   - 建立 `src/components/layout/dashboard-layout.tsx`
   - 結構：`<Header />` + 主內容區域
   - 主內容區域使用 CSS Grid（響應式，稍後 US3 擴展）
   - 目前桌面版：左側 Sidebar（40%），右側 Main（60%）
 
-- [ ] **T042** [US1] 建立 Sidebar 布局元件
+- [ ] **T044** [US1] 建立 Sidebar 布局元件
   - 建立 `src/components/layout/sidebar.tsx`
   - 結構：上方藝人資訊 + 下方歌曲清單
   - 使用 Card 元件包裝
 
 #### T043-T048: 藝人與歌曲 UI 元件
 
-- [ ] **T043** [P] [US1] 建立藝人資料卡元件
+- [ ] **T045** [P] [US1] 建立藝人資料卡元件
 
   - 建立 `src/components/artist/artist-profile.tsx`
   - 接收 `SpotifyArtist` props
   - 顯示：藝人頭像（Avatar）、名稱（h2）、追蹤人數、人氣度（progress bar）
   - 使用 shadcn/ui Card
 
-- [ ] **T044** [P] [US1] 建立歌曲清單元件
+- [ ] **T046** [P] [US1] 建立歌曲清單元件
 
   - 建立 `src/components/track/track-list.tsx`
   - 接收 `tracks[]` props（來自本地資料，filtered by artistId）
@@ -387,14 +387,14 @@
   - 點擊歌曲 → dispatch `setCurrentTrack` + fetch API data
   - 使用虛擬滾動（若歌曲 > 50 首）
 
-- [ ] **T045** [US1] 建立歌曲詳情卡元件
+- [ ] **T047** [US1] 建立歌曲詳情卡元件
 
   - 建立 `src/components/track/track-detail.tsx`
   - 接收 `Track` props（包含 album, features）
   - 顯示：歌曲封面（album.coverUrl）、名稱、藝人、專輯、發行年份、時長
   - 使用 Grid 布局（左側封面、右側資訊）
 
-- [ ] **T046** [P] [US1] 建立人氣圖表元件
+- [ ] **T048** [P] [US1] 建立人氣圖表元件
 
   - 建立 `src/components/track/popularity-chart.tsx`
   - 使用 Recharts BarChart
@@ -402,7 +402,7 @@
   - Y 軸：數值（使用 log scale）
   - 使用 shadcn/ui Chart wrapper + Spotify 配色
 
-- [ ] **T047** [P] [US1] 建立音樂特徵圖表元件
+- [ ] **T049** [P] [US1] 建立音樂特徵圖表元件
 
   - 建立 `src/components/track/feature-chart.tsx`
   - 使用 Recharts RadarChart
@@ -410,14 +410,14 @@
   - 所有數值 normalized to 0-1
   - 使用 Spotify Green 填充
 
-- [ ] **T048** [US1] 實作 Artist Hook
+- [ ] **T050** [US1] 實作 Artist Hook
 
   - 建立 `src/hooks/use-artist.ts`
   - 接收 `artistId`
   - dispatch `fetchArtist` thunk
   - 回傳 `{ artist, loading, error }`
 
-- [ ] **T049** [US1] 實作 Track Hook
+- [ ] **T051** [US1] 實作 Track Hook
   - 建立 `src/hooks/use-track.ts`
   - 接收 `trackId`
   - 平行 dispatch `fetchTrackDetails` 與 `fetchAudioFeatures`
@@ -425,7 +425,7 @@
 
 #### T050-T052: 整合與路由
 
-- [ ] **T050** [US1] 整合所有元件至 App.tsx
+- [ ] **T052** [US1] 整合所有元件至 App.tsx
 
   - 更新 `src/app/App.tsx`：
     - 使用 `useDataLoader` Hook（顯示 LoadingFallback）
@@ -434,13 +434,13 @@
     - Main 包含 `<TrackDetail>` + Charts
   - 使用 Redux selectors 取得 currentArtist, currentTrack
 
-- [ ] **T051** [US1] 實作狀態管理邏輯
+- [ ] **T053** [US1] 實作狀態管理邏輯
 
   - 搜尋結果點擊 → 更新 Redux `currentArtist` → 觸發 `fetchArtist` → 顯示藝人資訊
   - 藝人確認後 → 過濾歌曲（從本地資料）→ 顯示 TrackList
   - 歌曲點擊 → 更新 Redux `currentTrack` → 平行 fetch track details + audio features → 顯示圖表
 
-- [ ] **T052** [US1] 處理錯誤情境
+- [ ] **T054** [US1] 處理錯誤情境
   - Spotify API 401 → 自動 refreshToken
   - Spotify API 429 → 顯示「伺服器忙碌中」Toast
   - Spotify API 404 → 顯示「查無此資料」
@@ -465,19 +465,19 @@
 
 **註**：US2 的基礎設施大部分已在 Phase 2 建立（T020 sessionStorage Service, T026 快取整合），此階段主要是優化與擴展。
 
-- [ ] **T053** [P] [US2] 實作載入進度指示器
+- [ ] **T055** [P] [US2] 實作載入進度指示器
 
   - 在 `src/components/layout/loading-fallback.tsx` 新增進度條
   - 使用 `fetch` 的 `ReadableStream` 追蹤下載進度
   - 顯示百分比（0-100%）+ 當前狀態（"下載中...", "驗證中...", "建立索引..."）
 
-- [ ] **T054** [P] [US2] 實作資料版本管理
+- [ ] **T056** [P] [US2] 實作資料版本管理
 
   - 在 `src/services/storage.ts` 新增 `checkDataVersion()` 方法
   - 比對本地快取版本與遠端版本（從 tracks.json metadata）
   - 若版本不一致，提示使用者「資料已更新，是否重新載入？」（使用 Dialog）
 
-- [ ] **T055** [US2] 優化 sessionStorage 策略
+- [ ] **T057** [US2] 優化 sessionStorage 策略
 
   - 實作降級方案：
     1. 優先使用 sessionStorage
@@ -485,25 +485,25 @@
     3. 若仍失敗，降級為記憶體儲存（Redux state only）
   - 在 console 顯示使用的儲存方式
 
-- [ ] **T056** [US2] 實作離線模式偵測
+- [ ] **T058** [US2] 實作離線模式偵測
 
   - 建立 `src/hooks/use-online-status.ts`
   - 監聽 `window.addEventListener('online')`, `window.addEventListener('offline')`
   - 回傳 `isOnline` boolean
 
-- [ ] **T057** [US2] 整合離線模式 UI 提示
+- [ ] **T059** [US2] 整合離線模式 UI 提示
 
   - 在 `src/components/layout/header.tsx` 新增離線模式指示器
   - 當 `isOnline === false` 時，顯示黃色橫幅「離線模式：Spotify API 功能暫時無法使用」
   - 使用 shadcn/ui Alert 元件
 
-- [ ] **T058** [US2] 優化 Spotify API 呼叫（離線處理）
+- [ ] **T060** [US2] 優化 Spotify API 呼叫（離線處理）
 
   - 在 `src/services/spotify-api.ts` 所有方法中，先檢查 `navigator.onLine`
   - 若離線，不呼叫 API，直接回傳 cached data（若有）或跳過
   - 在 Artist/Track 元件中，顯示「離線模式：部分資訊無法更新」提示
 
-- [ ] **T059** [US2] 實作資料完整性檢查 UI
+- [ ] **T061** [US2] 實作資料完整性檢查 UI
   - 在資料載入後（`loadLocalData` success），呼叫 `checkDataIntegrity()`
   - 若發現問題（重複 ID、metadata 不一致），在 console.warn 顯示
   - 不阻止應用運作，但在開發模式顯示警告 Toast
@@ -527,26 +527,26 @@
 
 **註**：Tailwind CSS 4.x Mobile First 已在 T005 配置，此階段主要是調整元件樣式。
 
-- [ ] **T060** [US3] 優化 DashboardLayout 響應式布局
+- [ ] **T062** [US3] 優化 DashboardLayout 響應式布局
 
   - 在 `src/components/layout/dashboard-layout.tsx` 使用 Tailwind 斷點：
     - Mobile (< 768px): `flex flex-col`（垂直排列）
     - Tablet (768px - 1024px): `grid grid-cols-[40%_60%]`（雙欄）
     - Desktop (> 1024px): `grid grid-cols-[24rem_1fr]`（左側固定寬度）
 
-- [ ] **T061** [P] [US3] 優化 Sidebar 響應式樣式
+- [ ] **T063** [P] [US3] 優化 Sidebar 響應式樣式
 
   - Mobile: 全寬（`w-full`）
   - Tablet/Desktop: 使用 Grid 控制寬度
   - 歌曲清單在 Mobile 顯示前 10 首 + "顯示更多" 按鈕
 
-- [ ] **T062** [P] [US3] 優化 TrackDetail 響應式樣式
+- [ ] **T064** [P] [US3] 優化 TrackDetail 響應式樣式
 
   - Mobile: 封面 + 資訊垂直排列（`flex flex-col`）
   - Tablet/Desktop: 封面 + 資訊水平排列（`flex flex-row`）
   - 封面大小：Mobile (120px), Tablet (180px), Desktop (240px)
 
-- [ ] **T063** [P] [US3] 優化圖表響應式樣式
+- [ ] **T065** [P] [US3] 優化圖表響應式樣式
 
   - 在 `src/components/track/popularity-chart.tsx`:
     - Mobile: 圖表高度 200px，縮小字體
@@ -556,29 +556,29 @@
     - Mobile: Radar 圖半徑 60px
     - Desktop: Radar 圖半徑 100px
 
-- [ ] **T064** [P] [US3] 優化 Header 響應式樣式
+- [ ] **T066** [P] [US3] 優化 Header 響應式樣式
 
   - Mobile: Logo 縮小（text-lg）、搜尋列全寬
   - Desktop: Logo 正常大小（text-2xl）、搜尋列最大寬度 600px
 
-- [ ] **T065** [P] [US3] 優化 SearchBar 響應式行為
+- [ ] **T067** [P] [US3] 優化 SearchBar 響應式行為
 
   - Mobile: 點擊搜尋列時，自動展開（全螢幕 Overlay）
   - Desktop: 保持 inline 行為
   - 使用 shadcn/ui Dialog 元件（Mobile only）
 
-- [ ] **T066** [US3] 實作超大螢幕限制
+- [ ] **T068** [US3] 實作超大螢幕限制
 
   - 在 `src/components/layout/dashboard-layout.tsx` 新增 `max-w-screen-2xl mx-auto`
   - 限制內容最大寬度 1920px，超過則置中顯示
 
-- [ ] **T067** [US3] 處理裝置旋轉
+- [ ] **T069** [US3] 處理裝置旋轉
 
   - 使用 CSS `@media (orientation: landscape)` 與 `@media (orientation: portrait)`
   - 手機橫向時，強制使用 Tablet 布局（雙欄）
   - 使用 `window.addEventListener('orientationchange')` 觸發重新渲染（若需要）
 
-- [ ] **T068** [US3] 測試與微調
+- [ ] **T070** [US3] 測試與微調
   - 使用 Chrome DevTools 測試所有斷點（375px, 768px, 1024px, 1440px, 2560px）
   - 驗證文字可讀性（字體大小 >= 14px）
   - 驗證觸控目標大小（按鈕 >= 44x44px）
@@ -592,55 +592,55 @@
 
 **Purpose**: 跨故事的改進與最終優化
 
-- [ ] **T069** [P] 建立 shadcn/ui Toast 元件
+- [ ] **T071** [P] 建立 shadcn/ui Toast 元件
 
   - 建立 `src/components/ui/toast.tsx` 與 `src/components/ui/toaster.tsx`
   - 整合至 App.tsx（全域 Toast 容器）
   - 用於顯示錯誤、成功訊息
 
-- [ ] **T070** [P] 優化圖表顏色與主題
+- [ ] **T072** [P] 優化圖表顏色與主題
 
   - 檢查所有圖表使用 Spotify 配色（Spotify Green #1DB954 作為 primary）
   - 統一圖表樣式（字體、網格線、tooltips）
 
-- [ ] **T071** 實作鍵盤快捷鍵
+- [ ] **T073** 實作鍵盤快捷鍵
 
   - `/` 鍵聚焦搜尋列
   - `Esc` 鍵清除搜尋
   - `↑↓` 鍵在搜尋結果中導航
 
-- [ ] **T072** 優化效能
+- [ ] **T074** 優化效能
 
   - 檢查 Redux selectors 是否使用 Reselect memoization
   - 檢查 React 元件是否使用 `React.memo`（適用於 TrackListItem）
   - 使用 `React.lazy` + `Suspense` lazy load 圖表元件
 
-- [ ] **T073** 新增 Meta tags
+- [ ] **T075** 新增 Meta tags
 
   - 在 `public/index.html` 新增 Open Graph tags（分享至社群媒體）
   - 新增 favicon（Spotify Green 音符 icon）
   - 新增 viewport meta tag（已在 T001 設定，檢查）
 
-- [ ] **T074** [P] 程式碼品質檢查
+- [ ] **T076** [P] 程式碼品質檢查
 
   - 執行 `npm run type-check` - 確認無 TypeScript 錯誤
   - 執行 `npm run lint` - 修正所有 ESLint 警告
   - 檢查 console.log 移除（保留必要的 error/warn）
 
-- [ ] **T075** [P] 文件更新
+- [ ] **T077** [P] 文件更新
 
   - 更新 `README.md`（加入專案描述、截圖、執行指令）
   - 確認 `quickstart.md` 指令可正常執行
   - 新增 `CONTRIBUTING.md`（若團隊協作）
 
-- [ ] **T076** 建置與部署測試
+- [ ] **T078** 建置與部署測試
 
   - 執行 `npm run build` - 確認建置成功
   - 執行 `npm run preview` - 測試生產版本
   - 檢查 bundle size（主 bundle < 500KB gzip）
   - 部署至 GitHub Pages（或其他靜態主機）
 
-- [ ] **T077** 最終驗收測試
+- [ ] **T079** 最終驗收測試
 
   - 依序執行所有 User Story 的 Independent Test
   - US1: 搜尋 → 藝人 → 歌曲 → 圖表（30 秒內完成）
@@ -648,7 +648,7 @@
   - US3: 三種螢幕尺寸測試（375px, 768px, 1440px）
   - 執行 `quickstart.md` 中的驗證清單
 
-- [ ] **T078** [P] 建立專案英中雙語 README.md
+- [ ] **T080** [P] 建立專案英中雙語 README.md
   - 建立 `README.md`（英文版，專案根目錄）
   - 建立 `README.zh-TW.md`（繁體中文版）
   - 內容包含：
