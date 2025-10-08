@@ -68,7 +68,7 @@
   - 建立 `src/styles/globals.css`（`@import "tailwindcss"` + `@theme` 指令）
   - 設定 Spotify 主題配色（根據 research.md 的 oklch 色彩方案）
 
-- [ ] **T006** [P] 配置 Vite
+- [x] **T006** [P] 配置 Vite
 
   - 建立 `vite.config.ts`
   - 配置 `@vitejs/plugin-react`, `@tailwindcss/vite`
