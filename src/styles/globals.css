@@ -1,0 +1,118 @@
+/* Tailwind CSS 4.x - Single import replaces the old three imports */
+@import "tailwindcss";
+
+/*
+ * shadcn/ui design tokens + Spotify Theme
+ * Using oklch color space for more accurate color rendering and gradients
+ */
+@theme {
+  /* ============================================
+   * Base Colors - Spotify Classic Dark Theme
+   * ============================================ */
+
+  /* Background - Spotify classic deep black */
+  --color-background: oklch(0.13 0 0); /* #121212 */
+  --color-foreground: oklch(0.98 0 0); /* #fafafa white text */
+
+  /* Card background - slightly lighter than background for layering */
+  --color-card: oklch(0.16 0 0); /* #1a1a1a */
+  --color-card-foreground: oklch(0.98 0 0); /* #fafafa */
+
+  /* Popover/Dropdown background */
+  --color-popover: oklch(0.18 0 0); /* #1f1f1f */
+  --color-popover-foreground: oklch(0.98 0 0); /* #fafafa */
+
+  /* ============================================
+   * Spotify Green - Primary Brand Color
+   * ============================================ */
+
+  /* Primary - Spotify Green (#1DB954) */
+  --color-primary: oklch(0.65 0.18 150); /* Spotify Green */
+  --color-primary-foreground: oklch(0.13 0 0); /* Black text (high contrast) */
+
+  /* ============================================
+   * Secondary Colors
+   * ============================================ */
+
+  /* Secondary - light gray for secondary buttons */
+  --color-secondary: oklch(0.25 0 0); /* #282828 dark gray */
+  --color-secondary-foreground: oklch(0.98 0 0); /* white text */
+
+  /* Muted - soft gray for disabled states or backgrounds */
+  --color-muted: oklch(0.22 0 0); /* #242424 */
+  --color-muted-foreground: oklch(0.6 0 0); /* #a0a0a0 medium gray text */
+
+  /* Accent - emphasis color for hover states */
+  --color-accent: oklch(0.2 0 0); /* #202020 */
+  --color-accent-foreground: oklch(0.98 0 0); /* white text */
+
+  /* ============================================
+   * Functional Colors
+   * ============================================ */
+
+  /* Destructive - error/delete actions (using Spotify red tone) */
+  --color-destructive: oklch(0.55 0.22 25); /* #e22134 red */
+  --color-destructive-foreground: oklch(0.98 0 0); /* white text */
+
+  /* ============================================
+   * Borders & Inputs
+   * ============================================ */
+
+  /* Border - dark gray border */
+  --color-border: oklch(0.25 0 0); /* #282828 */
+
+  /* Input - input field background */
+  --color-input: oklch(0.25 0 0); /* #282828 */
+
+  /* Ring - focus state outline (using Spotify Green) */
+  --color-ring: oklch(0.65 0.18 150); /* Spotify Green */
+
+  /* ============================================
+   * Chart Colors - Spotify Color Palette
+   * ============================================ */
+
+  /* Chart 1 - Spotify Green (primary) */
+  --color-chart-1: oklch(0.65 0.18 150); /* #1DB954 */
+
+  /* Chart 2 - Cyan-green (secondary) */
+  --color-chart-2: oklch(0.6 0.15 200); /* #1ed760 */
+
+  /* Chart 3 - Yellow-green (tertiary) */
+  --color-chart-3: oklch(0.7 0.15 120); /* #c4f564 */
+
+  /* Chart 4 - Cyan (contrast) */
+  --color-chart-4: oklch(0.65 0.12 230); /* #2e77d0 */
+
+  /* Chart 5 - Purple (emphasis) */
+  --color-chart-5: oklch(0.55 0.18 300); /* #9d4edd */
+
+  /* ============================================
+   * Typography
+   * ============================================ */
+
+  /* Font Family - using system fonts for optimal performance */
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* ============================================
+   * Radius - Border Radius Values
+   * ============================================ */
+
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+}
+
+/* ============================================
+ * Global Styles
+ * ============================================ */
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply bg-background text-foreground;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
