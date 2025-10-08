@@ -100,7 +100,7 @@
   - 複製 `specs/001-1-typescript-tailwindcss/contracts/spotify-api.ts` 至 `src/types/spotify.ts`
   - 複製 `specs/001-1-typescript-tailwindcss/contracts/tracks-data-schema.ts` 至 `src/types/data-schema.ts`
 
-- [ ] **T011** [P] 配置測試框架
+- [x] **T011** [P] 配置測試框架
 
   - 安裝 Vitest + @vitest/ui (單元測試 & 整合測試)
   - 安裝 @testing-library/react + @testing-library/user-event (React 元件測試)
