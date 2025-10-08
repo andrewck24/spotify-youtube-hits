@@ -136,7 +136,7 @@
   - 建立 `src/features/artist/artist-types.ts`（ArtistState 介面）
   - 建立 `src/features/artist/artist-selectors.ts`（selectCurrentArtist, selectArtistLoading）
 
-- [ ] **T015** [P] 建立 Track Redux Slice 骨架
+- [x] **T015** [P] 建立 Track Redux Slice 骨架
 
   - 建立 `src/features/track/track-slice.ts`
   - 建立 `src/features/track/track-types.ts`（TrackState 介面）
