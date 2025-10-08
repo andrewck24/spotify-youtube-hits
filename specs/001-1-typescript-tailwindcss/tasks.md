@@ -46,7 +46,7 @@
   - 建立 `src/app/`, `src/features/`, `src/components/`, `src/services/`, `src/hooks/`, `src/lib/`, `src/types/`, `src/styles/`
   - 建立 `public/data/` 目錄
 
-- [ ] **T002** 初始化 TypeScript + React + Vite 專案
+- [x] **T002** 初始化 TypeScript + React + Vite 專案
 
   - 安裝 React 19.2.0, TypeScript 5.x, Vite 7.x
   - 建立 `package.json` 與基本腳本（dev, build, preview, type-check, lint）
