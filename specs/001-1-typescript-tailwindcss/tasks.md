@@ -166,7 +166,7 @@
   - 配置 reducer 組合：`{ artist, track, search, data, spotify }`
   - 驗證 store 可正常初始化
 
-- [ ] **T020** 實作 Spotify API Service（骨架）
+- [x] **T020** 實作 Spotify API Service（骨架）
 
   - 建立 `src/services/spotify-api.ts`
   - 實作 `SpotifyApiService` class（實作 `ISpotifyApiService` 介面）
