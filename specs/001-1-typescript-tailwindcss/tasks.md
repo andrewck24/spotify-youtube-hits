@@ -124,7 +124,7 @@
 
 **⚠️ CRITICAL**: 此階段完成前，無法開始任何使用者故事實作
 
-- [ ] **T013** 建立 Redux Store 配置
+- [x] **T013** 建立 Redux Store 配置
 
   - 建立 `src/app/store.ts`
   - 配置 `configureStore`，設定 middleware（處理 Fuse.js 不可序列化）
