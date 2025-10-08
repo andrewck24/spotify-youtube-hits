@@ -148,7 +148,7 @@
   - 建立 `src/features/search/search-types.ts`（SearchState 介面，包含 fuseInstance）
   - 建立 `src/features/search/search-selectors.ts`（selectSearchResults, selectSearchQuery）
 
-- [ ] **T017** [P] 建立 Data Redux Slice 骨架
+- [x] **T017** [P] 建立 Data Redux Slice 骨架
 
   - 建立 `src/features/data/data-slice.ts`（管理資料載入狀態）
   - 建立 `src/features/data/data-types.ts`（DataState 介面）
