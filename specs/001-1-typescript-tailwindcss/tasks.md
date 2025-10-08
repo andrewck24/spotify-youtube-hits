@@ -81,7 +81,7 @@
   - 建立 `src/lib/utils.ts`（cn helper function）
   - 建立 `src/components/ui/` 目錄
 
-- [ ] **T008** [P] 安裝核心依賴
+- [x] **T008** [P] 安裝核心依賴
 
   - Redux Toolkit 2.x: `@reduxjs/toolkit`, `react-redux`
   - Recharts 3.x: `recharts`
