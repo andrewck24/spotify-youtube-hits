@@ -75,7 +75,7 @@
   - 設定路徑別名 `@` → `src`
   - 配置 build.rollupOptions 用於 code splitting
 
-- [ ] **T007** [P] 安裝 shadcn/ui 基礎設定
+- [x] **T007** [P] 安裝 shadcn/ui 基礎設定
 
   - 安裝 `@radix-ui/react-*` 相關套件
   - 建立 `src/lib/utils.ts`（cn helper function）
