@@ -62,7 +62,7 @@
   - 安裝 @typescript-eslint/parser, @typescript-eslint/eslint-plugin
   - 設定規則：no-unused-vars, no-console (warn), consistent-return
 
-- [ ] **T005** [P] 配置 Tailwind CSS 4.x
+- [x] **T005** [P] 配置 Tailwind CSS 4.x
 
   - 安裝 `tailwindcss@next`, `@tailwindcss/vite`
   - 建立 `src/styles/globals.css`（`@import "tailwindcss"` + `@theme` 指令）
