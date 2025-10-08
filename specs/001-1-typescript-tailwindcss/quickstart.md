@@ -25,19 +25,19 @@
 
 ### 核心技術棧
 
-| 類別           | 技術                              | 版本    |
-| -------------- | --------------------------------- | ------- |
-| 語言           | TypeScript                        | 5.x     |
-| 框架           | React                             | 19.2.0  |
-| 建置工具       | Vite                              | 7.x     |
-| 樣式           | Tailwind CSS                      | 4.x     |
-| 元件庫         | shadcn/ui (Radix UI)              | latest  |
-| 狀態管理       | Redux Toolkit                     | 2.x     |
-| 圖表           | Recharts                          | 3.x     |
-| 搜尋引擎       | Fuse.js                           | 7.x     |
-| 型別驗證       | Zod                               | latest  |
-| 程式碼檢查     | ESLint + typescript-eslint        | 9.x     |
-| 格式化         | Prettier (via ESLint integration) | latest  |
+| 類別       | 技術                              | 版本   |
+| ---------- | --------------------------------- | ------ |
+| 語言       | TypeScript                        | 5.x    |
+| 框架       | React                             | 19.2.0 |
+| 建置工具   | Vite                              | 7.x    |
+| 樣式       | Tailwind CSS                      | 4.x    |
+| 元件庫     | shadcn/ui (Radix UI)              | latest |
+| 狀態管理   | Redux Toolkit                     | 2.x    |
+| 圖表       | Recharts                          | 3.x    |
+| 搜尋引擎   | Fuse.js                           | 7.x    |
+| 型別驗證   | Zod                               | latest |
+| 程式碼檢查 | ESLint + typescript-eslint        | 9.x    |
+| 格式化     | Prettier (via ESLint integration) | latest |
 
 ### 設計原則
 
@@ -129,6 +129,7 @@ VITE_DEBUG=false
 ```
 
 ⚠️ **安全注意事項**：
+
 - `.env.local` 已加入 `.gitignore`，不會被提交
 - **絕對不要**將 API 金鑰提交至 Git
 - 在生產環境使用環境變數管理工具（如 GitHub Secrets）
@@ -384,56 +385,56 @@ spotify-youtube-hits/
 範例：`src/features/artist/artist-slice.ts`
 
 ```typescript
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import type { SpotifyArtist } from "@contracts/spotify-api"
-import { spotifyApi } from "@/services/spotify-api"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import type { SpotifyArtist } from "@contracts/spotify-api";
+import { spotifyApi } from "@/services/spotify-api";
 
 interface ArtistState {
-  currentArtist: SpotifyArtist | null
-  loading: boolean
-  error: string | null
+  currentArtist: SpotifyArtist | null;
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: ArtistState = {
   currentArtist: null,
   loading: false,
   error: null,
-}
+};
 
 export const fetchArtist = createAsyncThunk(
   "artist/fetchArtist",
   async (artistId: string) => {
-    return await spotifyApi.getArtist(artistId)
+    return await spotifyApi.getArtist(artistId);
   }
-)
+);
 
 const artistSlice = createSlice({
   name: "artist",
   initialState,
   reducers: {
     clearArtist: (state) => {
-      state.currentArtist = null
+      state.currentArtist = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchArtist.pending, (state) => {
-        state.loading = true
-        state.error = null
+        state.loading = true;
+        state.error = null;
       })
       .addCase(fetchArtist.fulfilled, (state, action) => {
-        state.loading = false
-        state.currentArtist = action.payload
+        state.loading = false;
+        state.currentArtist = action.payload;
       })
       .addCase(fetchArtist.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.error.message || "Failed to fetch artist"
-      })
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch artist";
+      });
   },
-})
+});
 
-export const { clearArtist } = artistSlice.actions
-export default artistSlice.reducer
+export const { clearArtist } = artistSlice.actions;
+export default artistSlice.reducer;
 ```
 
 #### `src/components/` - UI 元件
@@ -447,12 +448,12 @@ export default artistSlice.reducer
 範例：`src/components/artist/artist-profile.tsx`
 
 ```tsx
-import { Card } from "@/components/ui/card"
-import { Avatar } from "@/components/ui/avatar"
-import type { SpotifyArtist } from "@contracts/spotify-api"
+import { Card } from "@/components/ui/card";
+import { Avatar } from "@/components/ui/avatar";
+import type { SpotifyArtist } from "@contracts/spotify-api";
 
 interface ArtistProfileProps {
-  artist: SpotifyArtist
+  artist: SpotifyArtist;
 }
 
 export function ArtistProfile({ artist }: ArtistProfileProps) {
@@ -468,7 +469,7 @@ export function ArtistProfile({ artist }: ArtistProfileProps) {
         </div>
       </div>
     </Card>
-  )
+  );
 }
 ```
 
@@ -479,10 +480,10 @@ export function ArtistProfile({ artist }: ArtistProfileProps) {
 範例：`src/services/spotify-api.ts`
 
 ```typescript
-import type { ISpotifyApiService, SpotifyArtist } from "@contracts/spotify-api"
+import type { ISpotifyApiService, SpotifyArtist } from "@contracts/spotify-api";
 
 class SpotifyApiService implements ISpotifyApiService {
-  private token: string | null = null
+  private token: string | null = null;
 
   async initialize(): Promise<void> {
     // 實作 Client Credentials Flow
@@ -495,7 +496,7 @@ class SpotifyApiService implements ISpotifyApiService {
   // ... 其他方法實作
 }
 
-export const spotifyApi = new SpotifyApiService()
+export const spotifyApi = new SpotifyApiService();
 ```
 
 #### `src/hooks/` - Custom Hooks
@@ -505,23 +506,26 @@ export const spotifyApi = new SpotifyApiService()
 範例：`src/hooks/use-artist.ts`
 
 ```typescript
-import { useEffect } from "react"
-import { useAppDispatch, useAppSelector } from "@/app/store"
-import { fetchArtist } from "@/features/artist/artist-slice"
-import { selectCurrentArtist, selectArtistLoading } from "@/features/artist/artist-selectors"
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import { fetchArtist } from "@/features/artist/artist-slice";
+import {
+  selectCurrentArtist,
+  selectArtistLoading,
+} from "@/features/artist/artist-selectors";
 
 export function useArtist(artistId: string | null) {
-  const dispatch = useAppDispatch()
-  const artist = useAppSelector(selectCurrentArtist)
-  const loading = useAppSelector(selectArtistLoading)
+  const dispatch = useAppDispatch();
+  const artist = useAppSelector(selectCurrentArtist);
+  const loading = useAppSelector(selectArtistLoading);
 
   useEffect(() => {
     if (artistId) {
-      dispatch(fetchArtist(artistId))
+      dispatch(fetchArtist(artistId));
     }
-  }, [artistId, dispatch])
+  }, [artistId, dispatch]);
 
-  return { artist, loading }
+  return { artist, loading };
 }
 ```
 

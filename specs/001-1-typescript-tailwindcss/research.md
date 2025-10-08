@@ -739,9 +739,9 @@ export default defineConfig({
 
 ---
 
-## Decision 4: 測試框架與策略
+## Decision 7: 測試框架與策略
 
-### 需求與目標
+### 7.1. 需求與目標
 
 根據 spec.md 功能需求 (FR-011, FR-012, FR-013) 與成功標準 (SC-007, SC-008)：
 
@@ -749,7 +749,7 @@ export default defineConfig({
 - **整合測試**：驗證資料流程（API 整合、資料載入、搜尋引擎）
 - **E2E 測試**：覆蓋 3 個主要使用者故事（搜尋藝人、離線快取、響應式設計）
 
-### 選擇方案：Vitest + Testing Library + Playwright
+### 7.2. 選擇方案：Vitest + Testing Library + Playwright
 
 #### 1. **單元測試 & 整合測試：Vitest**
 
@@ -765,9 +765,9 @@ export default defineConfig({
 **配置範例** (`vitest.config.ts`):
 
 ```typescript
-import { defineConfig } from "vitest/config"
-import react from "@vitejs/plugin-react"
-import path from "path"
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
   plugins: [react()],
@@ -778,12 +778,7 @@ export default defineConfig({
     coverage: {
       provider: "v8", // v8 比 istanbul 快
       reporter: ["text", "json", "html"],
-      exclude: [
-        "node_modules/",
-        "tests/",
-        "**/*.config.ts",
-        "src/main.tsx",
-      ],
+      exclude: ["node_modules/", "tests/", "**/*.config.ts", "src/main.tsx"],
       thresholds: {
         lines: 80, // 最低 80% 行覆蓋率
         functions: 80,
@@ -797,34 +792,34 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-})
+});
 ```
 
 **測試範例** (`src/lib/formatters.test.ts`):
 
 ```typescript
-import { describe, it, expect } from "vitest"
-import { formatNumber, formatDuration, formatDate } from "./formatters"
+import { describe, it, expect } from "vitest";
+import { formatNumber, formatDuration, formatDate } from "./formatters";
 
 describe("formatters", () => {
   describe("formatNumber", () => {
     it("should format numbers with thousands separator", () => {
-      expect(formatNumber(1000000)).toBe("1,000,000")
-      expect(formatNumber(500)).toBe("500")
-    })
+      expect(formatNumber(1000000)).toBe("1,000,000");
+      expect(formatNumber(500)).toBe("500");
+    });
 
     it("should handle zero", () => {
-      expect(formatNumber(0)).toBe("0")
-    })
-  })
+      expect(formatNumber(0)).toBe("0");
+    });
+  });
 
   describe("formatDuration", () => {
     it("should format duration in mm:ss format", () => {
-      expect(formatDuration(225000)).toBe("3:45")
-      expect(formatDuration(60000)).toBe("1:00")
-    })
-  })
-})
+      expect(formatDuration(225000)).toBe("3:45");
+      expect(formatDuration(60000)).toBe("1:00");
+    });
+  });
+});
 ```
 
 #### 2. **React 元件測試：Testing Library**
@@ -839,63 +834,66 @@ describe("formatters", () => {
 **測試範例** (`src/components/search/search-bar.test.tsx`):
 
 ```typescript
-import { describe, it, expect, vi } from "vitest"
-import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import { SearchBar } from "./search-bar"
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { SearchBar } from "./search-bar";
 
 describe("SearchBar", () => {
   it("should call onSearch when user types", async () => {
-    const mockOnSearch = vi.fn()
-    const user = userEvent.setup()
+    const mockOnSearch = vi.fn();
+    const user = userEvent.setup();
 
-    render(<SearchBar onSearch={mockOnSearch} />)
+    render(<SearchBar onSearch={mockOnSearch} />);
 
-    const input = screen.getByPlaceholderText("搜尋藝人...")
-    await user.type(input, "Gorillaz")
+    const input = screen.getByPlaceholderText("搜尋藝人...");
+    await user.type(input, "Gorillaz");
 
     // debounce 300ms
-    await vi.waitFor(() => {
-      expect(mockOnSearch).toHaveBeenCalledWith("Gorillaz")
-    }, { timeout: 500 })
-  })
+    await vi.waitFor(
+      () => {
+        expect(mockOnSearch).toHaveBeenCalledWith("Gorillaz");
+      },
+      { timeout: 500 }
+    );
+  });
 
   it("should clear input when Esc is pressed", async () => {
-    const mockOnSearch = vi.fn()
-    const user = userEvent.setup()
+    const mockOnSearch = vi.fn();
+    const user = userEvent.setup();
 
-    render(<SearchBar onSearch={mockOnSearch} />)
+    render(<SearchBar onSearch={mockOnSearch} />);
 
-    const input = screen.getByRole("textbox")
-    await user.type(input, "Test")
-    await user.keyboard("{Escape}")
+    const input = screen.getByRole("textbox");
+    await user.type(input, "Test");
+    await user.keyboard("{Escape}");
 
-    expect(input).toHaveValue("")
-  })
-})
+    expect(input).toHaveValue("");
+  });
+});
 ```
 
 **Redux 整合測試範例** (`src/features/search/search-slice.test.ts`):
 
 ```typescript
-import { describe, it, expect } from "vitest"
-import searchReducer, { performSearch, clearSearch } from "./search-slice"
-import { createMockStore } from "@/tests/utils/mock-store"
+import { describe, it, expect } from "vitest";
+import searchReducer, { performSearch, clearSearch } from "./search-slice";
+import { createMockStore } from "@/tests/utils/mock-store";
 
 describe("searchSlice", () => {
   it("should update search results when performSearch is called", () => {
-    const store = createMockStore()
+    const store = createMockStore();
     const mockResults = [
       { artistId: "1", artistName: "Gorillaz", popularity: 85 },
-    ]
+    ];
 
-    store.dispatch(performSearch({ query: "gor", results: mockResults }))
+    store.dispatch(performSearch({ query: "gor", results: mockResults }));
 
-    const state = store.getState().search
-    expect(state.query).toBe("gor")
-    expect(state.results).toEqual(mockResults)
-  })
-})
+    const state = store.getState().search;
+    expect(state.query).toBe("gor");
+    expect(state.results).toEqual(mockResults);
+  });
+});
 ```
 
 #### 3. **E2E 測試：Playwright**
@@ -912,7 +910,7 @@ describe("searchSlice", () => {
 **配置範例** (`playwright.config.ts`):
 
 ```typescript
-import { defineConfig, devices } from "@playwright/test"
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -958,68 +956,74 @@ export default defineConfig({
     url: "http://localhost:5173",
     reuseExistingServer: !process.env.CI,
   },
-})
+});
 ```
 
 **E2E 測試範例** (`tests/e2e/user-story-1.spec.ts`):
 
 ```typescript
-import { test, expect } from "@playwright/test"
+import { test, expect } from "@playwright/test";
 
 test.describe("User Story 1 - 藝人搜尋與歌曲瀏覽", () => {
-  test("should search artist, view tracks, and display charts", async ({ page }) => {
+  test("should search artist, view tracks, and display charts", async ({
+    page,
+  }) => {
     // 1. 開啟應用
-    await page.goto("/")
+    await page.goto("/");
 
     // 2. 等待資料載入完成
-    await expect(page.getByText("載入音樂資料庫...")).toBeHidden({ timeout: 10000 })
+    await expect(page.getByText("載入音樂資料庫...")).toBeHidden({
+      timeout: 10000,
+    });
 
     // 3. 搜尋藝人
-    const searchInput = page.getByPlaceholder("搜尋藝人...")
-    await searchInput.fill("Gorillaz")
+    const searchInput = page.getByPlaceholder("搜尋藝人...");
+    await searchInput.fill("Gorillaz");
 
     // 4. 點擊搜尋結果
-    await page.getByRole("button", { name: /Gorillaz/i }).click()
+    await page.getByRole("button", { name: /Gorillaz/i }).click();
 
     // 5. 驗證藝人資訊顯示
-    await expect(page.getByRole("heading", { name: "Gorillaz" })).toBeVisible()
-    await expect(page.getByText(/追蹤人數/i)).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Gorillaz" })).toBeVisible();
+    await expect(page.getByText(/追蹤人數/i)).toBeVisible();
 
     // 6. 驗證歌曲清單顯示
-    await expect(page.getByRole("list", { name: /熱門歌曲/i })).toBeVisible()
+    await expect(page.getByRole("list", { name: /熱門歌曲/i })).toBeVisible();
 
     // 7. 點擊歌曲
-    await page.getByRole("listitem", { name: /Feel Good Inc/i }).click()
+    await page.getByRole("listitem", { name: /Feel Good Inc/i }).click();
 
     // 8. 驗證歌曲詳情與圖表
-    await expect(page.getByRole("heading", { name: "Feel Good Inc." })).toBeVisible()
-    await expect(page.getByText(/人氣圖表/i)).toBeVisible()
-    await expect(page.getByText(/音樂特徵/i)).toBeVisible()
-  })
+    await expect(
+      page.getByRole("heading", { name: "Feel Good Inc." })
+    ).toBeVisible();
+    await expect(page.getByText(/人氣圖表/i)).toBeVisible();
+    await expect(page.getByText(/音樂特徵/i)).toBeVisible();
+  });
 
   test("should handle no search results gracefully", async ({ page }) => {
-    await page.goto("/")
-    await page.getByPlaceholder("搜尋藝人...").fill("xyz123nonexistent")
-    await expect(page.getByText("查無相關藝人")).toBeVisible()
-  })
-})
+    await page.goto("/");
+    await page.getByPlaceholder("搜尋藝人...").fill("xyz123nonexistent");
+    await expect(page.getByText("查無相關藝人")).toBeVisible();
+  });
+});
 ```
 
-### 替代方案
+### 7.3. 替代方案
 
-| 測試類型   | 選擇方案               | 替代方案                  | 為何未採用                     |
-| ---------- | ---------------------- | ------------------------- | ------------------------------ |
-| 單元測試   | Vitest                 | Jest                      | Jest 啟動慢、與 Vite 整合差    |
-| 單元測試   | Vitest                 | Mocha + Chai              | 需額外設定，生態系不如 Vitest  |
-| 元件測試   | Testing Library        | Enzyme                    | 已過時，不支援 React 18+       |
-| E2E 測試   | Playwright             | Cypress                   | Cypress 跨瀏覽器支援弱         |
-| E2E 測試   | Playwright             | Selenium                  | Selenium API 老舊、速度慢      |
+| 測試類型 | 選擇方案        | 替代方案     | 為何未採用                    |
+| -------- | --------------- | ------------ | ----------------------------- |
+| 單元測試 | Vitest          | Jest         | Jest 啟動慢、與 Vite 整合差   |
+| 單元測試 | Vitest          | Mocha + Chai | 需額外設定，生態系不如 Vitest |
+| 元件測試 | Testing Library | Enzyme       | 已過時，不支援 React 18+      |
+| E2E 測試 | Playwright      | Cypress      | Cypress 跨瀏覽器支援弱        |
+| E2E 測試 | Playwright      | Selenium     | Selenium API 老舊、速度慢     |
 
-### 測試策略
+### 7.4. 測試策略
 
 #### 測試金字塔
 
-```
+```plaintext
      /\
     /  \   E2E (10%) - Playwright
    /────\
@@ -1029,12 +1033,14 @@ test.describe("User Story 1 - 藝人搜尋與歌曲瀏覽", () => {
 ```
 
 - **70% 單元測試**：
+
   - Services (spotify-api, data-loader, storage)
   - Reducers (Redux slices)
   - Selectors (Reselect)
   - Utilities (formatters, constants)
 
 - **20% 整合測試**：
+
   - Redux + Services 整合
   - React 元件 + Redux 整合
   - Fuse.js 搜尋引擎
@@ -1088,12 +1094,16 @@ jobs:
       - run: npm run test:e2e
 ```
 
-### Mock 資料管理
+### 7.5. Mock 資料管理
 
 **Spotify API Mock** (`tests/mocks/spotify-api.mock.ts`):
 
 ```typescript
-import type { SpotifyArtist, SpotifyTrack, SpotifyAudioFeatures } from "@/types/spotify"
+import type {
+  SpotifyArtist,
+  SpotifyTrack,
+  SpotifyAudioFeatures,
+} from "@/types/spotify";
 
 export const mockArtist: SpotifyArtist = {
   id: "3AA28KZvwAUcZuOKwyblJQ",
@@ -1101,20 +1111,20 @@ export const mockArtist: SpotifyArtist = {
   type: "artist",
   uri: "spotify:artist:3AA28KZvwAUcZuOKwyblJQ",
   href: "https://api.spotify.com/v1/artists/3AA28KZvwAUcZuOKwyblJQ",
-  external_urls: { spotify: "https://open.spotify.com/artist/3AA28KZvwAUcZuOKwyblJQ" },
-  images: [
-    { url: "https://i.scdn.co/image/...", height: 640, width: 640 },
-  ],
+  external_urls: {
+    spotify: "https://open.spotify.com/artist/3AA28KZvwAUcZuOKwyblJQ",
+  },
+  images: [{ url: "https://i.scdn.co/image/...", height: 640, width: 640 }],
   popularity: 85,
   followers: { href: null, total: 8500000 },
   genres: ["alternative rock", "britpop"],
-}
+};
 
 export const mockTrack: SpotifyTrack = {
   id: "0d28khcov6AiegSCpG5TuT",
   name: "Feel Good Inc.",
   // ... 完整 mock 資料
-}
+};
 
 export const mockAudioFeatures: SpotifyAudioFeatures = {
   id: "0d28khcov6AiegSCpG5TuT",
@@ -1123,14 +1133,14 @@ export const mockAudioFeatures: SpotifyAudioFeatures = {
   danceability: 0.678,
   energy: 0.789,
   // ... 完整 mock 資料
-}
+};
 ```
 
 **Redux Store Mock Factory** (`tests/utils/mock-store.ts`):
 
 ```typescript
-import { configureStore } from "@reduxjs/toolkit"
-import { artistReducer, trackReducer, searchReducer } from "@/features"
+import { configureStore } from "@reduxjs/toolkit";
+import { artistReducer, trackReducer, searchReducer } from "@/features";
 
 export function createMockStore(preloadedState = {}) {
   return configureStore({
@@ -1141,11 +1151,11 @@ export function createMockStore(preloadedState = {}) {
       // ... 其他 reducers
     },
     preloadedState,
-  })
+  });
 }
 ```
 
-### 測試檔案組織
+### 7.6. 測試檔案組織
 
 ```text
 tests/
@@ -1178,7 +1188,7 @@ src/
         └── search-bar.test.tsx   # 元件測試
 ```
 
-### 實作細節
+### 7.7. 實作細節
 
 **package.json scripts**:
 
