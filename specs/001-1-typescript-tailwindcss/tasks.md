@@ -142,7 +142,7 @@
   - 建立 `src/features/track/track-types.ts`（TrackState 介面）
   - 建立 `src/features/track/track-selectors.ts`（selectCurrentTrack, selectTrackLoading）
 
-- [ ] **T016** [P] 建立 Search Redux Slice 骨架
+- [x] **T016** [P] 建立 Search Redux Slice 骨架
 
   - 建立 `src/features/search/search-slice.ts`
   - 建立 `src/features/search/search-types.ts`（SearchState 介面，包含 fuseInstance）
