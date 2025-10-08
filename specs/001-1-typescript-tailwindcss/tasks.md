@@ -160,13 +160,13 @@
   - 建立 `src/features/spotify/spotify-types.ts`（SpotifyState 介面）
   - 建立 `src/features/spotify/spotify-selectors.ts`（selectSpotifyToken, selectTokenValid）
 
-- [ ] **T019** 整合所有 Redux Slices 至 Store
+- [x] **T019** 整合所有 Redux Slices 至 Store
 
   - 在 `src/app/store.ts` 中匯入所有 reducers
   - 配置 reducer 組合：`{ artist, track, search, data, spotify }`
   - 驗證 store 可正常初始化
 
-- [ ] **T018** 實作 Spotify API Service（骨架）
+- [ ] **T020** 實作 Spotify API Service（骨架）
 
   - 建立 `src/services/spotify-api.ts`
   - 實作 `SpotifyApiService` class（實作 `ISpotifyApiService` 介面）
@@ -174,14 +174,14 @@
   - 實作 `isTokenValid()`, `refreshToken()` 方法
   - 匯出 singleton instance: `export const spotifyApi = new SpotifyApiService()`
 
-- [ ] **T019** 實作資料載入 Service（骨架）
+- [ ] **T021** 實作資料載入 Service（骨架）
 
   - 建立 `src/services/data-loader.ts`
   - 實作 `loadTracksDatabase()` 函數（fetch `/data/tracks.json`）
   - 實作資料驗證（使用 Zod schema from `src/types/data-schema.ts`）
   - 實作 `checkDataIntegrity()` 呼叫
 
-- [ ] **T020** 實作 sessionStorage Service
+- [ ] **T022** 實作 sessionStorage Service
 
   - 建立 `src/services/storage.ts`
   - 實作 `StorageService` class：
@@ -191,7 +191,7 @@
     - `getDataVersion()` - 取得快取版本
   - 處理 quota exceeded 錯誤（降級為記憶體儲存）
 
-- [ ] **T021** 建立基礎 shadcn/ui 元件
+- [ ] **T023** 建立基礎 shadcn/ui 元件
 
   - 建立 `src/components/ui/button.tsx`（使用 Radix UI Slot）
   - 建立 `src/components/ui/card.tsx`
@@ -199,7 +199,7 @@
   - 建立 `src/components/ui/spinner.tsx`（Loading 動畫）
   - 所有元件使用 Tailwind CSS 4.x + Spotify 主題
 
-- [ ] **T022** 建立工具函式
+- [ ] **T024** 建立工具函式
 
   - 建立 `src/lib/formatters.ts`：
     - `formatNumber(num)` - 數字千分位格式化（1,000,000）
@@ -210,13 +210,13 @@
     - `DATA_VERSION = "2023.1"`
     - Spotify API endpoints
 
-- [ ] **T023** 建立應用進入點
+- [ ] **T025** 建立應用進入點
 
   - 建立 `src/main.tsx`（React root render，strict mode）
   - 建立 `src/app/App.tsx`（基本骨架，使用 Redux Provider）
   - 在 `public/index.html` 中匯入 `src/main.tsx`
 
-- [ ] **T024** 建立錯誤邊界元件
+- [ ] **T026** 建立錯誤邊界元件
   - 建立 `src/components/error-boundary.tsx`（React Error Boundary）
   - 顯示友善錯誤訊息與重試按鈕
   - 整合至 `App.tsx`

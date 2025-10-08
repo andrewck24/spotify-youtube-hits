@@ -2,6 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import type { TypedUseSelectorHook } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 
+// Import all reducers
+import artistReducer from '@/features/artist/artist-slice';
+import trackReducer from '@/features/track/track-slice';
+import searchReducer from '@/features/search/search-slice';
+import dataReducer from '@/features/data/data-slice';
+import spotifyReducer from '@/features/spotify/spotify-slice';
+
 /**
  * Redux Store Configuration
  *
@@ -11,20 +18,24 @@ import { useDispatch, useSelector } from 'react-redux';
  * - Middleware configuration for handling non-serializable data (Fuse.js instance)
  * - Redux DevTools integration (enabled in development)
  *
+ * State Structure:
+ * - artist: Current selected artist and Spotify data
+ * - track: Current selected track and audio features
+ * - search: Search query and results (with Fuse.js instance)
+ * - data: Local tracks database
+ * - spotify: API authentication token
+ *
  * Usage:
  *   import { store, useAppDispatch, useAppSelector } from '@/app/store'
- *
- * Note: Reducers will be added incrementally (artist, track, search, data, spotify)
  */
 
 export const store = configureStore({
   reducer: {
-    // Reducers will be added here as they are implemented
-    // artist: artistReducer,
-    // track: trackReducer,
-    // search: searchReducer,
-    // data: dataReducer,
-    // spotify: spotifyReducer,
+    artist: artistReducer,
+    track: trackReducer,
+    search: searchReducer,
+    data: dataReducer,
+    spotify: spotifyReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
