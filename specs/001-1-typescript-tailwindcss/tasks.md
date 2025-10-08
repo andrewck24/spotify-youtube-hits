@@ -6,11 +6,13 @@
 **Tests**: 根據 spec.md Functional Requirements (FR-011, FR-012, FR-013)，本次重構包含完整測試：單元測試（Vitest）、整合測試（Testing Library）、E2E 測試（Playwright），目標覆蓋率 80% 以上。
 
 **TDD Workflow**: 所有實作任務遵循 Test-Driven Development (TDD) 原則：
+
 1. **RED**: 先撰寫測試（應該失敗）
 2. **GREEN**: 實作功能（讓測試通過）
 3. **REFACTOR**: 重構程式碼（保持測試通過）
 
 對於核心業務邏輯（services, features/slices, hooks, utilities），任務拆分為：
+
 - **[TEST]** 任務：撰寫測試檔案（例如 `T025a [TEST]`）
 - **[IMPL]** 任務：實作功能（例如 `T025b [IMPL]`）
 
@@ -93,11 +95,13 @@
   - 更新 `.gitignore`（排除 `.env.local`）
 
 - [ ] **T010** 建立基本型別定義
+
   - 建立 `src/types/index.ts`（匯出所有型別）
   - 複製 `specs/001-1-typescript-tailwindcss/contracts/spotify-api.ts` 至 `src/types/spotify.ts`
   - 複製 `specs/001-1-typescript-tailwindcss/contracts/tracks-data-schema.ts` 至 `src/types/data-schema.ts`
 
 - [ ] **T011** [P] 配置測試框架
+
   - 安裝 Vitest + @vitest/ui (單元測試 & 整合測試)
   - 安裝 @testing-library/react + @testing-library/user-event (React 元件測試)
   - 安裝 @playwright/test (E2E 測試)
@@ -854,9 +858,10 @@ Task: "Create PopularityChart component in src/components/track/popularity-chart
 
 對於每個需要測試的實作任務（services, slices, hooks, utilities），遵循以下流程：
 
-**範例：T018 Spotify API Service**
+範例：T018 Spotify API Service
 
 1. **T018a [TEST]** - 撰寫 `src/services/spotify-api.test.ts`
+
    - 測試 `initialize()` 成功取得 token
    - 測試 `isTokenValid()` 驗證邏輯
    - 測試 `refreshToken()` 處理過期 token
@@ -869,6 +874,7 @@ Task: "Create PopularityChart component in src/components/track/popularity-chart
    - 重構程式碼（如有需要，保持測試通過）
 
 **適用範圍**: 以下類型的任務應拆分為 [TEST] + [IMPL]：
+
 - Redux Slices (T013a/b - T017a/b)
 - Services (T018a/b, T019a/b, T020a/b)
 - Search Engine (T027a/b, T028a/b)
