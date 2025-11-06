@@ -240,21 +240,21 @@
 
 #### T025-T030: 資料載入與搜尋引擎 (US1 核心依賴)
 
-- [ ] **T027** [US1] 實作資料載入邏輯（Data Slice）
+- [x] **T027** [US1] 實作資料載入邏輯（Data Slice）
 
   - 在 `src/features/data/data-slice.ts` 新增 `loadLocalData` async thunk
   - 呼叫 `data-loader.ts` 的 `loadTracksDatabase()`
   - 載入成功後儲存至 Redux state (`tracks` array)
   - 處理載入失敗（顯示錯誤）
 
-- [ ] **T028** [US1] 整合 sessionStorage 快取至資料載入
+- [x] **T028** [US1] 整合 sessionStorage 快取至資料載入
 
   - 在 `loadLocalData` thunk 中，先檢查 sessionStorage
   - 若快取存在且版本正確，直接使用快取
   - 若快取不存在或版本過期，下載並快取至 sessionStorage
   - 更新 Data Slice 的 loading 狀態
 
-- [ ] **T029** [US1] 實作 Fuse.js 搜尋引擎服務
+- [x] **T029** [US1] 實作 Fuse.js 搜尋引擎服務
 
   - 建立 `src/features/search/search-service.ts`
   - 實作 `createSearchIndex(tracks)` 函數（回傳 Fuse instance）
@@ -264,21 +264,21 @@
     - `includeScore: true`
   - 實作 `searchArtists(fuse, query, limit = 12)` 函數
 
-- [ ] **T030** [US1] 整合搜尋引擎至 Search Slice
+- [x] **T030** [US1] 整合搜尋引擎至 Search Slice
 
   - 在 `src/features/search/search-slice.ts` 新增 `initializeSearch` reducer
   - 接收 Fuse instance 並儲存至 state（標記為不可序列化）
   - 新增 `performSearch` reducer（接收 query，呼叫 `searchArtists`，更新 results）
   - 新增 `clearSearch` reducer
 
-- [ ] **T031** [US1] 實作資料載入 Hook
+- [x] **T031** [US1] 實作資料載入 Hook
 
   - 建立 `src/hooks/use-data-loader.ts`
   - 在 component mount 時 dispatch `loadLocalData`
   - 資料載入成功後 dispatch `initializeSearch`（建立 Fuse index）
   - 回傳 `{ dataLoaded, dataLoading, error }`
 
-- [ ] **T032** [US1] 建立 Loading 畫面元件
+- [x] **T032** [US1] 建立 Loading 畫面元件
   - 建立 `src/components/layout/loading-fallback.tsx`
   - 顯示 Spinner + 載入訊息（"載入音樂資料庫..."）
   - 顯示 Dashboard Skeleton 預覽（根據 research.md 設計）
@@ -286,7 +286,7 @@
 
 #### T031-T036: Spotify API 整合 (US1 即時資料)
 
-- [ ] **T033** [P] [US1] 實作 Spotify API - getArtist
+- [x] **T033** [P] [US1] 實作 Spotify API - getArtist
 
   - 在 `src/services/spotify-api.ts` 實作 `getArtist(artistId)` 方法
   - 呼叫 `GET https://api.spotify.com/v1/artists/{id}`
@@ -294,33 +294,33 @@
   - 處理錯誤（401, 429, 404）→ 拋出 `SpotifyApiError`
   - 驗證回應（使用 type guard `isValidSpotifyArtist`）
 
-- [ ] **T034** [P] [US1] 實作 Spotify API - getTrack
+- [x] **T034** [P] [US1] 實作 Spotify API - getTrack
 
   - 在 `src/services/spotify-api.ts` 實作 `getTrack(trackId)` 方法
   - 呼叫 `GET https://api.spotify.com/v1/tracks/{id}`
   - 驗證回應（使用 `isValidSpotifyTrack`）
 
-- [ ] **T035** [P] [US1] 實作 Spotify API - getAudioFeatures
+- [x] **T035** [P] [US1] 實作 Spotify API - getAudioFeatures
 
   - 在 `src/services/spotify-api.ts` 實作 `getAudioFeatures(trackId)` 方法
   - 呼叫 `GET https://api.spotify.com/v1/audio-features/{id}`
   - 驗證回應（使用 `isValidAudioFeatures`）
 
-- [ ] **T036** [US1] 整合 getArtist 至 Artist Slice
+- [x] **T036** [US1] 整合 getArtist 至 Artist Slice
 
   - 在 `src/features/artist/artist-slice.ts` 新增 `fetchArtist` async thunk
   - 呼叫 `spotifyApi.getArtist(artistId)`
   - 成功後更新 state (`currentArtist`)
   - 處理錯誤（儲存 error message）
 
-- [ ] **T037** [US1] 整合 getTrack 至 Track Slice
+- [x] **T037** [US1] 整合 getTrack 至 Track Slice
 
   - 在 `src/features/track/track-slice.ts` 新增 `fetchTrackDetails` async thunk
   - 呼叫 `spotifyApi.getTrack(trackId)`
   - 提取專輯資訊（album name, cover URL, release date）
   - 更新 `currentTrack.album` 欄位
 
-- [ ] **T038** [US1] 整合 getAudioFeatures 至 Track Slice
+- [x] **T038** [US1] 整合 getAudioFeatures 至 Track Slice
   - 在 `src/features/track/track-slice.ts` 新增 `fetchAudioFeatures` async thunk
   - 呼叫 `spotifyApi.getAudioFeatures(trackId)`
   - 更新 `currentTrack.features` 欄位
@@ -344,7 +344,7 @@
   - 點擊藝人 → dispatch `setCurrentArtist` + navigate
   - 無結果時顯示「查無相關藝人」
 
-- [ ] **T041** [US1] 實作搜尋 Hook
+- [x] **T041** [US1] 實作搜尋 Hook
 
   - 建立 `src/hooks/use-search.ts`
   - 整合 `useAppSelector(selectSearchResults)`, `useAppDispatch`

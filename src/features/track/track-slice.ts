@@ -1,6 +1,7 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { SpotifyTrack, SpotifyAudioFeatures } from '@/types/spotify';
 import { initialTrackState } from './track-types';
+import { spotifyApi } from '@/services/spotify-api';
 
 /**
  * Track Redux Slice
@@ -14,7 +15,7 @@ import { initialTrackState } from './track-types';
  * - setLoading: Update loading state
  * - setError: Set error message
  *
- * Async Thunks (to be added later):
+ * Async Thunks:
  * - fetchTrackDetails: Fetch full track data from Spotify API
  * - fetchAudioFeatures: Fetch audio features from Spotify API
  *
@@ -23,6 +24,42 @@ import { initialTrackState } from './track-types';
  *   dispatch(fetchTrackDetails(trackId))
  *   dispatch(fetchAudioFeatures(trackId))
  */
+
+/**
+ * T037: Fetch track details from Spotify API
+ * 呼叫 spotifyApi.getTrack() 取得完整歌曲資訊（專輯、發行日期等）
+ */
+export const fetchTrackDetails = createAsyncThunk(
+  'track/fetchTrackDetails',
+  async (trackId: string, { rejectWithValue }) => {
+    try {
+      const track = await spotifyApi.getTrack(trackId);
+      return track;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to fetch track';
+      console.error('fetchTrackDetails error:', message);
+      return rejectWithValue(message);
+    }
+  }
+);
+
+/**
+ * T038: Fetch audio features from Spotify API
+ * 呼叫 spotifyApi.getAudioFeatures() 取得音樂特徵（energy, danceability 等）
+ */
+export const fetchAudioFeatures = createAsyncThunk(
+  'track/fetchAudioFeatures',
+  async (trackId: string, { rejectWithValue }) => {
+    try {
+      const features = await spotifyApi.getAudioFeatures(trackId);
+      return features;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to fetch audio features';
+      console.error('fetchAudioFeatures error:', message);
+      return rejectWithValue(message);
+    }
+  }
+);
 
 const trackSlice = createSlice({
   name: 'track',
@@ -72,25 +109,28 @@ const trackSlice = createSlice({
       state.loading = false;
     },
   },
-  // extraReducers will be added here when async thunks are implemented
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(fetchTrackDetails.pending, (state) => {
-  //       state.loading = true;
-  //       state.error = null;
-  //     })
-  //     .addCase(fetchTrackDetails.fulfilled, (state, action) => {
-  //       state.currentTrack = action.payload;
-  //       state.loading = false;
-  //     })
-  //     .addCase(fetchTrackDetails.rejected, (state, action) => {
-  //       state.error = action.error.message || 'Failed to fetch track';
-  //       state.loading = false;
-  //     })
-  //     .addCase(fetchAudioFeatures.fulfilled, (state, action) => {
-  //       state.audioFeatures = action.payload;
-  //     });
-  // },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTrackDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTrackDetails.fulfilled, (state, action: PayloadAction<SpotifyTrack>) => {
+        state.currentTrack = action.payload;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(fetchTrackDetails.rejected, (state, action) => {
+        state.error = action.payload as string || 'Failed to fetch track';
+        state.loading = false;
+      })
+      .addCase(fetchAudioFeatures.fulfilled, (state, action: PayloadAction<SpotifyAudioFeatures>) => {
+        state.audioFeatures = action.payload;
+      })
+      .addCase(fetchAudioFeatures.rejected, (state, action) => {
+        state.error = action.payload as string || 'Failed to fetch audio features';
+      });
+  },
 });
 
 export const {
