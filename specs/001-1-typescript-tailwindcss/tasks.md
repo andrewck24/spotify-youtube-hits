@@ -328,7 +328,7 @@
 
 #### T037-T042: 搜尋 UI 元件
 
-- [ ] **T039** [P] [US1] 建立搜尋列元件
+- [x] **T039** [P] [US1] 建立搜尋列元件
 
   - 建立 `src/components/search/search-bar.tsx`
   - 使用 shadcn/ui Input 元件
@@ -336,7 +336,7 @@
   - dispatch `performSearch` action
   - 顯示搜尋 icon（magnifying glass）
 
-- [ ] **T040** [P] [US1] 建立搜尋結果元件
+- [x] **T040** [P] [US1] 建立搜尋結果元件
 
   - 建立 `src/components/search/search-results.tsx`
   - 顯示藝人清單（最多 12 筆）
@@ -351,35 +351,35 @@
   - 提供 `search(query)` 函數
   - 回傳 `{ results, searching, search, clearSearch }`
 
-- [ ] **T042** [US1] 建立 Header 布局元件
+- [x] **T042** [US1] 建立 Header 布局元件
 
   - 建立 `src/components/layout/header.tsx`
   - 包含應用 Logo（"Spotify YouTube Hits"）
   - 嵌入 `SearchBar` 元件
   - 使用 Spotify 主題（深黑背景 #121212）
 
-- [ ] **T043** [US1] 建立 Dashboard 布局元件
+- [x] **T043** [US1] 建立 Dashboard 布局元件
 
   - 建立 `src/components/layout/dashboard-layout.tsx`
   - 結構：`<Header />` + 主內容區域
   - 主內容區域使用 CSS Grid（響應式，稍後 US3 擴展）
   - 目前桌面版：左側 Sidebar（40%），右側 Main（60%）
 
-- [ ] **T044** [US1] 建立 Sidebar 布局元件
+- [x] **T044** [US1] 建立 Sidebar 布局元件
   - 建立 `src/components/layout/sidebar.tsx`
   - 結構：上方藝人資訊 + 下方歌曲清單
   - 使用 Card 元件包裝
 
 #### T043-T048: 藝人與歌曲 UI 元件
 
-- [ ] **T045** [P] [US1] 建立藝人資料卡元件
+- [x] **T045** [P] [US1] 建立藝人資料卡元件
 
   - 建立 `src/components/artist/artist-profile.tsx`
   - 接收 `SpotifyArtist` props
   - 顯示：藝人頭像（Avatar）、名稱（h2）、追蹤人數、人氣度（progress bar）
   - 使用 shadcn/ui Card
 
-- [ ] **T046** [P] [US1] 建立歌曲清單元件
+- [x] **T046** [P] [US1] 建立歌曲清單元件
 
   - 建立 `src/components/track/track-list.tsx`
   - 接收 `tracks[]` props（來自本地資料，filtered by artistId）
@@ -387,7 +387,7 @@
   - 點擊歌曲 → dispatch `setCurrentTrack` + fetch API data
   - 使用虛擬滾動（若歌曲 > 50 首）
 
-- [ ] **T047** [US1] 建立歌曲詳情卡元件
+- [x] **T047** [US1] 建立歌曲詳情卡元件
 
   - 建立 `src/components/track/track-detail.tsx`
   - 接收 `Track` props（包含 album, features）
@@ -410,14 +410,14 @@
   - 所有數值 normalized to 0-1
   - 使用 Spotify Green 填充
 
-- [ ] **T050** [US1] 實作 Artist Hook
+- [x] **T050** [US1] 實作 Artist Hook
 
   - 建立 `src/hooks/use-artist.ts`
   - 接收 `artistId`
   - dispatch `fetchArtist` thunk
   - 回傳 `{ artist, loading, error }`
 
-- [ ] **T051** [US1] 實作 Track Hook
+- [x] **T051** [US1] 實作 Track Hook
   - 建立 `src/hooks/use-track.ts`
   - 接收 `trackId`
   - 平行 dispatch `fetchTrackDetails` 與 `fetchAudioFeatures`
@@ -425,7 +425,7 @@
 
 #### T050-T052: 整合與路由
 
-- [ ] **T052** [US1] 整合所有元件至 App.tsx
+- [x] **T052** [US1] 整合所有元件至 App.tsx
 
   - 更新 `src/app/App.tsx`：
     - 使用 `useDataLoader` Hook（顯示 LoadingFallback）
@@ -434,13 +434,13 @@
     - Main 包含 `<TrackDetail>` + Charts
   - 使用 Redux selectors 取得 currentArtist, currentTrack
 
-- [ ] **T053** [US1] 實作狀態管理邏輯
+- [x] **T053** [US1] 實作狀態管理邏輯
 
   - 搜尋結果點擊 → 更新 Redux `currentArtist` → 觸發 `fetchArtist` → 顯示藝人資訊
   - 藝人確認後 → 過濾歌曲（從本地資料）→ 顯示 TrackList
   - 歌曲點擊 → 更新 Redux `currentTrack` → 平行 fetch track details + audio features → 顯示圖表
 
-- [ ] **T054** [US1] 處理錯誤情境
+- [x] **T054** [US1] 處理錯誤情境
   - Spotify API 401 → 自動 refreshToken
   - Spotify API 429 → 顯示「伺服器忙碌中」Toast
   - Spotify API 404 → 顯示「查無此資料」

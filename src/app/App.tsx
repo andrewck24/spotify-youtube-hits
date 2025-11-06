@@ -11,6 +11,8 @@ import { SearchResults } from '@/components/search/search-results';
 import { ArtistProfile } from '@/components/artist/artist-profile';
 import { TrackList } from '@/components/track/track-list';
 import { TrackDetail } from '@/components/track/track-detail';
+import { PopularityChart } from '@/components/track/popularity-chart';
+import { FeatureChart } from '@/components/track/feature-chart';
 import { selectCurrentArtist } from '@/features/artist/artist-selectors';
 import { selectTracks } from '@/features/data/data-selectors';
 import { getTracksByArtist } from '@/features/search/search-service';
@@ -51,7 +53,13 @@ export function App() {
 
   // T053: Determine current track ID for useTrack
   const currentTrackId = useAppSelector((state) => state.track.currentTrack?.id);
-  const { track, loading: trackLoading } = useTrack(currentTrackId);
+  const { track, features, loading: trackLoading } = useTrack(currentTrackId);
+
+  // Find the corresponding local track for YouTube data
+  const localTrack = useMemo(() => {
+    if (!track || !allTracks) return undefined;
+    return allTracks.find((t) => t.trackId === track.id);
+  }, [track, allTracks]);
 
   // T032: Show loading screen
   if (dataLoading) {
@@ -108,15 +116,14 @@ export function App() {
           <TrackDetail track={track} loading={trackLoading} />
         )}
 
-        {/* Charts Section (Placeholder - T048-T049) */}
+        {/* Charts Section (T048-T049) */}
         {track && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-[#282828] rounded-lg p-6 h-64 flex items-center justify-center text-[#B3B3B3]">
-              人氣度圖表 (T048)
-            </div>
-            <div className="bg-[#282828] rounded-lg p-6 h-64 flex items-center justify-center text-[#B3B3B3]">
-              音樂特徵雷達圖 (T049)
-            </div>
+            {/* Popularity Chart - T048 */}
+            <PopularityChart track={track} localTrack={localTrack} />
+
+            {/* Feature Chart - T049 */}
+            <FeatureChart features={features} />
           </div>
         )}
 
