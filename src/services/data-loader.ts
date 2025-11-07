@@ -1,8 +1,8 @@
 import {
-  localTracksDatabaseSchema,
   checkDataIntegrity as checkIntegrity,
+  localTracksDatabaseSchema,
   type LocalTracksDatabase,
-} from '@/types/data-schema';
+} from "@/types/data-schema";
 
 /**
  * Data Loader Service
@@ -25,11 +25,11 @@ import {
  */
 export async function loadTracksDatabase(): Promise<LocalTracksDatabase> {
   try {
-    const response = await fetch('/data/tracks.json');
+    const response = await fetch("/data/tracks.json");
 
     if (!response.ok) {
       throw new Error(
-        `Failed to load tracks database: ${response.status} ${response.statusText}`
+        `Failed to load tracks database: ${response.status} ${response.statusText}`,
       );
     }
 
@@ -43,7 +43,7 @@ export async function loadTracksDatabase(): Promise<LocalTracksDatabase> {
     if (error instanceof Error) {
       throw new Error(`Failed to load tracks database: ${error.message}`);
     }
-    throw new Error('Failed to load tracks database: Unknown error');
+    throw new Error("Failed to load tracks database: Unknown error");
   }
 }
 

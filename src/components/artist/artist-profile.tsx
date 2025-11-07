@@ -1,6 +1,6 @@
-import { Card } from '@/components/ui/card';
-import type { SpotifyArtist } from '@/types/spotify';
-import { formatNumber } from '@/lib/formatters';
+import { Card } from "@/components/ui/card";
+import { formatNumber } from "@/lib/formatters";
+import type { SpotifyArtist } from "@/types/spotify";
 
 /**
  * ArtistProfile Component

@@ -1,4 +1,4 @@
-import { SearchBar } from '@/components/search/search-bar';
+import { SearchBar } from "@/components/search/search-bar";
 
 /**
  * Header Component
@@ -30,7 +30,9 @@ export function Header() {
                 <path d="M12 1C6.48 1 2 5.48 2 11s4.48 10 10 10 10-4.48 10-10S17.52 1 12 1zm3.5 11c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm-5 0c0 .83-.67 1.5-1.5 1.5S7 12.83 7 12s.67-1.5 1.5-1.5 1.5.67 1.5 1.5z" />
               </svg>
             </div>
-            <h1 className="text-xl font-bold text-white">Spotify YouTube Hits</h1>
+            <h1 className="text-xl font-bold text-white">
+              Spotify YouTube Hits
+            </h1>
           </div>
 
           {/* SearchBar */}

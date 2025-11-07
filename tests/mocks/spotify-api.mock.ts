@@ -1,8 +1,8 @@
 import type {
   SpotifyArtist,
-  SpotifyTrack,
   SpotifyAudioFeatures,
-} from "@/types/spotify"
+  SpotifyTrack,
+} from "@/types/spotify";
 
 /**
  * Mock Spotify API data for testing
@@ -21,7 +21,7 @@ export const mockSpotifyArtist: SpotifyArtist = {
   followers: { total: 8234567 },
   popularity: 82,
   genres: ["alternative hip hop", "art pop", "trip hop"],
-}
+};
 
 export const mockSpotifyTrack: SpotifyTrack = {
   id: "0d28khcov6AiegSCpG5TuT",
@@ -46,7 +46,7 @@ export const mockSpotifyTrack: SpotifyTrack = {
   },
   duration_ms: 222973,
   popularity: 89,
-}
+};
 
 export const mockAudioFeatures: SpotifyAudioFeatures = {
   id: "0d28khcov6AiegSCpG5TuT",
@@ -61,10 +61,10 @@ export const mockAudioFeatures: SpotifyAudioFeatures = {
   key: 7,
   mode: 1,
   time_signature: 4,
-}
+};
 
 export const mockSpotifyToken = {
   access_token: "mock_access_token_12345",
   token_type: "Bearer",
   expires_in: 3600,
-}
+};

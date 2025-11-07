@@ -8,7 +8,7 @@
  * @date 2025-10-08
  */
 
-import { z } from "zod"
+import { z } from "zod";
 
 // ============================================================================
 // Core Data Types
@@ -19,17 +19,17 @@ import { z } from "zod"
  */
 export interface PopularityMetrics {
   // === Spotify 指標 ===
-  playCount?: number // Spotify 播放次數（若有）
-  spotifyPopularity?: number // 0-100，Spotify 演算法計算（可選）
-  spotifyStreams?: number // 總播放次數（若有）
+  playCount?: number; // Spotify 播放次數（若有）
+  spotifyPopularity?: number; // 0-100，Spotify 演算法計算（可選）
+  spotifyStreams?: number; // 總播放次數（若有）
 
   // === YouTube 指標 ===
-  youtubeViews: number // 觀看次數
-  youtubeLikes: number // 按讚數
-  youtubeComments: number // 留言數
+  youtubeViews: number; // 觀看次數
+  youtubeLikes: number; // 按讚數
+  youtubeComments: number; // 留言數
 
   // === 綜合指標 ===
-  combinedScore?: number // 自訂綜合分數（可選）
+  combinedScore?: number; // 自訂綜合分數（可選）
 }
 
 /**
@@ -39,18 +39,18 @@ export interface PopularityMetrics {
  */
 export interface LocalTrackData {
   // === 基本資訊 ===
-  trackId: string // Spotify Track ID (primary key)
-  trackName: string // 歌曲名稱
-  artistId: string // Spotify Artist ID
-  artistName: string // 藝人名稱
-  artistMonthlyListeners?: number // 藝人每月聽眾數（快照時間點）
-  releaseYear: number // 發行年份 (YYYY)
+  trackId: string; // Spotify Track ID (primary key)
+  trackName: string; // 歌曲名稱
+  artistId: string; // Spotify Artist ID
+  artistName: string; // 藝人名稱
+  artistMonthlyListeners?: number; // 藝人每月聽眾數（快照時間點）
+  releaseYear: number; // 發行年份 (YYYY)
 
   // === 人氣指標 ===
-  popularity: PopularityMetrics
+  popularity: PopularityMetrics;
 
   // === UI 狀態 ===
-  indicator: 0 | 1 | 2 // 內部使用的指示器（用途待確認）
+  indicator: 0 | 1 | 2; // 內部使用的指示器（用途待確認）
 }
 
 /**
@@ -58,18 +58,18 @@ export interface LocalTrackData {
  */
 export interface LocalTracksDatabase {
   // === Metadata ===
-  version: string // 資料版本 (e.g., "2023.1", "2024.1")
-  generatedAt: string // ISO 8601 timestamp (e.g., "2023-12-31T23:59:59Z")
-  totalTracks: number // 總歌曲數
+  version: string; // 資料版本 (e.g., "2023.1", "2024.1")
+  generatedAt: string; // ISO 8601 timestamp (e.g., "2023-12-31T23:59:59Z")
+  totalTracks: number; // 總歌曲數
 
   // === Data ===
-  tracks: LocalTrackData[] // 歌曲陣列
+  tracks: LocalTrackData[]; // 歌曲陣列
 
   // === Index (optional, for performance) ===
   index?: {
-    byArtist: Record<string, string[]> // artistId → trackIds[]
-    byYear: Record<number, string[]> // year → trackIds[]
-  }
+    byArtist: Record<string, string[]>; // artistId → trackIds[]
+    byYear: Record<number, string[]>; // year → trackIds[]
+  };
 }
 
 // ============================================================================
@@ -87,7 +87,7 @@ export const popularityMetricsSchema = z.object({
   youtubeLikes: z.number().int().nonnegative(),
   youtubeComments: z.number().int().nonnegative(),
   combinedScore: z.number().nonnegative().optional(),
-})
+});
 
 /**
  * 單一 Track 驗證規則
@@ -105,14 +105,16 @@ export const localTrackDataSchema = z.object({
     .max(new Date().getFullYear() + 1, "發行年份不得超過明年"),
   popularity: popularityMetricsSchema,
   indicator: z.union([z.literal(0), z.literal(1), z.literal(2)]),
-})
+});
 
 /**
  * 資料庫根結構驗證規則
  */
 export const localTracksDatabaseSchema = z.object({
   version: z.string().regex(/^\d{4}\.\d+$/, "版本格式必須為 YYYY.N"),
-  generatedAt: z.string().datetime({ message: "必須為有效的 ISO 8601 時間格式" }),
+  generatedAt: z
+    .string()
+    .datetime({ message: "必須為有效的 ISO 8601 時間格式" }),
   totalTracks: z.number().int().positive(),
   tracks: z.array(localTrackDataSchema),
   index: z
@@ -121,7 +123,7 @@ export const localTracksDatabaseSchema = z.object({
       byYear: z.record(z.string(), z.array(z.string())),
     })
     .optional(),
-})
+});
 
 // ============================================================================
 // Type Guards
@@ -131,13 +133,13 @@ export const localTracksDatabaseSchema = z.object({
  * 檢查是否為有效的 PopularityMetrics
  */
 export function isValidPopularityMetrics(
-  data: unknown
+  data: unknown,
 ): data is PopularityMetrics {
   try {
-    popularityMetricsSchema.parse(data)
-    return true
+    popularityMetricsSchema.parse(data);
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
 
@@ -146,10 +148,10 @@ export function isValidPopularityMetrics(
  */
 export function isValidLocalTrackData(data: unknown): data is LocalTrackData {
   try {
-    localTrackDataSchema.parse(data)
-    return true
+    localTrackDataSchema.parse(data);
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
 
@@ -157,13 +159,13 @@ export function isValidLocalTrackData(data: unknown): data is LocalTrackData {
  * 檢查是否為有效的 LocalTracksDatabase
  */
 export function isValidLocalTracksDatabase(
-  data: unknown
+  data: unknown,
 ): data is LocalTracksDatabase {
   try {
-    localTracksDatabaseSchema.parse(data)
-    return true
+    localTracksDatabaseSchema.parse(data);
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
 
@@ -178,10 +180,8 @@ export function isValidLocalTracksDatabase(
  * @returns 驗證成功的資料庫物件
  * @throws {z.ZodError} 當資料格式不符時
  */
-export function validateTracksDatabase(
-  jsonData: unknown
-): LocalTracksDatabase {
-  return localTracksDatabaseSchema.parse(jsonData)
+export function validateTracksDatabase(jsonData: unknown): LocalTracksDatabase {
+  return localTracksDatabaseSchema.parse(jsonData);
 }
 
 /**
@@ -191,15 +191,15 @@ export function validateTracksDatabase(
  * @returns 驗證結果物件
  */
 export function safeValidateTracksDatabase(jsonData: unknown): {
-  success: boolean
-  data?: LocalTracksDatabase
-  error?: z.ZodError
+  success: boolean;
+  data?: LocalTracksDatabase;
+  error?: z.ZodError;
 } {
-  const result = localTracksDatabaseSchema.safeParse(jsonData)
+  const result = localTracksDatabaseSchema.safeParse(jsonData);
   if (result.success) {
-    return { success: true, data: result.data }
+    return { success: true, data: result.data };
   } else {
-    return { success: false, error: result.error }
+    return { success: false, error: result.error };
   }
 }
 
@@ -215,47 +215,47 @@ export function safeValidateTracksDatabase(jsonData: unknown): {
 export interface TrackStateData extends LocalTrackData {
   // Redux 狀態會額外加入以下欄位（由 API 取得）
   features?: {
-    acousticness: number
-    danceability: number
-    energy: number
-    instrumentalness: number
-    liveness: number
-    speechiness: number
-    valence: number
-    key: number
-    mode: 0 | 1
-    loudness: number
-    tempo: number
-    timeSignature: number
-  }
+    acousticness: number;
+    danceability: number;
+    energy: number;
+    instrumentalness: number;
+    liveness: number;
+    speechiness: number;
+    valence: number;
+    key: number;
+    mode: 0 | 1;
+    loudness: number;
+    tempo: number;
+    timeSignature: number;
+  };
   album?: {
-    id: string
-    name: string
-    coverUrl: string
-    releaseDate: string
-    totalTracks: number
-  }
+    id: string;
+    name: string;
+    coverUrl: string;
+    releaseDate: string;
+    totalTracks: number;
+  };
 }
 
 /**
  * 轉換單一 Track 資料
  */
 export function transformLocalTrackToState(
-  localTrack: LocalTrackData
+  localTrack: LocalTrackData,
 ): TrackStateData {
   return {
     ...localTrack,
     // features 與 album 初始為 undefined，由 API 呼叫後填入
-  }
+  };
 }
 
 /**
  * 批次轉換 Tracks 資料
  */
 export function transformLocalTracksToState(
-  localTracks: LocalTrackData[]
+  localTracks: LocalTrackData[],
 ): TrackStateData[] {
-  return localTracks.map(transformLocalTrackToState)
+  return localTracks.map(transformLocalTrackToState);
 }
 
 // ============================================================================
@@ -266,9 +266,9 @@ export function transformLocalTracksToState(
  * 資料完整性檢查結果
  */
 export interface DataIntegrityReport {
-  isValid: boolean
-  totalTracks: number
-  issues: DataIntegrityIssue[]
+  isValid: boolean;
+  totalTracks: number;
+  issues: DataIntegrityIssue[];
 }
 
 export interface DataIntegrityIssue {
@@ -276,10 +276,10 @@ export interface DataIntegrityIssue {
     | "DUPLICATE_TRACK_ID"
     | "MISSING_FIELD"
     | "INVALID_VALUE"
-    | "METADATA_MISMATCH"
-  trackId?: string
-  field?: string
-  message: string
+    | "METADATA_MISMATCH";
+  trackId?: string;
+  field?: string;
+  message: string;
 }
 
 /**
@@ -289,10 +289,10 @@ export interface DataIntegrityIssue {
  * @returns 檢查報告
  */
 export function checkDataIntegrity(
-  database: LocalTracksDatabase
+  database: LocalTracksDatabase,
 ): DataIntegrityReport {
-  const issues: DataIntegrityIssue[] = []
-  const trackIdSet = new Set<string>()
+  const issues: DataIntegrityIssue[] = [];
+  const trackIdSet = new Set<string>();
 
   // 1. 檢查重複的 Track ID
   for (const track of database.tracks) {
@@ -301,9 +301,9 @@ export function checkDataIntegrity(
         type: "DUPLICATE_TRACK_ID",
         trackId: track.trackId,
         message: `發現重複的 Track ID: ${track.trackId}`,
-      })
+      });
     }
-    trackIdSet.add(track.trackId)
+    trackIdSet.add(track.trackId);
   }
 
   // 2. 檢查 metadata 是否與實際資料一致
@@ -311,15 +311,15 @@ export function checkDataIntegrity(
     issues.push({
       type: "METADATA_MISMATCH",
       message: `totalTracks (${database.totalTracks}) 與實際歌曲數量 (${database.tracks.length}) 不一致`,
-    })
+    });
   }
 
   // 3. 檢查索引資料（若存在）
   if (database.index) {
     const indexedTrackIds = new Set(
-      Object.values(database.index.byArtist).flat()
-    )
-    const actualTrackIds = new Set(database.tracks.map((t) => t.trackId))
+      Object.values(database.index.byArtist).flat(),
+    );
+    const actualTrackIds = new Set(database.tracks.map((t) => t.trackId));
 
     // 檢查索引中的 Track ID 是否都存在於實際資料中
     for (const indexedId of indexedTrackIds) {
@@ -328,7 +328,7 @@ export function checkDataIntegrity(
           type: "INVALID_VALUE",
           trackId: indexedId,
           message: `索引中的 Track ID "${indexedId}" 不存在於實際資料中`,
-        })
+        });
       }
     }
   }
@@ -337,7 +337,7 @@ export function checkDataIntegrity(
     isValid: issues.length === 0,
     totalTracks: database.tracks.length,
     issues,
-  }
+  };
 }
 
 // ============================================================================
@@ -351,7 +351,7 @@ export function checkDataIntegrity(
  * @returns Mock 資料庫物件
  */
 export function generateMockTracksDatabase(
-  count: number = 10
+  count: number = 10,
 ): LocalTracksDatabase {
   const tracks: LocalTrackData[] = Array.from({ length: count }, (_, i) => ({
     trackId: `mock-track-${i + 1}`,
@@ -366,13 +366,12 @@ export function generateMockTracksDatabase(
       youtubeComments: Math.floor(Math.random() * 50000),
     },
     indicator: (i % 2) as 0 | 1,
-  }))
+  }));
 
   return {
     version: "2023.1",
     generatedAt: new Date().toISOString(),
     totalTracks: count,
     tracks,
-  }
+  };
 }
-

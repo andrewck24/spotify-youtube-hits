@@ -1,10 +1,10 @@
-import { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '@/app/store';
-import { useSearch } from '@/hooks/use-search';
-import { setCurrentArtist } from '@/features/artist/artist-slice';
-import { getTracksByArtist } from '@/features/search/search-service';
-import { selectTracks } from '@/features/data/data-selectors';
-import { Card } from '@/components/ui/card';
+import { Card } from "@/components/ui/card";
+import { setCurrentArtist } from "@/features/artist/artist-slice";
+import { selectTracks } from "@/features/data/data-selectors";
+import { getTracksByArtist } from "@/features/search/search-service";
+import { useSearch } from "@/hooks/use-search";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import { useCallback } from "react";
 
 /**
  * SearchResults Component
@@ -34,7 +34,6 @@ export function SearchResults() {
       const artistTracks = getTracksByArtist(tracks, artistName);
 
       if (artistTracks.length === 0) {
-        console.warn('No tracks found for artist:', artistName);
         return;
       }
 
@@ -54,18 +53,18 @@ export function SearchResults() {
         href: `https://api.spotify.com/v1/artists/${artistId}`,
         images: [],
         popularity: 0,
-        type: 'artist' as const,
+        type: "artist" as const,
       };
 
       dispatch(setCurrentArtist(basicArtist));
     },
-    [dispatch, tracks]
+    [dispatch, tracks],
   );
 
   if (results.length === 0) {
     return (
       <Card className="p-4 text-center text-[#B3B3B3]">
-        {results.length === 0 ? '輸入藝人名稱搜尋...' : '查無相關藝人'}
+        {results.length === 0 ? "輸入藝人名稱搜尋..." : "查無相關藝人"}
       </Card>
     );
   }
@@ -80,12 +79,16 @@ export function SearchResults() {
           return (
             <button
               key={`${track.artistId}-${index}`}
-              onClick={() => handleSelectArtist(track.artistId, track.artistName)}
+              onClick={() =>
+                handleSelectArtist(track.artistId, track.artistName)
+              }
               className="w-full p-3 border-b border-[#282828] hover:bg-[#282828] transition-colors text-left"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-white font-medium">{track.artistName}</div>
+                  <div className="text-white font-medium">
+                    {track.artistName}
+                  </div>
                   <div className="text-xs text-[#B3B3B3] mt-1">
                     人氣度: {track.popularity.spotifyPopularity ?? 0}/100
                   </div>

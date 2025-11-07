@@ -307,7 +307,7 @@ import { Button } from '@/components/ui/button'
 **Store 結構**:
 
 ```typescript
-// src/app/store.ts
+// src/lib/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import artistReducer from "@/features/artist/artist-slice";
 import trackReducer from "@/features/track/track-slice";

@@ -1,4 +1,4 @@
-import type { SpotifyTrack, SpotifyAudioFeatures } from '@/types/spotify';
+import type { SpotifyAudioFeatures, SpotifyTrack } from "@/types/spotify";
 
 /**
  * Track Feature State

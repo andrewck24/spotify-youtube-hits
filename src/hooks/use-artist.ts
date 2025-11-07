@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/app/store';
-import { fetchArtist } from '@/features/artist/artist-slice';
 import {
-  selectCurrentArtist,
-  selectArtistLoading,
   selectArtistError,
-} from '@/features/artist/artist-selectors';
+  selectArtistLoading,
+  selectCurrentArtist,
+} from "@/features/artist/artist-selectors";
+import { fetchArtist } from "@/features/artist/artist-slice";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import { useEffect } from "react";
 
 /**
  * Custom Hook: useArtist

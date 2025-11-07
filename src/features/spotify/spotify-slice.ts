@@ -1,5 +1,5 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { initialSpotifyState } from './spotify-types';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { initialSpotifyState } from "./spotify-types";
 
 /**
  * Spotify Redux Slice
@@ -26,7 +26,7 @@ interface SetTokenPayload {
 }
 
 const spotifySlice = createSlice({
-  name: 'spotify',
+  name: "spotify",
   initialState: initialSpotifyState,
   reducers: {
     /**

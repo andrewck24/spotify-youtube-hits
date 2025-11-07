@@ -1,4 +1,4 @@
-import type { LocalTrack, TracksDatabase } from "@/types/data-schema"
+import type { LocalTrack, TracksDatabase } from "@/types/data-schema";
 
 /**
  * Mock local tracks database for testing
@@ -14,7 +14,7 @@ export const mockLocalTrack: LocalTrack = {
   youtubeViews: 456789123,
   youtubeLikes: 3456789,
   youtubeComments: 234567,
-}
+};
 
 export const mockLocalTracks: LocalTrack[] = [
   mockLocalTrack,
@@ -40,7 +40,7 @@ export const mockLocalTracks: LocalTrack[] = [
     youtubeLikes: 2345678,
     youtubeComments: 156789,
   },
-]
+];
 
 export const mockTracksDatabase: TracksDatabase = {
   metadata: {
@@ -50,4 +50,4 @@ export const mockTracksDatabase: TracksDatabase = {
     dataSource: "Spotify API + YouTube API",
   },
   tracks: mockLocalTracks,
-}
+};

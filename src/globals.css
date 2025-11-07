@@ -1,10 +1,5 @@
-/* Tailwind CSS 4.x - Single import replaces the old three imports */
 @import "tailwindcss";
 
-/*
- * shadcn/ui design tokens + Spotify Theme
- * Using oklch color space for more accurate color rendering and gradients
- */
 @theme {
   /* ============================================
    * Base Colors - Spotify Classic Dark Theme
@@ -91,8 +86,9 @@
    * ============================================ */
 
   /* Font Family - using system fonts for optimal performance */
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
 
   /* ============================================
    * Radius - Border Radius Values
@@ -114,5 +110,7 @@
 
 body {
   @apply bg-background text-foreground;
-  font-feature-settings: "rlig" 1, "calt" 1;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
 }

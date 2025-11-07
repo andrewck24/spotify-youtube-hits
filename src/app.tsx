@@ -1,22 +1,22 @@
-import { useMemo } from 'react';
-import { useAppSelector } from '@/app/store';
-import { useDataLoader } from '@/hooks/use-data-loader';
-import { useArtist } from '@/hooks/use-artist';
-import { useTrack } from '@/hooks/use-track';
-import { useSearch } from '@/hooks/use-search';
-import { LoadingFallback } from '@/components/layout/loading-fallback';
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
-import { Header } from '@/components/layout/header';
-import { Sidebar } from '@/components/layout/sidebar';
-import { SearchResults } from '@/components/search/search-results';
-import { ArtistProfile } from '@/components/artist/artist-profile';
-import { TrackList } from '@/components/track/track-list';
-import { TrackDetail } from '@/components/track/track-detail';
-import { PopularityChart } from '@/components/track/popularity-chart';
-import { FeatureChart } from '@/components/track/feature-chart';
-import { selectCurrentArtist } from '@/features/artist/artist-selectors';
-import { selectTracks } from '@/features/data/data-selectors';
-import { getTracksByArtist } from '@/features/search/search-service';
+import { ArtistProfile } from "@/components/artist/artist-profile";
+import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { Header } from "@/components/layout/header";
+import { LoadingFallback } from "@/components/layout/loading-fallback";
+import { Sidebar } from "@/components/layout/sidebar";
+import { SearchResults } from "@/components/search/search-results";
+import { FeatureChart } from "@/components/track/feature-chart";
+import { PopularityChart } from "@/components/track/popularity-chart";
+import { TrackDetail } from "@/components/track/track-detail";
+import { TrackList } from "@/components/track/track-list";
+import { selectCurrentArtist } from "@/features/artist/artist-selectors";
+import { selectTracks } from "@/features/data/data-selectors";
+import { getTracksByArtist } from "@/features/search/search-service";
+import { useArtist } from "@/hooks/use-artist";
+import { useDataLoader } from "@/hooks/use-data-loader";
+import { useSearch } from "@/hooks/use-search";
+import { useTrack } from "@/hooks/use-track";
+import { useAppSelector } from "@/lib/store";
+import { useMemo } from "react";
 
 /**
  * App Component
@@ -56,7 +56,9 @@ function App() {
   }, [currentArtist, allTracks]);
 
   // T053: Determine current track ID for useTrack
-  const currentTrackId = useAppSelector((state) => state.track.currentTrack?.id);
+  const currentTrackId = useAppSelector(
+    (state) => state.track.currentTrack?.id,
+  );
   const { track, features, loading: trackLoading } = useTrack(currentTrackId);
 
   // Find the corresponding local track for YouTube data
@@ -97,12 +99,8 @@ function App() {
       header={<Header />}
       sidebar={
         <Sidebar
-          artist={
-            <ArtistProfile artist={artist || currentArtist} />
-          }
-          tracks={
-            <TrackList tracks={artistTracks} />
-          }
+          artist={<ArtistProfile artist={artist || currentArtist} />}
+          tracks={<TrackList tracks={artistTracks} />}
         />
       }
     >
@@ -116,9 +114,7 @@ function App() {
         )}
 
         {/* Track Detail Section */}
-        {track && (
-          <TrackDetail track={track} loading={trackLoading} />
-        )}
+        {track && <TrackDetail track={track} loading={trackLoading} />}
 
         {/* Charts Section (T048-T049) */}
         {track && (

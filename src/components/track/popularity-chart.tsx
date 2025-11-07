@@ -1,17 +1,17 @@
-import { useMemo } from 'react';
+import { formatNumber } from "@/lib/formatters";
+import type { LocalTrackData } from "@/types/data-schema";
+import type { SpotifyTrack } from "@/types/spotify";
+import { useMemo } from "react";
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer,
-} from 'recharts';
-import type { SpotifyTrack } from '@/types/spotify';
-import type { LocalTrackData } from '@/types/data-schema';
-import { formatNumber } from '@/lib/formatters';
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 /**
  * PopularityChart Component
@@ -44,7 +44,8 @@ export function PopularityChart({ track, localTrack }: PopularityChartProps) {
       return [];
     }
 
-    const spotifyPopularity = localTrack.popularity.spotifyPopularity ?? track.popularity ?? 0;
+    const spotifyPopularity =
+      localTrack.popularity.spotifyPopularity ?? track.popularity ?? 0;
     const youtubeViews = localTrack.popularity.youtubeViews;
     const youtubeLikes = localTrack.popularity.youtubeLikes;
     const youtubeComments = localTrack.popularity.youtubeComments;
@@ -57,22 +58,22 @@ export function PopularityChart({ track, localTrack }: PopularityChartProps) {
 
     return [
       {
-        platform: 'Spotify',
+        platform: "Spotify",
         popularity: spotifyPopularity,
         views: null,
       },
       {
-        platform: 'YouTube Views',
+        platform: "YouTube Views",
         popularity: null,
         views: logViews,
       },
       {
-        platform: 'YouTube Likes',
+        platform: "YouTube Likes",
         popularity: null,
         views: logLikes,
       },
       {
-        platform: 'YouTube Comments',
+        platform: "YouTube Comments",
         popularity: null,
         views: logComments,
       },
@@ -92,34 +93,37 @@ export function PopularityChart({ track, localTrack }: PopularityChartProps) {
       <h3 className="text-white font-semibold mb-4">人氣度對比</h3>
 
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
+        <BarChart
+          data={chartData}
+          margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
+        >
           <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
           <XAxis
             dataKey="platform"
-            tick={{ fill: '#B3B3B3', fontSize: 12 }}
-            axisLine={{ stroke: '#404040' }}
+            tick={{ fill: "#B3B3B3", fontSize: 12 }}
+            axisLine={{ stroke: "#404040" }}
           />
           <YAxis
-            tick={{ fill: '#B3B3B3', fontSize: 12 }}
-            axisLine={{ stroke: '#404040' }}
+            tick={{ fill: "#B3B3B3", fontSize: 12 }}
+            axisLine={{ stroke: "#404040" }}
             label={{
-              value: 'Score (Spotify: 0-100, YouTube: log₁₀)',
+              value: "Score (Spotify: 0-100, YouTube: log₁₀)",
               angle: -90,
-              position: 'insideLeft',
-              fill: '#B3B3B3',
+              position: "insideLeft",
+              fill: "#B3B3B3",
               style: { fontSize: 12 },
             }}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#181818',
-              border: '1px solid #404040',
-              borderRadius: '4px',
+              backgroundColor: "#181818",
+              border: "1px solid #404040",
+              borderRadius: "4px",
             }}
-            labelStyle={{ color: '#B3B3B3' }}
+            labelStyle={{ color: "#B3B3B3" }}
             formatter={(value) => {
-              if (value === null) return 'N/A';
-              if (typeof value === 'number') {
+              if (value === null) return "N/A";
+              if (typeof value === "number") {
                 return value.toFixed(2);
               }
               return value;
@@ -127,9 +131,9 @@ export function PopularityChart({ track, localTrack }: PopularityChartProps) {
           />
           <Legend
             wrapperStyle={{
-              paddingTop: '20px',
-              color: '#B3B3B3',
-              fontSize: '12px',
+              paddingTop: "20px",
+              color: "#B3B3B3",
+              fontSize: "12px",
             }}
             iconType="square"
           />
@@ -151,7 +155,8 @@ export function PopularityChart({ track, localTrack }: PopularityChartProps) {
           • YouTube 按讚：{formatNumber(localTrack.popularity.youtubeLikes)} 次
         </p>
         <p>
-          • YouTube 留言：{formatNumber(localTrack.popularity.youtubeComments)} 則
+          • YouTube 留言：{formatNumber(localTrack.popularity.youtubeComments)}{" "}
+          則
         </p>
       </div>
     </div>

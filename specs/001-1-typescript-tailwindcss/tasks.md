@@ -126,7 +126,7 @@
 
 - [x] **T013** 建立 Redux Store 配置
 
-  - 建立 `src/app/store.ts`
+  - 建立 `src/lib/store.ts`
   - 配置 `configureStore`，設定 middleware（處理 Fuse.js 不可序列化）
   - 匯出 `RootState`, `AppDispatch`, `useAppDispatch`, `useAppSelector` typed hooks
 
@@ -162,7 +162,7 @@
 
 - [x] **T019** 整合所有 Redux Slices 至 Store
 
-  - 在 `src/app/store.ts` 中匯入所有 reducers
+  - 在 `src/lib/store.ts` 中匯入所有 reducers
   - 配置 reducer 組合：`{ artist, track, search, data, spotify }`
   - 驗證 store 可正常初始化
 

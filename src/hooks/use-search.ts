@@ -1,8 +1,11 @@
-import { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '@/app/store';
-import { performSearch, clearSearch } from '@/features/search/search-slice';
-import { selectSearchResults, selectSearchQuery } from '@/features/search/search-selectors';
-import { searchArtists } from '@/features/search/search-service';
+import {
+  selectSearchQuery,
+  selectSearchResults,
+} from "@/features/search/search-selectors";
+import { searchArtists } from "@/features/search/search-service";
+import { clearSearch, performSearch } from "@/features/search/search-slice";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import { useCallback } from "react";
 
 /**
  * Custom Hook: useSearch
@@ -39,7 +42,6 @@ export function useSearch(): UseSearchReturn {
   const search = useCallback(
     (q: string) => {
       if (!fuseInstance) {
-        console.warn('Search engine not initialized');
         return;
       }
 
@@ -48,10 +50,10 @@ export function useSearch(): UseSearchReturn {
         performSearch({
           query: q,
           results: searchResults,
-        })
+        }),
       );
     },
-    [fuseInstance, dispatch]
+    [fuseInstance, dispatch],
   );
 
   const doClearSearch = useCallback(() => {

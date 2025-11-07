@@ -1,8 +1,8 @@
-import { useAppDispatch } from '@/app/store';
-import { setCurrentTrack } from '@/features/track/track-slice';
-import { Card } from '@/components/ui/card';
-import type { LocalTrackData } from '@/types/data-schema';
-import { formatNumber } from '@/lib/formatters';
+import { Card } from "@/components/ui/card";
+import { setCurrentTrack } from "@/features/track/track-slice";
+import { formatNumber } from "@/lib/formatters";
+import { useAppDispatch } from "@/lib/store";
+import type { LocalTrackData } from "@/types/data-schema";
 
 /**
  * TrackList Component
@@ -39,55 +39,51 @@ export function TrackList({ tracks }: TrackListProps) {
         spotify: `https://open.spotify.com/track/${track.trackId}`,
       },
       external_ids: {
-        isrc: '',
-        ean: '',
-        upc: '',
+        isrc: "",
+        ean: "",
+        upc: "",
       },
       album: {
-        id: '',
-        name: '',
-        uri: '',
-        external_urls: { spotify: '' },
+        id: "",
+        name: "",
+        uri: "",
+        external_urls: { spotify: "" },
         images: [],
         release_date: track.releaseYear.toString(),
-        release_date_precision: 'year' as const,
+        release_date_precision: "year" as const,
         total_tracks: 0,
-        type: 'album' as const,
+        type: "album" as const,
         artists: [],
-        href: '',
-        album_type: 'album' as const,
+        href: "",
+        album_type: "album" as const,
       },
       artists: [
         {
-          id: '',
+          id: "",
           name: track.artistName,
-          uri: '',
-          external_urls: { spotify: '' },
-          type: 'artist' as const,
-          href: '',
+          uri: "",
+          external_urls: { spotify: "" },
+          type: "artist" as const,
+          href: "",
         },
       ],
       disc_number: 0,
       duration_ms: 0,
       explicit: false,
-      href: '',
+      href: "",
       is_local: false,
       is_playable: true,
       popularity: track.popularity.spotifyPopularity ?? 0,
       preview_url: null,
       track_number: 0,
-      type: 'track' as const,
+      type: "track" as const,
     };
 
     dispatch(setCurrentTrack(spotifyTrack));
   };
 
   if (tracks.length === 0) {
-    return (
-      <Card className="p-4 text-center text-[#B3B3B3]">
-        沒有歌曲
-      </Card>
-    );
+    return <Card className="p-4 text-center text-[#B3B3B3]">沒有歌曲</Card>;
   }
 
   return (
@@ -105,7 +101,8 @@ export function TrackList({ tracks }: TrackListProps) {
                   {track.trackName}
                 </div>
                 <div className="text-xs text-[#B3B3B3] mt-1">
-                  {track.releaseYear} • {formatNumber(track.popularity.youtubeViews)} views
+                  {track.releaseYear} •{" "}
+                  {formatNumber(track.popularity.youtubeViews)} views
                 </div>
               </div>
               <div className="text-xs text-[#1DB954] ml-2 flex-shrink-0">

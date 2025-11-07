@@ -1,5 +1,5 @@
-import Fuse from 'fuse.js';
-import type { LocalTrackData } from '@/types/data-schema';
+import type { LocalTrackData } from "@/types/data-schema";
+import Fuse from "fuse.js";
 
 /**
  * Search Service
@@ -20,7 +20,7 @@ import type { LocalTrackData } from '@/types/data-schema';
  * Fuse.js 搜尋引擎配置
  */
 const FUSE_OPTIONS = {
-  keys: ['artistName'],
+  keys: ["artistName"],
   threshold: 0.3, // 容許 30% 的偏差（模糊匹配）
   includeScore: true,
   minMatchCharLength: 1, // 最少匹配字元數
@@ -33,7 +33,9 @@ const SEARCH_LIMIT = 12; // 預設搜尋結果限制
  * @param tracks - 本地追蹤資料
  * @returns Fuse 索引實例
  */
-export function createSearchIndex(tracks: LocalTrackData[]): Fuse<LocalTrackData> {
+export function createSearchIndex(
+  tracks: LocalTrackData[],
+): Fuse<LocalTrackData> {
   return new Fuse(tracks, FUSE_OPTIONS);
 }
 
@@ -47,7 +49,7 @@ export function createSearchIndex(tracks: LocalTrackData[]): Fuse<LocalTrackData
 export function searchArtists(
   fuseInstance: Fuse<LocalTrackData>,
   query: string,
-  limit: number = SEARCH_LIMIT
+  limit: number = SEARCH_LIMIT,
 ) {
   if (!query.trim()) {
     return [];
@@ -69,7 +71,7 @@ export function searchArtists(
  */
 export function getTracksByArtist(
   tracks: LocalTrackData[],
-  artistName: string
+  artistName: string,
 ): LocalTrackData[] {
   return tracks.filter((track) => track.artistName === artistName);
 }

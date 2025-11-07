@@ -1,12 +1,15 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/app/store';
-import { fetchTrackDetails, fetchAudioFeatures } from '@/features/track/track-slice';
 import {
-  selectCurrentTrack,
-  selectTrackLoading,
-  selectTrackError,
   selectAudioFeatures,
-} from '@/features/track/track-selectors';
+  selectCurrentTrack,
+  selectTrackError,
+  selectTrackLoading,
+} from "@/features/track/track-selectors";
+import {
+  fetchAudioFeatures,
+  fetchTrackDetails,
+} from "@/features/track/track-slice";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import { useEffect } from "react";
 
 /**
  * Custom Hook: useTrack

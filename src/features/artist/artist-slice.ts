@@ -1,7 +1,11 @@
-import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { SpotifyArtist } from '@/types/spotify';
-import { initialArtistState } from './artist-types';
-import { spotifyApi } from '@/services/spotify-api';
+import { spotifyApi } from "@/services/spotify-api";
+import type { SpotifyArtist } from "@/types/spotify";
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
+import { initialArtistState } from "./artist-types";
 
 /**
  * Artist Redux Slice
@@ -27,21 +31,23 @@ import { spotifyApi } from '@/services/spotify-api';
  * 呼叫 spotifyApi.getArtist() 取得完整藝人資訊
  */
 export const fetchArtist = createAsyncThunk(
-  'artist/fetchArtist',
+  "artist/fetchArtist",
   async (artistId: string, { rejectWithValue }) => {
     try {
       const artist = await spotifyApi.getArtist(artistId);
       return artist;
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to fetch artist';
-      console.error('fetchArtist error:', message);
+      const message =
+        error instanceof Error ? error.message : "Failed to fetch artist";
+      // eslint-disable-next-line no-console
+      console.error("fetchArtist error:", message);
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 const artistSlice = createSlice({
-  name: 'artist',
+  name: "artist",
   initialState: initialArtistState,
   reducers: {
     /**
@@ -85,13 +91,16 @@ const artistSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchArtist.fulfilled, (state, action: PayloadAction<SpotifyArtist>) => {
-        state.currentArtist = action.payload;
-        state.loading = false;
-        state.error = null;
-      })
+      .addCase(
+        fetchArtist.fulfilled,
+        (state, action: PayloadAction<SpotifyArtist>) => {
+          state.currentArtist = action.payload;
+          state.loading = false;
+          state.error = null;
+        },
+      )
       .addCase(fetchArtist.rejected, (state, action) => {
-        state.error = action.payload as string || 'Failed to fetch artist';
+        state.error = (action.payload as string) || "Failed to fetch artist";
         state.loading = false;
       });
   },

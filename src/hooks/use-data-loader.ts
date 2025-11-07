@@ -1,9 +1,13 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/app/store';
-import { loadLocalData } from '@/features/data/data-slice';
-import { initializeSearch } from '@/features/search/search-slice';
-import { selectDataLoaded, selectDataLoading, selectDataError } from '@/features/data/data-selectors';
-import { createSearchIndex } from '@/features/search/search-service';
+import {
+  selectDataError,
+  selectDataLoaded,
+  selectDataLoading,
+} from "@/features/data/data-selectors";
+import { loadLocalData } from "@/features/data/data-slice";
+import { createSearchIndex } from "@/features/search/search-service";
+import { initializeSearch } from "@/features/search/search-slice";
+import { useAppDispatch, useAppSelector } from "@/lib/store";
+import { useEffect } from "react";
 
 /**
  * Custom Hook: useDataLoader
@@ -53,7 +57,6 @@ export function useDataLoader(): UseDataLoaderReturn {
         if (tracksData.length > 0) {
           const fuseInstance = createSearchIndex(tracksData);
           dispatch(initializeSearch(fuseInstance));
-          console.log('Search index initialized with', tracksData.length, 'tracks');
         }
       }
     };

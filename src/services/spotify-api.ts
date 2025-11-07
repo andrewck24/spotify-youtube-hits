@@ -1,18 +1,18 @@
 import type {
   ISpotifyApiService,
   SpotifyArtist,
-  SpotifyTrack,
   SpotifyAudioFeatures,
   SpotifyToken,
   SpotifyTokenResponse,
-} from '@/types/spotify';
+  SpotifyTrack,
+} from "@/types/spotify";
 import {
   SpotifyApiError,
   isSpotifyErrorResponse,
+  isValidAudioFeatures,
   isValidSpotifyArtist,
   isValidSpotifyTrack,
-  isValidAudioFeatures,
-} from '@/types/spotify';
+} from "@/types/spotify";
 
 /**
  * Spotify API Service Implementation
@@ -31,8 +31,8 @@ import {
  *   const artist = await spotifyApi.getArtist('artistId')
  */
 
-const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
-const SPOTIFY_API_BASE_URL = 'https://api.spotify.com/v1';
+const SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token";
+const SPOTIFY_API_BASE_URL = "https://api.spotify.com/v1";
 
 export class SpotifyApiService implements ISpotifyApiService {
   private token: SpotifyToken | null = null;
@@ -47,20 +47,20 @@ export class SpotifyApiService implements ISpotifyApiService {
 
     if (!clientId || !clientSecret) {
       throw new SpotifyApiError(
-        'BAD_REQUEST',
+        "BAD_REQUEST",
         400,
-        'Missing Spotify API credentials. Please set VITE_SPOTIFY_CLIENT_ID and VITE_SPOTIFY_CLIENT_SECRET environment variables.'
+        "Missing Spotify API credentials. Please set VITE_SPOTIFY_CLIENT_ID and VITE_SPOTIFY_CLIENT_SECRET environment variables.",
       );
     }
 
     try {
       const response = await fetch(SPOTIFY_TOKEN_URL, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
         },
-        body: 'grant_type=client_credentials',
+        body: "grant_type=client_credentials",
       });
 
       if (!response.ok) {
@@ -68,9 +68,9 @@ export class SpotifyApiService implements ISpotifyApiService {
           const errorData = await response.json();
           if (isSpotifyErrorResponse(errorData)) {
             throw new SpotifyApiError(
-              'INVALID_TOKEN',
+              "INVALID_TOKEN",
               errorData.error.status,
-              errorData.error.message
+              errorData.error.message,
             );
           }
         } catch (jsonError) {
@@ -80,9 +80,9 @@ export class SpotifyApiService implements ISpotifyApiService {
           }
         }
         throw new SpotifyApiError(
-          'SERVER_ERROR',
+          "SERVER_ERROR",
           response.status,
-          'Failed to authenticate with Spotify API'
+          "Failed to authenticate with Spotify API",
         );
       }
 
@@ -101,10 +101,10 @@ export class SpotifyApiService implements ISpotifyApiService {
         throw error;
       }
       throw new SpotifyApiError(
-        'NETWORK_ERROR',
+        "NETWORK_ERROR",
         0,
-        'Network error while authenticating with Spotify API',
-        error
+        "Network error while authenticating with Spotify API",
+        error,
       );
     }
   }
@@ -131,15 +131,18 @@ export class SpotifyApiService implements ISpotifyApiService {
    */
   async getArtist(artistId: string): Promise<SpotifyArtist> {
     await this.ensureValidToken();
+    if (!this.token) {
+      throw new SpotifyApiError("INVALID_TOKEN", 401, "Token not available");
+    }
 
     try {
       const response = await fetch(
         `${SPOTIFY_API_BASE_URL}/artists/${artistId}`,
         {
           headers: {
-            Authorization: `Bearer ${this.token!.accessToken}`,
+            Authorization: `Bearer ${this.token.accessToken}`,
           },
-        }
+        },
       );
 
       await this.handleApiError(response);
@@ -148,9 +151,9 @@ export class SpotifyApiService implements ISpotifyApiService {
 
       if (!isValidSpotifyArtist(data)) {
         throw new SpotifyApiError(
-          'SERVER_ERROR',
+          "SERVER_ERROR",
           500,
-          'Invalid artist data received from Spotify API'
+          "Invalid artist data received from Spotify API",
         );
       }
 
@@ -160,10 +163,10 @@ export class SpotifyApiService implements ISpotifyApiService {
         throw error;
       }
       throw new SpotifyApiError(
-        'NETWORK_ERROR',
+        "NETWORK_ERROR",
         0,
-        'Network error while fetching artist',
-        error
+        "Network error while fetching artist",
+        error,
       );
     }
   }
@@ -173,16 +176,19 @@ export class SpotifyApiService implements ISpotifyApiService {
    */
   async getTrack(trackId: string, market?: string): Promise<SpotifyTrack> {
     await this.ensureValidToken();
+    if (!this.token) {
+      throw new SpotifyApiError("INVALID_TOKEN", 401, "Token not available");
+    }
 
     try {
       const url = new URL(`${SPOTIFY_API_BASE_URL}/tracks/${trackId}`);
       if (market) {
-        url.searchParams.append('market', market);
+        url.searchParams.append("market", market);
       }
 
       const response = await fetch(url.toString(), {
         headers: {
-          Authorization: `Bearer ${this.token!.accessToken}`,
+          Authorization: `Bearer ${this.token.accessToken}`,
         },
       });
 
@@ -192,9 +198,9 @@ export class SpotifyApiService implements ISpotifyApiService {
 
       if (!isValidSpotifyTrack(data)) {
         throw new SpotifyApiError(
-          'SERVER_ERROR',
+          "SERVER_ERROR",
           500,
-          'Invalid track data received from Spotify API'
+          "Invalid track data received from Spotify API",
         );
       }
 
@@ -204,10 +210,10 @@ export class SpotifyApiService implements ISpotifyApiService {
         throw error;
       }
       throw new SpotifyApiError(
-        'NETWORK_ERROR',
+        "NETWORK_ERROR",
         0,
-        'Network error while fetching track',
-        error
+        "Network error while fetching track",
+        error,
       );
     }
   }
@@ -217,15 +223,18 @@ export class SpotifyApiService implements ISpotifyApiService {
    */
   async getAudioFeatures(trackId: string): Promise<SpotifyAudioFeatures> {
     await this.ensureValidToken();
+    if (!this.token) {
+      throw new SpotifyApiError("INVALID_TOKEN", 401, "Token not available");
+    }
 
     try {
       const response = await fetch(
         `${SPOTIFY_API_BASE_URL}/audio-features/${trackId}`,
         {
           headers: {
-            Authorization: `Bearer ${this.token!.accessToken}`,
+            Authorization: `Bearer ${this.token.accessToken}`,
           },
-        }
+        },
       );
 
       await this.handleApiError(response);
@@ -234,9 +243,9 @@ export class SpotifyApiService implements ISpotifyApiService {
 
       if (!isValidAudioFeatures(data)) {
         throw new SpotifyApiError(
-          'SERVER_ERROR',
+          "SERVER_ERROR",
           500,
-          'Invalid audio features data received from Spotify API'
+          "Invalid audio features data received from Spotify API",
         );
       }
 
@@ -246,10 +255,10 @@ export class SpotifyApiService implements ISpotifyApiService {
         throw error;
       }
       throw new SpotifyApiError(
-        'NETWORK_ERROR',
+        "NETWORK_ERROR",
         0,
-        'Network error while fetching audio features',
-        error
+        "Network error while fetching audio features",
+        error,
       );
     }
   }
@@ -258,7 +267,7 @@ export class SpotifyApiService implements ISpotifyApiService {
    * 批次取得音樂特徵 (最多 100 筆)
    */
   async getAudioFeaturesBatch(
-    trackIds: string[]
+    trackIds: string[],
   ): Promise<Map<string, SpotifyAudioFeatures>> {
     if (trackIds.length === 0) {
       return new Map();
@@ -266,21 +275,24 @@ export class SpotifyApiService implements ISpotifyApiService {
 
     if (trackIds.length > 100) {
       throw new SpotifyApiError(
-        'BAD_REQUEST',
+        "BAD_REQUEST",
         400,
-        'Maximum 100 track IDs allowed per batch request'
+        "Maximum 100 track IDs allowed per batch request",
       );
     }
 
     await this.ensureValidToken();
+    if (!this.token) {
+      throw new SpotifyApiError("INVALID_TOKEN", 401, "Token not available");
+    }
 
     try {
       const url = new URL(`${SPOTIFY_API_BASE_URL}/audio-features`);
-      url.searchParams.append('ids', trackIds.join(','));
+      url.searchParams.append("ids", trackIds.join(","));
 
       const response = await fetch(url.toString(), {
         headers: {
-          Authorization: `Bearer ${this.token!.accessToken}`,
+          Authorization: `Bearer ${this.token.accessToken}`,
         },
       });
 
@@ -304,10 +316,10 @@ export class SpotifyApiService implements ISpotifyApiService {
         throw error;
       }
       throw new SpotifyApiError(
-        'NETWORK_ERROR',
+        "NETWORK_ERROR",
         0,
-        'Network error while fetching audio features batch',
-        error
+        "Network error while fetching audio features batch",
+        error,
       );
     }
   }
@@ -336,14 +348,14 @@ export class SpotifyApiService implements ISpotifyApiService {
       throw new SpotifyApiError(
         errorType,
         data.error.status,
-        data.error.message
+        data.error.message,
       );
     }
 
     throw new SpotifyApiError(
-      'SERVER_ERROR',
+      "SERVER_ERROR",
       response.status,
-      'Unexpected error from Spotify API'
+      "Unexpected error from Spotify API",
     );
   }
 
@@ -351,19 +363,24 @@ export class SpotifyApiService implements ISpotifyApiService {
    * 將 HTTP status code 映射到錯誤類型
    */
   private mapHttpStatusToErrorType(
-    status: number
-  ): 'INVALID_TOKEN' | 'RATE_LIMIT' | 'NOT_FOUND' | 'BAD_REQUEST' | 'SERVER_ERROR' {
+    status: number,
+  ):
+    | "INVALID_TOKEN"
+    | "RATE_LIMIT"
+    | "NOT_FOUND"
+    | "BAD_REQUEST"
+    | "SERVER_ERROR" {
     switch (status) {
       case 401:
-        return 'INVALID_TOKEN';
+        return "INVALID_TOKEN";
       case 429:
-        return 'RATE_LIMIT';
+        return "RATE_LIMIT";
       case 404:
-        return 'NOT_FOUND';
+        return "NOT_FOUND";
       case 400:
-        return 'BAD_REQUEST';
+        return "BAD_REQUEST";
       default:
-        return 'SERVER_ERROR';
+        return "SERVER_ERROR";
     }
   }
 }

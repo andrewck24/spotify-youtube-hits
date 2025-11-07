@@ -1,4 +1,4 @@
-import type { LocalTracksDatabase } from '@/types/data-schema';
+import type { LocalTracksDatabase } from "@/types/data-schema";
 
 /**
  * Storage Service
@@ -15,8 +15,8 @@ import type { LocalTracksDatabase } from '@/types/data-schema';
  *   storage.saveTracksData(data)
  */
 
-const STORAGE_KEY = 'spotify-youtube-hits:tracks-data';
-const VERSION_KEY = 'spotify-youtube-hits:data-version';
+const STORAGE_KEY = "spotify-youtube-hits:tracks-data";
+const VERSION_KEY = "spotify-youtube-hits:data-version";
 
 export class StorageService {
   /**
@@ -31,7 +31,8 @@ export class StorageService {
       return true;
     } catch (error) {
       // Quota exceeded or other errors
-      console.warn('Failed to save to sessionStorage:', error);
+      // eslint-disable-next-line no-console
+      console.warn("Failed to save to sessionStorage:", error);
       return false;
     }
   }
@@ -48,7 +49,8 @@ export class StorageService {
       }
       return JSON.parse(serialized) as LocalTracksDatabase;
     } catch (error) {
-      console.warn('Failed to load from sessionStorage:', error);
+      // eslint-disable-next-line no-console
+      console.warn("Failed to load from sessionStorage:", error);
       return null;
     }
   }

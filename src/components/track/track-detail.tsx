@@ -1,7 +1,7 @@
-import { Card } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import type { SpotifyTrack } from '@/types/spotify';
-import { formatDuration } from '@/lib/formatters';
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatDuration } from "@/lib/formatters";
+import type { SpotifyTrack } from "@/types/spotify";
 
 /**
  * TrackDetail Component
@@ -75,7 +75,7 @@ export function TrackDetail({ track, loading }: TrackDetailProps) {
 
           {/* Artist */}
           <div className="text-lg text-[#1DB954] mb-4">
-            {track.artists?.map((a) => a.name).join(', ')}
+            {track.artists?.map((a) => a.name).join(", ")}
           </div>
 
           {/* Album Info */}
@@ -84,14 +84,15 @@ export function TrackDetail({ track, loading }: TrackDetailProps) {
               <span className="font-semibold">專輯</span>: {track.album?.name}
             </div>
             <div>
-              <span className="font-semibold">發行年份</span>:{' '}
-              {track.album?.release_date?.split('-')[0]}
+              <span className="font-semibold">發行年份</span>:{" "}
+              {track.album?.release_date?.split("-")[0]}
             </div>
             <div>
               <span className="font-semibold">時長</span>: {duration}
             </div>
             <div>
-              <span className="font-semibold">人氣度</span>: {track.popularity}/100
+              <span className="font-semibold">人氣度</span>: {track.popularity}
+              /100
             </div>
           </div>
 

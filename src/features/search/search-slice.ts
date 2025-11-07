@@ -1,7 +1,7 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type Fuse from 'fuse.js';
-import type { LocalTrackData } from '@/types/data-schema';
-import { initialSearchState, type SearchResult } from './search-types';
+import type { LocalTrackData } from "@/types/data-schema";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type Fuse from "fuse.js";
+import { initialSearchState, type SearchResult } from "./search-types";
 
 /**
  * Search Redux Slice
@@ -23,7 +23,7 @@ import { initialSearchState, type SearchResult } from './search-types';
  */
 
 const searchSlice = createSlice({
-  name: 'search',
+  name: "search",
   initialState: initialSearchState,
   reducers: {
     /**
@@ -31,10 +31,7 @@ const searchSlice = createSlice({
      * This should be called after tracks data is loaded
      * The Fuse instance is created in search-service.ts
      */
-    initializeSearch: (
-      state,
-      action: PayloadAction<Fuse<LocalTrackData>>
-    ) => {
+    initializeSearch: (state, action: PayloadAction<Fuse<LocalTrackData>>) => {
       state.fuseInstance = action.payload;
     },
 
@@ -44,7 +41,7 @@ const searchSlice = createSlice({
      */
     performSearch: (
       state,
-      action: PayloadAction<{ query: string; results: SearchResult[] }>
+      action: PayloadAction<{ query: string; results: SearchResult[] }>,
     ) => {
       state.query = action.payload.query;
       state.results = action.payload.results;
@@ -54,7 +51,7 @@ const searchSlice = createSlice({
      * Clear search query and results
      */
     clearSearch: (state) => {
-      state.query = '';
+      state.query = "";
       state.results = [];
     },
 

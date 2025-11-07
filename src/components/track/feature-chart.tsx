@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
+import type { SpotifyAudioFeatures } from "@/types/spotify";
+import { useMemo } from "react";
 import {
-  RadarChart,
-  PolarGrid,
   PolarAngleAxis,
+  PolarGrid,
   PolarRadiusAxis,
   Radar,
+  RadarChart,
   ResponsiveContainer,
   Tooltip,
-} from 'recharts';
-import type { SpotifyAudioFeatures } from '@/types/spotify';
+} from "recharts";
 
 /**
  * FeatureChart Component
@@ -46,37 +46,37 @@ export function FeatureChart({ features }: FeatureChartProps) {
 
     return [
       {
-        name: '聲學',
+        name: "聲學",
         value: features.acousticness,
         fullMark: 1,
       },
       {
-        name: '舞蹈',
+        name: "舞蹈",
         value: features.danceability,
         fullMark: 1,
       },
       {
-        name: '能量',
+        name: "能量",
         value: features.energy,
         fullMark: 1,
       },
       {
-        name: '器樂',
+        name: "器樂",
         value: features.instrumentalness,
         fullMark: 1,
       },
       {
-        name: '現場',
+        name: "現場",
         value: features.liveness,
         fullMark: 1,
       },
       {
-        name: '語音',
+        name: "語音",
         value: features.speechiness,
         fullMark: 1,
       },
       {
-        name: '正向',
+        name: "正向",
         value: features.valence,
         fullMark: 1,
       },
@@ -96,16 +96,19 @@ export function FeatureChart({ features }: FeatureChartProps) {
       <h3 className="text-white font-semibold mb-4">音樂特徵雷達圖</h3>
 
       <ResponsiveContainer width="100%" height={300}>
-        <RadarChart data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+        <RadarChart
+          data={chartData}
+          margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+        >
           <PolarGrid stroke="#404040" />
           <PolarAngleAxis
             dataKey="name"
-            tick={{ fill: '#B3B3B3', fontSize: 12 }}
+            tick={{ fill: "#B3B3B3", fontSize: 12 }}
           />
           <PolarRadiusAxis
             angle={90}
             domain={[0, 1]}
-            tick={{ fill: '#B3B3B3', fontSize: 10 }}
+            tick={{ fill: "#B3B3B3", fontSize: 10 }}
           />
           <Radar
             name="特徵值"
@@ -116,14 +119,14 @@ export function FeatureChart({ features }: FeatureChartProps) {
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#181818',
-              border: '1px solid #404040',
-              borderRadius: '4px',
+              backgroundColor: "#181818",
+              border: "1px solid #404040",
+              borderRadius: "4px",
             }}
-            labelStyle={{ color: '#B3B3B3' }}
+            labelStyle={{ color: "#B3B3B3" }}
             formatter={(value) => {
-              if (typeof value === 'number') {
-                return (value * 100).toFixed(1) + '%';
+              if (typeof value === "number") {
+                return (value * 100).toFixed(1) + "%";
               }
               return value;
             }}

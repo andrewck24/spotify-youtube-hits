@@ -1,7 +1,11 @@
-import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { SpotifyTrack, SpotifyAudioFeatures } from '@/types/spotify';
-import { initialTrackState } from './track-types';
-import { spotifyApi } from '@/services/spotify-api';
+import { spotifyApi } from "@/services/spotify-api";
+import type { SpotifyAudioFeatures, SpotifyTrack } from "@/types/spotify";
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
+import { initialTrackState } from "./track-types";
 
 /**
  * Track Redux Slice
@@ -30,17 +34,19 @@ import { spotifyApi } from '@/services/spotify-api';
  * 呼叫 spotifyApi.getTrack() 取得完整歌曲資訊（專輯、發行日期等）
  */
 export const fetchTrackDetails = createAsyncThunk(
-  'track/fetchTrackDetails',
+  "track/fetchTrackDetails",
   async (trackId: string, { rejectWithValue }) => {
     try {
       const track = await spotifyApi.getTrack(trackId);
       return track;
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to fetch track';
-      console.error('fetchTrackDetails error:', message);
+      const message =
+        error instanceof Error ? error.message : "Failed to fetch track";
+      // eslint-disable-next-line no-console
+      console.error("fetchTrackDetails error:", message);
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 /**
@@ -48,21 +54,25 @@ export const fetchTrackDetails = createAsyncThunk(
  * 呼叫 spotifyApi.getAudioFeatures() 取得音樂特徵（energy, danceability 等）
  */
 export const fetchAudioFeatures = createAsyncThunk(
-  'track/fetchAudioFeatures',
+  "track/fetchAudioFeatures",
   async (trackId: string, { rejectWithValue }) => {
     try {
       const features = await spotifyApi.getAudioFeatures(trackId);
       return features;
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to fetch audio features';
-      console.error('fetchAudioFeatures error:', message);
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch audio features";
+      // eslint-disable-next-line no-console
+      console.error("fetchAudioFeatures error:", message);
       return rejectWithValue(message);
     }
-  }
+  },
 );
 
 const trackSlice = createSlice({
-  name: 'track',
+  name: "track",
   initialState: initialTrackState,
   reducers: {
     /**
@@ -115,20 +125,27 @@ const trackSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchTrackDetails.fulfilled, (state, action: PayloadAction<SpotifyTrack>) => {
-        state.currentTrack = action.payload;
-        state.loading = false;
-        state.error = null;
-      })
+      .addCase(
+        fetchTrackDetails.fulfilled,
+        (state, action: PayloadAction<SpotifyTrack>) => {
+          state.currentTrack = action.payload;
+          state.loading = false;
+          state.error = null;
+        },
+      )
       .addCase(fetchTrackDetails.rejected, (state, action) => {
-        state.error = action.payload as string || 'Failed to fetch track';
+        state.error = (action.payload as string) || "Failed to fetch track";
         state.loading = false;
       })
-      .addCase(fetchAudioFeatures.fulfilled, (state, action: PayloadAction<SpotifyAudioFeatures>) => {
-        state.audioFeatures = action.payload;
-      })
+      .addCase(
+        fetchAudioFeatures.fulfilled,
+        (state, action: PayloadAction<SpotifyAudioFeatures>) => {
+          state.audioFeatures = action.payload;
+        },
+      )
       .addCase(fetchAudioFeatures.rejected, (state, action) => {
-        state.error = action.payload as string || 'Failed to fetch audio features';
+        state.error =
+          (action.payload as string) || "Failed to fetch audio features";
       });
   },
 });
