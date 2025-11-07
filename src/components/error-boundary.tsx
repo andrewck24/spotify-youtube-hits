@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React from "react";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -40,7 +40,8 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by ErrorBoundary:', error, errorInfo);
+    // eslint-disable-next-line no-console
+    console.error("Error caught by ErrorBoundary:", error, errorInfo);
   }
 
   handleReset = () => {
@@ -54,9 +55,7 @@ export class ErrorBoundary extends React.Component<
         <div className="min-h-screen flex items-center justify-center bg-background p-4">
           <Card className="max-w-md w-full">
             <CardHeader>
-              <CardTitle className="text-destructive">
-                發生錯誤
-              </CardTitle>
+              <CardTitle className="text-destructive">發生錯誤</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">

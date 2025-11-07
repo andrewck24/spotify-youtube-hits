@@ -277,7 +277,7 @@ export const artistSlice = createSlice({
 // src/features/artist/artist-thunks.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchSpotifyArtist } from "@/services/spotify-api";
-import type { RootState } from "@/app/store";
+import type { RootState } from "@/lib/store";
 
 /**
  * 載入藝人資料 (含 Spotify API 查詢)
@@ -440,7 +440,7 @@ const initialState: SpotifyState = {
 ## 完整 Redux Store 結構
 
 ```typescript
-// src/app/store.ts
+// src/lib/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import artistReducer from "@/features/artist/artist-slice";
 import trackReducer from "@/features/track/track-slice";
@@ -682,7 +682,7 @@ export function validateTracksData(tracks: unknown[]): Track[] {
 ```typescript
 // src/features/artist/artist-selectors.ts
 import { createSelector } from "@reduxjs/toolkit";
-import type { RootState } from "@/app/store";
+import type { RootState } from "@/lib/store";
 
 export const selectCurrentArtist = (state: RootState) => state.artist.current;
 

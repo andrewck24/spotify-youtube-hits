@@ -1,36 +1,90 @@
-import { ReactElement } from "react"
-import { render, RenderOptions } from "@testing-library/react"
-// import { Provider } from "react-redux"
-// import { configureStore } from "@reduxjs/toolkit"
+import artistReducer from "@/features/artist/artist-slice";
+import dataReducer from "@/features/data/data-slice";
+import searchReducer from "@/features/search/search-slice";
+import spotifyReducer from "@/features/spotify/spotify-slice";
+import trackReducer from "@/features/track/track-slice";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { render, RenderOptions } from "@testing-library/react";
+import { ReactElement } from "react";
+import { Provider } from "react-redux";
+
+// Create root reducer for testing
+const rootReducer = combineReducers({
+  artist: artistReducer,
+  track: trackReducer,
+  search: searchReducer,
+  data: dataReducer,
+  spotify: spotifyReducer,
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
 
 /**
- * Custom render function with Redux Provider wrapper
- * TODO: Implement once Redux store is created (T013)
+ * Creates a Redux store for testing with optional preloaded state
+ * Each test gets its own store instance to ensure isolation
+ *
+ * @param preloadedState - Optional initial state for the store
+ * @returns Configured Redux store for testing
  */
+export function setupStore(preloadedState?: Partial<RootState>) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: ["search/initializeSearch"],
+          ignoredPaths: ["search.fuseInstance"],
+        },
+      }),
+  });
+}
+
+export type AppStore = ReturnType<typeof setupStore>;
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "wrapper"> {
-  // preloadedState?: Partial<RootState>
-  // store?: AppStore
+  preloadedState?: Partial<RootState>;
+  store?: AppStore;
 }
 
+/**
+ * Custom render function that wraps components with Redux Provider
+ * Follows RTK testing best practices for component testing
+ *
+ * @example
+ * // Render with default empty state
+ * render(<MyComponent />)
+ *
+ * @example
+ * // Render with custom initial state
+ * render(<MyComponent />, {
+ *   preloadedState: {
+ *     artist: { currentArtist: mockArtist, loading: false, error: null },
+ *   },
+ * })
+ *
+ * @example
+ * // Access store in tests
+ * const { store } = render(<MyComponent />)
+ * expect(store.getState().artist.currentArtist).toBe(null)
+ */
 export function renderWithProviders(
   ui: ReactElement,
-  options?: ExtendedRenderOptions,
+  {
+    preloadedState,
+    store = setupStore(preloadedState),
+    ...renderOptions
+  }: ExtendedRenderOptions = {},
 ) {
-  // TODO: Wrap with Redux Provider
-  // const store = options?.store || mockStore(options?.preloadedState)
-  // function Wrapper({ children }: { children: React.ReactNode }) {
-  //   return <Provider store={store}>{children}</Provider>
-  // }
+  function Wrapper({ children }: { children: React.ReactNode }) {
+    return <Provider store={store}>{children}</Provider>;
+  }
 
-  // return { ...render(ui, { wrapper: Wrapper, ...options }), store }
-
-  // Temporary: render without providers until Redux store is ready
-  return render(ui, options)
+  return {
+    ...render(ui, { wrapper: Wrapper, ...renderOptions }),
+    store,
+  };
 }
 
-// Re-export everything from @testing-library/react
-export * from "@testing-library/react"
-
 // Export custom render as default
-export { renderWithProviders as render }
+export { renderWithProviders as render };

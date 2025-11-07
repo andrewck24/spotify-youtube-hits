@@ -1,4 +1,4 @@
-import type { RootState } from '@/app/store';
+import type { RootState } from "@/lib/store";
 
 /**
  * Spotify Selectors
@@ -40,8 +40,7 @@ export const selectTokenExpiry = (state: RootState) =>
  * Select the Spotify loading state
  * True when requesting or refreshing token
  */
-export const selectSpotifyLoading = (state: RootState) =>
-  state.spotify.loading;
+export const selectSpotifyLoading = (state: RootState) => state.spotify.loading;
 
 /**
  * Select the Spotify error message

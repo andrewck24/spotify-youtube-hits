@@ -1,4 +1,4 @@
-import type { SpotifyArtist } from '@/types/spotify';
+import type { SpotifyArtist } from "@/types/spotify";
 
 /**
  * Artist Feature State

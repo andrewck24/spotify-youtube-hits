@@ -1,4 +1,4 @@
-import type { LocalTrackData } from '@/types/data-schema';
+import type { LocalTrackData } from "@/types/data-schema";
 
 /**
  * Data Feature State

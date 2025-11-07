@@ -4,7 +4,7 @@
  */
 
 // Spotify API types
-export * from "./spotify"
+export * from "./spotify";
 
 // Local tracks database schema
-export * from "./data-schema"
+export * from "./data-schema";

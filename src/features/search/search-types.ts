@@ -1,5 +1,5 @@
-import type Fuse from 'fuse.js';
-import type { LocalTrackData } from '@/types/data-schema';
+import type { LocalTrackData } from "@/types/data-schema";
+import type Fuse from "fuse.js";
 
 /**
  * Search Feature State
@@ -43,7 +43,7 @@ export interface SearchState {
 
 /** Initial state for the search slice */
 export const initialSearchState: SearchState = {
-  query: '',
+  query: "",
   results: [],
   fuseInstance: null,
   loading: false,

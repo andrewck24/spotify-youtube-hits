@@ -1,13 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit';
-import type { TypedUseSelectorHook } from 'react-redux';
-import { useDispatch, useSelector } from 'react-redux';
+import { configureStore } from "@reduxjs/toolkit";
+import type { TypedUseSelectorHook } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // Import all reducers
-import artistReducer from '@/features/artist/artist-slice';
-import trackReducer from '@/features/track/track-slice';
-import searchReducer from '@/features/search/search-slice';
-import dataReducer from '@/features/data/data-slice';
-import spotifyReducer from '@/features/spotify/spotify-slice';
+import artistReducer from "@/features/artist/artist-slice";
+import dataReducer from "@/features/data/data-slice";
+import searchReducer from "@/features/search/search-slice";
+import spotifyReducer from "@/features/spotify/spotify-slice";
+import trackReducer from "@/features/track/track-slice";
 
 /**
  * Redux Store Configuration
@@ -26,7 +26,7 @@ import spotifyReducer from '@/features/spotify/spotify-slice';
  * - spotify: API authentication token
  *
  * Usage:
- *   import { store, useAppDispatch, useAppSelector } from '@/app/store'
+ *   import { store, useAppDispatch, useAppSelector } from '@/lib/store'
  */
 
 export const store = configureStore({
@@ -42,11 +42,11 @@ export const store = configureStore({
       serializableCheck: {
         // Ignore these paths in the state for serialization checks
         // Required for storing Fuse.js instance in search slice
-        ignoredActions: ['search/initializeSearch'],
-        ignoredPaths: ['search.fuseInstance'],
+        ignoredActions: ["search/initializeSearch"],
+        ignoredPaths: ["search.fuseInstance"],
       },
     }),
-  devTools: process.env.NODE_ENV !== 'production', // Enable Redux DevTools in development
+  devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
