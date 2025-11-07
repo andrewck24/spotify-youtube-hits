@@ -25,7 +25,8 @@ import {
  */
 export async function loadTracksDatabase(): Promise<LocalTracksDatabase> {
   try {
-    const response = await fetch("/data/tracks.json");
+    // 使用相對路徑以支援 GitHub Pages 的 base path
+    const response = await fetch("data/tracks.json");
 
     if (!response.ok) {
       throw new Error(

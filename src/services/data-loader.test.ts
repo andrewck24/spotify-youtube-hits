@@ -32,7 +32,7 @@ describe("Data Loader Service", () => {
       const result = await loadTracksDatabase();
 
       // Assert
-      expect(global.fetch).toHaveBeenCalledWith("/data/tracks.json");
+      expect(global.fetch).toHaveBeenCalledWith("data/tracks.json");
       expect(result).toBeDefined();
       expect(result.version).toBeDefined();
       expect(result.generatedAt).toBeDefined();
