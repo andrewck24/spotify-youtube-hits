@@ -1,0 +1,338 @@
+openapi: 3.0.3
+info:
+  title: Spotify YouTube Hits - Spotify API Proxy
+  description: |
+    Cloudflare Workers API 代理層，安全管理 Spotify API 憑證並提供前端存取介面。
+
+    **Security**: Client ID 與 Client Secret 僅存於 Cloudflare Workers Secrets，永不暴露於前端。
+
+    **Base URL**: Same origin as SPA (e.g., `https://spotify-youtube-hits.workers.dev`)
+  version: 1.0.0
+  contact:
+    name: Spotify YouTube Hits Team
+  license:
+    name: MIT
+
+servers:
+  - url: /api/spotify
+    description: Production (Cloudflare Workers)
+
+tags:
+  - name: Authentication
+    description: Spotify API token management
+  - name: Tracks
+    description: Spotify track information
+
+paths:
+  /token:
+    post:
+      tags:
+        - Authentication
+      summary: 取得 Spotify Access Token
+      description: |
+        向 Spotify API 請求 access token。Worker 會自動處理憑證管理與快取。
+
+        **Caching**: Token 快取於 Worker in-memory，有效期 55 分鐘。
+      operationId: getSpotifyToken
+      responses:
+        "200":
+          description: 成功取得 access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpotifyAccessToken"
+              example:
+                access_token: "BQDaB...6kW8"
+                token_type: "Bearer"
+                expires_in: 3600
+        "500":
+          description: Server configuration error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/APIError"
+              example:
+                error:
+                  code: "MISSING_ENV_VARS"
+                  message: "Spotify credentials not configured"
+                timestamp: 1699876543210
+        "502":
+          description: Spotify API authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/APIError"
+              example:
+                error:
+                  code: "SPOTIFY_AUTH_FAILED"
+                  message: "Failed to authenticate with Spotify API"
+                timestamp: 1699876543210
+
+  /tracks/{id}:
+    get:
+      tags:
+        - Tracks
+      summary: 取得 Spotify 歌曲詳細資訊
+      description: |
+        透過 Spotify track ID 取得歌曲詳細資訊。Worker 會自動處理 token 管理。
+
+        **Response**: 直接轉發 Spotify API `/v1/tracks/{id}` 回應。
+      operationId: getTrackById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Spotify track ID (22 字元 base62 字串)
+          schema:
+            type: string
+            pattern: "^[a-zA-Z0-9]{22}$"
+            example: "0d28khcov6AiegSCpG5TuT"
+      responses:
+        "200":
+          description: 成功取得歌曲資訊
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpotifyTrack"
+        "400":
+          description: Invalid track ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/APIError"
+              example:
+                error:
+                  code: "INVALID_TRACK_ID"
+                  message: "Track ID must be 22 characters"
+                timestamp: 1699876543210
+        "404":
+          description: Track not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/APIError"
+              example:
+                error:
+                  code: "TRACK_NOT_FOUND"
+                  message: "Track not found on Spotify"
+                timestamp: 1699876543210
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/APIError"
+              example:
+                error:
+                  code: "RATE_LIMITED"
+                  message: "Too many requests, please try again later"
+                timestamp: 1699876543210
+        "502":
+          description: Spotify API error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/APIError"
+              example:
+                error:
+                  code: "SPOTIFY_API_ERROR"
+                  message: "Spotify API is currently unavailable"
+                timestamp: 1699876543210
+
+components:
+  schemas:
+    SpotifyAccessToken:
+      type: object
+      required:
+        - access_token
+        - token_type
+        - expires_in
+      properties:
+        access_token:
+          type: string
+          description: Spotify API bearer token
+          example: "BQDaB...6kW8"
+        token_type:
+          type: string
+          enum: ["Bearer"]
+          description: Token type (always "Bearer")
+          example: "Bearer"
+        expires_in:
+          type: integer
+          description: Token 有效期（秒），通常為 3600
+          example: 3600
+
+    SpotifyTrack:
+      type: object
+      description: Spotify 歌曲詳細資訊（符合 Spotify Web API schema）
+      required:
+        - id
+        - name
+        - artists
+        - album
+        - duration_ms
+        - external_urls
+        - popularity
+      properties:
+        id:
+          type: string
+          description: Spotify track ID
+          pattern: "^[a-zA-Z0-9]{22}$"
+          example: "0d28khcov6AiegSCpG5TuT"
+        name:
+          type: string
+          description: 歌曲名稱
+          example: "Shape of You"
+        artists:
+          type: array
+          description: 演出藝人列表
+          items:
+            type: object
+            required:
+              - id
+              - name
+              - external_urls
+            properties:
+              id:
+                type: string
+                example: "6eUKZXaKkcviH0Ku9w2n3V"
+              name:
+                type: string
+                example: "Ed Sheeran"
+              external_urls:
+                type: object
+                required:
+                  - spotify
+                properties:
+                  spotify:
+                    type: string
+                    format: uri
+                    example: "https://open.spotify.com/artist/6eUKZXaKkcviH0Ku9w2n3V"
+        album:
+          type: object
+          required:
+            - id
+            - name
+            - images
+            - release_date
+          properties:
+            id:
+              type: string
+              example: "3T4tUhGYeRNVUGevb0wThu"
+            name:
+              type: string
+              example: "÷ (Deluxe)"
+            images:
+              type: array
+              items:
+                type: object
+                required:
+                  - url
+                  - height
+                  - width
+                properties:
+                  url:
+                    type: string
+                    format: uri
+                    example: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96"
+                  height:
+                    type: integer
+                    example: 640
+                  width:
+                    type: integer
+                    example: 640
+            release_date:
+              type: string
+              format: date
+              description: Album 發行日期 (YYYY-MM-DD)
+              example: "2017-03-03"
+        duration_ms:
+          type: integer
+          description: 歌曲長度（毫秒）
+          minimum: 1
+          example: 233713
+        external_urls:
+          type: object
+          required:
+            - spotify
+          properties:
+            spotify:
+              type: string
+              format: uri
+              description: Spotify 歌曲連結
+              example: "https://open.spotify.com/track/0d28khcov6AiegSCpG5TuT"
+        preview_url:
+          type: string
+          format: uri
+          nullable: true
+          description: 試聽 URL（30 秒片段），可能為 null
+          example: "https://p.scdn.co/mp3-preview/..."
+        popularity:
+          type: integer
+          description: 歌曲熱門度（0-100）
+          minimum: 0
+          maximum: 100
+          example: 93
+
+    APIError:
+      type: object
+      required:
+        - error
+        - timestamp
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: 錯誤代碼
+              enum:
+                - MISSING_ENV_VARS
+                - SPOTIFY_AUTH_FAILED
+                - SPOTIFY_API_ERROR
+                - RATE_LIMITED
+                - INVALID_TRACK_ID
+                - TRACK_NOT_FOUND
+                - INTERNAL_ERROR
+              example: "SPOTIFY_API_ERROR"
+            message:
+              type: string
+              description: 使用者可讀的錯誤訊息
+              example: "Spotify API is currently unavailable"
+            details:
+              description: 可選的錯誤細節（僅 development 環境）
+              nullable: true
+        timestamp:
+          type: integer
+          format: int64
+          description: 錯誤發生時間戳（Unix milliseconds）
+          example: 1699876543210
+        request_id:
+          type: string
+          description: 可選的請求追蹤 ID
+          nullable: true
+          example: "req_abc123xyz"
+
+  securitySchemes:
+    # Worker 內部處理認證，前端無需提供任何憑證
+    # 此處標記為 none，表示前端呼叫無需 authentication
+    None:
+      type: http
+      scheme: none
+
+security:
+  - None: []
+
+x-cloudflare-workers:
+  runtime: v8-isolates
+  compatibility-date: "2025-01-09"
+  secrets:
+    - SPOTIFY_CLIENT_ID
+    - SPOTIFY_CLIENT_SECRET
+  caching:
+    access_token:
+      location: in-memory
+      ttl: 3300 # 55 minutes in seconds

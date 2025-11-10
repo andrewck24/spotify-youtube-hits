@@ -1,0 +1,219 @@
+openapi: 3.0.3
+info:
+  title: Spotify YouTube Hits - Static Assets Service
+  description: |
+    Cloudflare Workers Assets 提供的靜態資源服務規格。
+
+    **Service**: Workers Assets (Cloudflare built-in)
+    **Compression**: Automatic Brotli/Gzip
+    **Caching**: Automatic CDN caching
+    **HTTP/3**: Enabled by default
+
+  version: 1.0.0
+
+servers:
+  - url: /
+    description: Same origin as application
+
+paths:
+  /:
+    get:
+      summary: 取得應用首頁
+      description: 返回 index.html（SPA entry point）
+      operationId: getIndexHtml
+      responses:
+        "200":
+          description: HTML document
+          content:
+            text/html:
+              schema:
+                type: string
+          headers:
+            Content-Encoding:
+              description: 自動壓縮（brotli or gzip）
+              schema:
+                type: string
+                enum: [br, gzip]
+            Cache-Control:
+              description: CDN 快取控制
+              schema:
+                type: string
+                example: "public, max-age=3600"
+
+  /assets/{filename}:
+    get:
+      summary: 取得靜態資源（JS, CSS, images）
+      description: |
+        返回 Vite build 產生的靜態資源檔案。
+
+        **Automatic Handling**:
+        - Content-Type detection
+        - Brotli/Gzip compression
+        - CDN caching
+        - HTTP/3 support
+      operationId: getAsset
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          description: 資源檔案路徑
+          schema:
+            type: string
+            example: "index-BwZoCKv4.js"
+      responses:
+        "200":
+          description: Static asset
+          content:
+            application/javascript:
+              schema:
+                type: string
+            text/css:
+              schema:
+                type: string
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/svg+xml:
+              schema:
+                type: string
+          headers:
+            Content-Encoding:
+              description: 自動壓縮
+              schema:
+                type: string
+                enum: [br, gzip]
+            Cache-Control:
+              description: 長期快取（hash-based filenames）
+              schema:
+                type: string
+                example: "public, max-age=31536000, immutable"
+        "404":
+          description: Asset not found
+          content:
+            text/html:
+              schema:
+                type: string
+                description: 返回 index.html（SPA fallback for client-side routing）
+
+  /data/tracks.json:
+    get:
+      summary: 取得 tracks 資料
+      description: |
+        返回靜態 JSON 資料檔案（6.4 MB）。
+
+        **Compression**: 壓縮後約 2 MB (70% reduction)
+        **Caching**: 長期快取於 CDN
+      operationId: getTracksData
+      responses:
+        "200":
+          description: Tracks JSON data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  description: Track metadata（結構由前端定義）
+          headers:
+            Content-Encoding:
+              description: Brotli compression
+              schema:
+                type: string
+                example: "br"
+            Content-Length:
+              description: 壓縮後大小約 2 MB
+              schema:
+                type: integer
+                example: 2097152
+            Cache-Control:
+              description: 快取 24 小時
+              schema:
+                type: string
+                example: "public, max-age=86400"
+
+  /{clientPath}:
+    get:
+      summary: SPA 客戶端路由 (Catch-all)
+      description: |
+        所有未匹配的路由返回 index.html，由 React Router 接管。
+
+        **Examples**:
+        - `/track/0d28khcov6AiegSCpG5TuT` → index.html
+        - `/artist/6eUKZXaKkcviH0Ku9w2n3V` → index.html
+        - `/search` → index.html
+
+        **Configuration**: `not_found_handling: "single-page-application"` in wrangler.jsonc
+      operationId: spaFallback
+      parameters:
+        - name: clientPath
+          in: path
+          required: true
+          description: 任意客戶端路由路徑
+          schema:
+            type: string
+            example: "track/0d28khcov6AiegSCpG5TuT"
+      responses:
+        "200":
+          description: HTML document (index.html)
+          content:
+            text/html:
+              schema:
+                type: string
+
+components:
+  headers:
+    CacheControl:
+      description: CDN 快取控制
+      schema:
+        type: string
+        enum:
+          - "public, max-age=3600" # HTML files (1 hour)
+          - "public, max-age=31536000, immutable" # Hashed assets (1 year)
+          - "public, max-age=86400" # JSON data (24 hours)
+
+    ContentEncoding:
+      description: 內容編碼（自動壓縮）
+      schema:
+        type: string
+        enum:
+          - br # Brotli (preferred, 更高壓縮率)
+          - gzip # Gzip (fallback)
+
+x-cloudflare-workers-assets:
+  directory: ./dist
+  not_found_handling: single-page-application
+  binding: ASSETS
+  compression:
+    brotli: auto
+    gzip: auto
+  caching:
+    html:
+      max-age: 3600
+      stale-while-revalidate: 86400
+    assets:
+      max-age: 31536000
+      immutable: true
+    data:
+      max-age: 86400
+
+x-performance-targets:
+  ttfb:
+    description: Time To First Byte
+    target: "50-100ms"
+    current: "500-1000ms"
+    improvement: "80%"
+
+  compression-ratio:
+    description: Resource size reduction
+    target: "70%"
+    method: "Brotli/Gzip"
+    example:
+      tracks.json:
+        original: "6.4 MB"
+        compressed: "~2 MB"
+
+  cache-hit-rate:
+    description: CDN cache effectiveness
+    target: "> 90%"
+    locations: "300+ global edge nodes"
