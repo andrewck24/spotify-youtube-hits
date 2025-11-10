@@ -97,9 +97,10 @@ package.json             # 依賴管理（需更新）
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] 手動部署測試：執行 `npm run build && npx wrangler deploy`
-  - 驗證部署成功
-  - 記錄部署 URL（`*.workers.dev`）
+- [x] T009 [US1] 手動部署測試：執行 `npm run build && npx wrangler deploy`
+  - 驗證部署成功 ✅
+  - 記錄部署 URL：https://spotify-youtube-hits.andrewck24.workers.dev ✅
+  - 註：SSL 證書配置中，需等待 5-10 分鐘後進行後續驗證
 - [ ] T010 [US1] 驗證首頁載入
   - 瀏覽器訪問部署 URL
   - 檢查 Network tab 確認資源壓縮（Content-Encoding: br or gzip）
