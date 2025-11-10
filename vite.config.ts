@@ -6,7 +6,7 @@ import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.NODE_ENV === "production" ? "/spotify-youtube-hits/" : "/",
+  base: "/",
   plugins: [react(), tailwindcss(), svgr()],
   resolve: {
     alias: {

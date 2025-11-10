@@ -1,0 +1,13 @@
+# Cloudflare Workers Environment Variables (Local Development)
+# This file is a template for .dev.vars (used by `wrangler dev`)
+# Copy this file to .dev.vars and fill in your actual values
+# NEVER commit .dev.vars to git (it's in .gitignore)
+
+# Spotify API Credentials
+# Get your credentials at: https://developer.spotify.com/dashboard
+
+# Required: Your Spotify Client ID
+SPOTIFY_CLIENT_ID=your_client_id_here
+
+# Required: Your Spotify Client Secret (NEVER expose this in frontend code)
+SPOTIFY_CLIENT_SECRET=your_client_secret_here

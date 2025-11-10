@@ -39,17 +39,17 @@ package.json             # 依賴管理（需更新）
 
 **Purpose**: 安裝 Cloudflare Workers 工具鏈，建立基礎配置檔案
 
-- [ ] T001 [P] [Setup] 安裝 wrangler CLI: `npm install -D wrangler`
-- [ ] T002 [P] [Setup] 移除 gh-pages 依賴: `npm uninstall gh-pages`
-- [ ] T003 [P] [Setup] 建立 wrangler.jsonc 配置檔案於專案根目錄
+- [x] T001 [P] [Setup] 安裝 wrangler CLI: `npm install -D wrangler`
+- [x] T002 [P] [Setup] 移除 gh-pages 依賴: `npm uninstall gh-pages`
+- [x] T003 [P] [Setup] 建立 wrangler.jsonc 配置檔案於專案根目錄
   - 設定 `name: "spotify-youtube-hits"`
-  - 設定 `compatibility_date: "2025-01-09"`
+  - 設定 `compatibility_date: "2025-11-09"`
   - 設定 `assets.directory: "./dist"`
   - 設定 `assets.not_found_handling: "single-page-application"`
-- [ ] T004 [P] [Setup] 更新 .gitignore 加入 Cloudflare 相關檔案
+- [x] T004 [P] [Setup] 更新 .gitignore 加入 Cloudflare 相關檔案
   - 新增 `.wrangler/`
   - 新增 `.dev.vars`
-- [ ] T005 [P] [Setup] 建立 .dev.vars.example 範本檔案
+- [x] T005 [P] [Setup] 建立 .dev.vars.example 範本檔案
   - 提供 `SPOTIFY_CLIENT_ID` 範例
   - 提供 `SPOTIFY_CLIENT_SECRET` 範例
   - 加入說明註解
@@ -64,14 +64,14 @@ package.json             # 依賴管理（需更新）
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 [Foundation] 更新 vite.config.ts
+- [x] T006 [Foundation] 更新 vite.config.ts
   - 將 `base` 從 `'/spotify-youtube-hits/'` 改為 `'/'`
   - 保留現有 plugins 配置（react, tailwindcss, svgr）
   - 保留現有 alias 配置（`@` → `./src`）
-- [ ] T007 [Foundation] 更新 package.json scripts
+- [x] T007 [Foundation] 更新 package.json scripts
   - 移除 `predeploy` 與 `deploy` scripts（gh-pages）
   - 新增 `deploy:cf: "npm run build && wrangler deploy"` script
-- [ ] T008 [Foundation] 執行 `npm run build` 驗證建置成功
+- [x] T008 [Foundation] 執行 `npm run build` 驗證建置成功
   - 確認 dist/ 目錄產生
   - 確認資源使用相對路徑（而非 `/spotify-youtube-hits/` prefix）
 

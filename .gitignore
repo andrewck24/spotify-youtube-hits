@@ -16,6 +16,10 @@ dist-ssr
 .env.local
 env.js
 
+# Cloudflare Workers
+.wrangler/
+.dev.vars
+
 # Claude Code local settings
 .claude/settings.local.json
 

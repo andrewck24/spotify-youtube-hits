@@ -1,0 +1,14 @@
+{
+  // Cloudflare Workers configuration for spotify-youtube-hits
+  // See: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+  "name": "spotify-youtube-hits",
+  "compatibility_date": "2025-11-09",
+
+  // Workers Assets configuration
+  // Serves static files from the dist/ directory with SPA routing support
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
