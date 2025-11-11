@@ -23,14 +23,15 @@ src/                      # React 前端程式碼
 public/                   # 靜態資源
 tests/                    # 測試檔案
 
-# Edge Functions (new)
-worker/                   # Cloudflare Workers 程式碼
+# Edge Functions (new - optional, for US4)
+worker/                   # Cloudflare Workers 程式碼（Phase 6 實作）
 
 # Infrastructure (new/updated)
-.github/workflows/        # GitHub Actions
 wrangler.jsonc           # Cloudflare Workers 配置
-vite.config.ts           # Vite 配置（需更新）
-package.json             # 依賴管理（需更新）
+vite.config.ts           # Vite 配置（已更新）
+package.json             # 依賴管理（已更新）
+.dev.vars                # 本地開發環境變數（不 commit）
+.dev.vars.example        # 環境變數範本
 ```
 
 ---
@@ -134,53 +135,62 @@ package.json             # 依賴管理（需更新）
 
 ## Phase 4: User Story 3 - 無縫部署更新 (Priority: P2)
 
-**Goal**: 設定 GitHub Actions 自動化 CI/CD 流程，實現 push 到 main 自動部署，PR 自動建立預覽環境
+**Goal**: 設定 Cloudflare Git Integration 自動化 CI/CD 流程，實現 push 到 main 自動部署，PR 自動建立預覽環境
+
+**Implementation Method**: Cloudflare Git Integration（替代 GitHub Actions 方案）
 
 **Independent Test**:
 
-1. 提交程式碼到 main 分支，驗證 GitHub Actions 自動觸發部署
+1. 提交程式碼到 main 分支，驗證 Cloudflare 自動觸發部署
 2. 建立 Pull Request，驗證預覽環境自動建立並提供 URL
-3. 測試失敗時驗證部署被阻止
+3. 測試建置失敗時驗證部署被阻止
 
 **Success Criteria**:
 
 - ✅ Commit 到 main → 10 分鐘內自動部署到生產環境
 - ✅ 建立 PR → 5 分鐘內獲得預覽環境 URL
-- ✅ 測試失敗 → 部署自動取消
+- ✅ 建置失敗 → 部署自動取消
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] 建立 Cloudflare API Token
-  - 前往 Cloudflare Dashboard → My Profile → API Tokens
-  - 選擇 Custom Token，設定權限：Account → Cloudflare Workers → Edit
-  - 複製 token（只顯示一次）
-- [ ] T016 [US3] 取得 Cloudflare Account ID
-  - 從 Cloudflare Dashboard 右側欄位取得
-  - 或從 URL 中提取：`https://dash.cloudflare.com/<ACCOUNT_ID>/...`
-- [ ] T017 [US3] 設定 GitHub Secrets
-  - 前往 GitHub repo → Settings → Secrets and variables → Actions
-  - 新增 `CLOUDFLARE_API_TOKEN`
-  - 新增 `CLOUDFLARE_ACCOUNT_ID`
-- [ ] T018 [US3] 建立 GitHub Actions workflow 檔案：`.github/workflows/deploy.yml`
-  - 設定觸發條件：`push` to `main` + `pull_request` to `main`
-  - 設定 Node.js 20 環境
-  - 步驟：Checkout → Setup Node → Install deps → Run tests → Type check → Lint → Build → Deploy
-  - 使用 `cloudflare/wrangler-action@v3`
+- [x] T015 [US3] 設定 Cloudflare Git Integration
+  - 前往 Cloudflare Dashboard → Workers & Pages → 建立應用程式
+  - 選擇「連接到 Git」
+  - 授權並選擇 GitHub repository: `andrewck24/spotify-youtube-hits` ✅
+  - 設定專案名稱: `spotify-youtube-hits` ✅
+- [x] T016 [US3] 配置建置設定
+  - 組建命令: `npm run build` ✅
+  - 部署命令: `npx wrangler deploy` ✅
+  - 版本命令: `npx wrangler versions upload` ✅
+  - 根目錄: `/` ✅
+  - 確認 wrangler.jsonc 已正確配置 ✅
+- [x] T017 [US3] 設定環境變數與秘密
+  - 在 Cloudflare Dashboard 設定區塊新增環境變數
+  - 新增 `SPOTIFY_CLIENT_ID` (變數類型) ✅
+  - 新增 `SPOTIFY_CLIENT_SECRET` (秘密類型) ✅
+  - 確認秘密已加密存儲 ✅
+- [x] T018 [US3] 配置分支控制與 PR 預覽
+  - 設定生產分支: `main` ✅
+  - 啟用「提取要求預覽」(PR Preview) ✅
+  - 確認建置路徑排除設定 (如需要)
 - [ ] T019 [US3] 測試自動部署流程
-  - 提交測試 commit 到 main 分支
-  - 前往 GitHub Actions tab 驗證 workflow 執行成功
-  - 確認部署完成（所有步驟綠色 ✅）
+  - 將此 tasks.md 更新 commit 並 merge 到 main 分支
+  - 前往 Cloudflare Dashboard → 部署頁面驗證自動觸發
+  - 確認建置成功（組建 → 部署 → 完成）
+  - 驗證生產環境 URL 已更新
 - [ ] T020 [US3] 測試 PR 預覽環境
-  - 建立測試 Pull Request
-  - 驗證 GitHub Actions 自動觸發
-  - 驗證預覽環境 URL 在 workflow output 中顯示
+  - 建立測試 Pull Request（如新增 feature）
+  - 驗證 Cloudflare 自動建立預覽部署
+  - 在 PR 留言區確認預覽 URL 顯示
   - 訪問預覽 URL 確認功能正常
-- [ ] T021 [US3] 測試失敗情境
-  - 建立一個會導致測試失敗的 commit
-  - 驗證 GitHub Actions 在測試步驟失敗
-  - 驗證後續部署步驟被跳過（未執行 Deploy）
+  - 驗證預覽環境與生產環境隔離
+- [ ] T021 [US3] 測試建置失敗情境
+  - 建立一個會導致 `npm run build` 失敗的 commit（如故意破壞語法）
+  - 驗證 Cloudflare 建置步驟失敗並顯示錯誤訊息
+  - 確認生產環境未受影響（仍為上一個成功版本）
+  - 修復錯誤並確認可恢復正常部署
 
-**Checkpoint**: User Story 3 完成 - CI/CD 自動化流程就緒，可自動部署與建立預覽環境
+**Checkpoint**: User Story 3 完成 - Cloudflare Git Integration 自動化流程就緒，可自動部署與建立預覽環境
 
 ---
 
@@ -288,9 +298,10 @@ package.json             # 依賴管理（需更新）
 
 #### 4.5 Cloudflare Secrets 設定
 
-- [ ] T032 [US4] 設定 Cloudflare Workers Secrets
-  - 執行 `echo "your-client-id" | npx wrangler secret put SPOTIFY_CLIENT_ID`
-  - 執行 `echo "your-client-secret" | npx wrangler secret put SPOTIFY_CLIENT_SECRET`
+- [x] T032 [US4] 確認 Cloudflare Workers Secrets 配置
+  - 確認 Cloudflare Dashboard 已設定 `SPOTIFY_CLIENT_ID`（變數類型）
+  - 確認 Cloudflare Dashboard 已設定 `SPOTIFY_CLIENT_SECRET`（秘密類型）✅
+  - 註：使用 Cloudflare Git Integration，秘密已在 Phase 4 (T017) 設定完成
   - 更新 .dev.vars 用於本地開發（不 commit）
 
 #### 4.6 Frontend API Integration
@@ -399,7 +410,7 @@ Foundational (Phase 2)
 
 - **US1**: Sequential tasks (T009 → T010 → T011 → T012 → T013 → T014)
 - **US2**: Sequential tasks (T022 → T023 → T024/T025 can be parallel)
-- **US3**: Sequential tasks (T015 → T016 → T017 → T018 → T019 → T020 → T021)
+- **US3**: Configuration first (T015 → T016 → T017 → T018), then validation (T019 → T020 → T021)
 - **US4**:
   - T026 [P] T027 can run in parallel (different files)
   - T028 and T029 can run in parallel (different files)
@@ -505,7 +516,7 @@ Task: "Set Cloudflare Secrets"
 **Phase 3**: Automation (US3)
 
 - **Tasks**: T015-T021
-- **Validation**: GitHub Actions 自動部署成功，PR 預覽環境生成
+- **Validation**: Cloudflare Git Integration 自動部署成功，PR 預覽環境生成
 - **Time**: 1 小時
 - **Deploy/Demo**: ✅ Full automation ready!
 
@@ -559,9 +570,10 @@ Task: "Set Cloudflare Secrets"
 - Each user story is independently completable and testable (except US3/US2 depend on US1)
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
-- **Spotify API 憑證**: 使用 `wrangler secret put` 管理，永不 commit 到 git
+- **CI/CD 方式**: 採用 Cloudflare Git Integration（替代 GitHub Actions），配置更簡單且與 Cloudflare 生態整合更佳
+- **Spotify API 憑證**: 透過 Cloudflare Dashboard 設定為「秘密」類型，永不 commit 到 git；本地開發使用 `.dev.vars`（不 commit）
 - **測試策略**: 使用現有 Vitest + Playwright 測試套件驗證功能，無需新增測試任務
-- **回滾機制**: Phase 1 採用手動回滾（`wrangler rollback`），自動化留待未來迭代
+- **回滾機制**: 透過 Cloudflare Dashboard 部署歷史進行版本回滾，或使用 `wrangler rollback` 指令
 
 ### Task Estimation Summary
 
