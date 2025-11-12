@@ -1,5 +1,8 @@
 import { Card } from "@/components/ui/card";
-import { setCurrentTrack } from "@/features/track/track-slice";
+import {
+  fetchAudioFeatures,
+  fetchTrackDetails,
+} from "@/features/track/track-slice";
 import { formatNumber } from "@/lib/formatters";
 import { useAppDispatch } from "@/lib/store";
 import type { LocalTrackData } from "@/types/data-schema";
@@ -30,56 +33,11 @@ export function TrackList({ tracks }: TrackListProps) {
   const dispatch = useAppDispatch();
 
   const handleSelectTrack = (track: LocalTrackData) => {
-    // Convert LocalTrackData to SpotifyTrack-like object
-    const spotifyTrack = {
-      id: track.trackId,
-      name: track.trackName,
-      uri: `spotify:track:${track.trackId}`,
-      external_urls: {
-        spotify: `https://open.spotify.com/track/${track.trackId}`,
-      },
-      external_ids: {
-        isrc: "",
-        ean: "",
-        upc: "",
-      },
-      album: {
-        id: "",
-        name: "",
-        uri: "",
-        external_urls: { spotify: "" },
-        images: [],
-        release_date: track.releaseYear.toString(),
-        release_date_precision: "year" as const,
-        total_tracks: 0,
-        type: "album" as const,
-        artists: [],
-        href: "",
-        album_type: "album" as const,
-      },
-      artists: [
-        {
-          id: "",
-          name: track.artistName,
-          uri: "",
-          external_urls: { spotify: "" },
-          type: "artist" as const,
-          href: "",
-        },
-      ],
-      disc_number: 0,
-      duration_ms: 0,
-      explicit: false,
-      href: "",
-      is_local: false,
-      is_playable: true,
-      popularity: track.popularity.spotifyPopularity ?? 0,
-      preview_url: null,
-      track_number: 0,
-      type: "track" as const,
-    };
-
-    dispatch(setCurrentTrack(spotifyTrack));
+    // 直接觸發 thunks 從 Spotify API 取得完整資料
+    // fetchTrackDetails 會自動更新 Redux store 中的 currentTrack
+    dispatch(fetchTrackDetails(track.trackId));
+    // 同時取得音樂特徵資料
+    dispatch(fetchAudioFeatures(track.trackId));
   };
 
   if (tracks.length === 0) {

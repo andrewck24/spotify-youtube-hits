@@ -12,9 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Environment variables (keep .env.example)
 .env
-.env.local
-env.js
+.env.*
+!.env.example
 
 # Cloudflare Workers
 .wrangler/

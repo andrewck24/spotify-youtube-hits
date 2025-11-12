@@ -30,7 +30,27 @@ import {
  * Note: API 請求會透過 Worker proxy，不需要在前端處理認證
  */
 
-const WORKER_API_BASE_URL = "/api/spotify";
+/**
+ * Spotify API Base URL
+ *
+ * Configuration:
+ * - Development: http://localhost:8787/api/spotify (direct to Worker dev server)
+ * - Production: /api/spotify (relative path, same origin as frontend)
+ *
+ * Override via environment variable VITE_API_BASE_URL
+ * See: .env.development, .env.production, .env.example
+ */
+const WORKER_API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api/spotify";
+
+// Development debug logging
+if (import.meta.env.DEV) {
+  // eslint-disable-next-line no-console
+  console.log("[Spotify API Service] Initialized");
+  // eslint-disable-next-line no-console
+  console.log("[Spotify API Service] Base URL:", WORKER_API_BASE_URL);
+  // eslint-disable-next-line no-console
+  console.log("[Spotify API Service] Mode:", import.meta.env.MODE);
+}
 
 export class SpotifyApiService implements ISpotifyApiService {
   /**
@@ -171,7 +191,10 @@ export class SpotifyApiService implements ISpotifyApiService {
     }
 
     try {
-      const url = new URL(`${WORKER_API_BASE_URL}/audio-features`, window.location.origin);
+      const url = new URL(
+        `${WORKER_API_BASE_URL}/audio-features`,
+        window.location.origin
+      );
       url.searchParams.append("ids", trackIds.join(","));
 
       const response = await fetch(url.toString());

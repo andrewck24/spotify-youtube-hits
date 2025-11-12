@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { setCurrentArtist } from "@/features/artist/artist-slice";
+import { fetchArtist } from "@/features/artist/artist-slice";
 import { selectTracks } from "@/features/data/data-selectors";
 import { getTracksByArtist } from "@/features/search/search-service";
 import { useSearch } from "@/hooks/use-search";
@@ -28,37 +28,18 @@ export function SearchResults() {
 
   const handleSelectArtist = useCallback(
     (artistId: string, artistName: string) => {
-      // 從搜尋結果找到對應的 artist object
-      // 先從 Spotify API 視角建構一個基本的 artist 物件
-      // 實際上後續會透過 fetchArtist thunk 更新完整資訊
+      // 驗證該藝人是否有歌曲資料
       const artistTracks = getTracksByArtist(tracks, artistName);
 
       if (artistTracks.length === 0) {
         return;
       }
 
-      // 建構基本的 artist object（之後會被 Spotify API 資料覆蓋）
-      const basicArtist = {
-        id: artistId,
-        name: artistName,
-        uri: `spotify:artist:${artistId}`,
-        external_urls: {
-          spotify: `https://open.spotify.com/artist/${artistId}`,
-        },
-        followers: {
-          href: null,
-          total: 0,
-        },
-        genres: [],
-        href: `https://api.spotify.com/v1/artists/${artistId}`,
-        images: [],
-        popularity: 0,
-        type: "artist" as const,
-      };
-
-      dispatch(setCurrentArtist(basicArtist));
+      // 直接觸發 fetchArtist thunk，從 Spotify API 取得完整藝人資訊
+      // 這會自動更新 Redux store 中的 currentArtist
+      dispatch(fetchArtist(artistId));
     },
-    [dispatch, tracks],
+    [dispatch, tracks]
   );
 
   if (results.length === 0) {

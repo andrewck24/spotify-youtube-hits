@@ -359,11 +359,32 @@ package.json             # 依賴管理（已更新）
     - ✅ Artist API 運作正常 ("Ed Sheeran")
     - ⚠️ Audio Features API 錯誤 (Spotify API 已廢棄，返回 403 - 已知問題)
     - ✅ 錯誤處理正常（400 無效 ID, 404 不存在）
-- [ ] T036 [US4] 線上環境驗證
+- [x] T036 [US4] 前端環境變數配置 (2025-01-13) ✅
+  - 建立 `.env.example` 範本檔案 ✅
+  - 更新 `.gitignore` 排除 `.env.development`, `.env.production` ✅
+  - 更新 `src/vite-env.d.ts` 新增 `VITE_API_BASE_URL` 類型定義 ✅
+  - 更新 `src/services/spotify-api.ts` 使用環境變數設定 API base URL ✅
+  - 更新 `README.md` 說明環境變數設定步驟 ✅
+  - **重要**：開發者需自行建立 `.env.development` 和 `.env.production` 檔案
+- [x] T037 [US4] 前端元件 API 整合修正 (2025-01-13) ✅
+  - **問題**：`SearchResults.tsx` 和 `TrackList.tsx` 使用 `setCurrentArtist`/`setCurrentTrack` 設定假資料，導致 `useArtist`/`useTrack` hooks 的 `useEffect` 條件永遠為 false，API 請求未觸發
+  - 修正 `src/components/search/search-results.tsx`:
+    - 移除 `setCurrentArtist` import ✅
+    - 改用 `fetchArtist(artistId)` thunk 直接取得 Spotify API 資料 ✅
+    - 移除 30+ 行手動建構 artist 物件的程式碼 ✅
+  - 修正 `src/components/track/track-list.tsx`:
+    - 移除 `setCurrentTrack` import ✅
+    - 改用 `fetchTrackDetails(trackId)` + `fetchAudioFeatures(trackId)` thunks ✅
+    - 移除 50+ 行手動建構 track 物件的程式碼 ✅
+  - 驗證修正結果（使用 Chrome DevTools MCP）:
+    - ✅ Artist API 正常運作：`GET /api/spotify/artists/06HL4z0CvFAxyc27GXpf02` [200]
+    - ✅ Track API 正常運作：`GET /api/spotify/tracks/0V3wPSX9ygBnCm8psDIegu` [200]
+    - ⚠️ Audio Features API: [502] (已知 Spotify API 廢棄問題)
+- [ ] T038 [US4] 線上環境驗證
   - 測試前端應用可正常呼叫 Spotify API
   - 檢查 Network tab 確認 API 請求路徑正確（`/api/spotify/*`）
   - 驗證 Client Secret 不出現於前端程式碼或 Network requests
-- [ ] T037 [US4] 錯誤情境測試
+- [ ] T039 [US4] 錯誤情境測試
   - 測試無效的 track ID（應返回 400 INVALID_TRACK_ID）
   - 測試不存在的 track ID（應返回 404 TRACK_NOT_FOUND）
   - 測試 Spotify API 暫時無法存取情境（模擬）
@@ -376,17 +397,25 @@ package.json             # 依賴管理（已更新）
 
 **Purpose**: 最終檢查、文件更新、清理舊設定
 
-- [ ] T038 [P] [Polish] 停用 GitHub Pages
+- [ ] T040 [P] [Polish] 停用 GitHub Pages
   - 前往 GitHub repo → Settings → Pages
   - 選擇 "Disable GitHub Pages"
-- [ ] T039 [P] [Polish] 更新 README.md
-  - 更新部署 URL（從 GitHub Pages 改為 Cloudflare Workers）
-  - 新增 Cloudflare Workers 部署指引
-  - 更新本地開發指引（加入 `wrangler dev`）
-- [ ] T040 [P] [Polish] 檢查並移除舊環境變數
-  - 確認 `VITE_SPOTIFY_CLIENT_SECRET` 不存在於任何 .env 檔案
-  - 確認 .gitignore 包含所有 Cloudflare 相關檔案
-- [ ] T041 [Polish] 執行完整功能驗證（Smoke Test）
+- [x] T041 [P] [Polish] 更新 README.md (2025-01-13) ✅
+  - 更新部署 URL（從 GitHub Pages 改為 Cloudflare Workers）✅
+  - 新增 Cloudflare Workers 部署指引 ✅
+  - 更新本地開發指引（加入 `wrangler dev`）✅
+  - 更新環境變數設定說明 ✅
+  - 修正 markdown linting 警告（fenced code blocks 需指定語言）✅
+- [x] T042 [P] [Polish] 檢查並移除舊環境變數 (2025-01-13) ✅
+  - 確認 `VITE_SPOTIFY_CLIENT_SECRET` 不存在於任何 .env 檔案 ✅
+  - 確認 .gitignore 包含所有 Cloudflare 相關檔案 ✅
+  - 更新 .gitignore 排除 `.env.development`, `.env.production` ✅
+- [x] T043 [Polish] 建立未來優化文件 (2025-01-13) ✅
+  - 建立 `specs/002-cloudflare/future-optimizations.md` ✅
+  - 記錄 RTK Query 快取長期方案 ✅
+  - 記錄其他優化建議（批次請求、Service Worker、Edge Caching）✅
+  - 說明實作優先順序與預估工時 ✅
+- [ ] T044 [Polish] 執行完整功能驗證（Smoke Test）
   - 首頁載入 ✅
   - 搜尋功能 ✅
   - 歌曲詳情頁 ✅
@@ -394,12 +423,12 @@ package.json             # 依賴管理（已更新）
   - 圖表顯示 ✅
   - SPA 路由 ✅
   - Spotify API 整合（若已實作 US4）✅
-- [ ] T042 [Polish] 效能基準測試
+- [ ] T045 [Polish] 效能基準測試
   - 使用 WebPageTest 測量首次載入時間
   - 記錄 TTFB、FCP、LCP
   - 與 GitHub Pages 基準比較
   - 確認達成 SC-001 目標（載入時間降低 60%）
-- [ ] T043 [P] [Polish] 文件最終檢查
+- [ ] T046 [P] [Polish] 文件最終檢查
   - 確認 [quickstart.md](./quickstart.md) 步驟正確
   - 確認 [plan.md](./plan.md) 與實際實作一致
   - 確認 [research.md](./research.md) 決策已執行
