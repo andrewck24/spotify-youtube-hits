@@ -14,6 +14,7 @@ export default defineConfig([
       "build",
       "node_modules",
       ".vite",
+      ".wrangler",
       "coverage",
       ".next",
       "*.log",
