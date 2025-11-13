@@ -318,16 +318,6 @@ export interface ISpotifyApiService {
    * @throws {SpotifyApiError} 當 API 呼叫失敗時
    */
   getAudioFeatures(trackId: string): Promise<SpotifyAudioFeatures>;
-
-  /**
-   * 批次取得音樂特徵 (最多 100 筆)
-   * @param trackIds Spotify Track IDs (max 100)
-   * @returns Map<trackId, AudioFeatures>
-   * @throws {SpotifyApiError} 當 API 呼叫失敗時
-   */
-  getAudioFeaturesBatch(
-    trackIds: string[],
-  ): Promise<Map<string, SpotifyAudioFeatures>>;
 }
 
 // ============================================================================

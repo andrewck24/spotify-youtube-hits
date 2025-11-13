@@ -163,65 +163,6 @@ export class SpotifyApiService implements ISpotifyApiService {
   }
 
   /**
-   * 批次取得音樂特徵 (最多 100 筆)
-   * Note: 透過 Worker proxy，Worker 處理認證
-   */
-  async getAudioFeaturesBatch(
-    trackIds: string[]
-  ): Promise<Map<string, SpotifyAudioFeatures>> {
-    if (trackIds.length === 0) {
-      return new Map();
-    }
-
-    if (trackIds.length > 100) {
-      throw new SpotifyApiError(
-        "BAD_REQUEST",
-        400,
-        "Maximum 100 track IDs allowed per batch request"
-      );
-    }
-
-    try {
-      const url = new URL(
-        `${WORKER_API_BASE_URL}/audio-features`,
-        window.location.origin
-      );
-      url.searchParams.append("ids", trackIds.join(","));
-
-      const response = await fetch(url.toString());
-
-      await this.handleApiError(response);
-
-      const data = (await response.json()) as {
-        audio_features: (SpotifyAudioFeatures | null)[];
-      };
-
-      // API 回傳 { audio_features: [...] }，與請求的 trackIds 順序對應
-      const features = data.audio_features;
-
-      const result = new Map<string, SpotifyAudioFeatures>();
-      features.forEach((feature, index) => {
-        if (feature && isValidAudioFeatures(feature) && index < trackIds.length) {
-          // Use trackId from request since AudioFeatures no longer contains id
-          result.set(trackIds[index], feature);
-        }
-      });
-
-      return result;
-    } catch (error) {
-      if (error instanceof SpotifyApiError) {
-        throw error;
-      }
-      throw new SpotifyApiError(
-        "NETWORK_ERROR",
-        0,
-        "Network error while fetching audio features batch",
-        error
-      );
-    }
-  }
-
-  /**
    * 處理 API 錯誤回應
    * 支援 Worker 錯誤格式和 Spotify API 錯誤格式
    */
