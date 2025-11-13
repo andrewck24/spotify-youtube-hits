@@ -4,15 +4,8 @@ import { HTTPException } from "hono/http-exception";
 import { callSpotifyApi } from "./spotify/base";
 import { getSpotifyToken } from "./spotify/token";
 import type { Env } from "./types/env";
-
-/**
- * Standardized error response format
- */
-interface ErrorResponse {
-  error: string;
-  message: string;
-  status: number;
-}
+import type { ErrorResponse } from "./types/error";
+import type { ReccoBeatsAudioFeaturesResponse } from "./types/reccobeats-api";
 
 /**
  * Spotify ID validation regex (22 alphanumeric characters)
@@ -44,7 +37,7 @@ function validateSpotifyId(id: string, type: "track" | "artist"): void {
 async function fetchWithRetry(
   url: string,
   maxRetries: number = 3,
-  initialDelayMs: number = 1000,
+  initialDelayMs: number = 1000
 ): Promise<Response> {
   let lastError: Error | undefined;
 
@@ -264,9 +257,11 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
     // Call ReccoBeats API instead of Spotify API
     // ReccoBeats uses query parameter ?ids= instead of path parameter
     const response = await fetchWithRetry(
-      `https://api.reccobeats.com/v1/audio-features?ids=${encodeURIComponent(trackId)}`,
+      `https://api.reccobeats.com/v1/audio-features?ids=${encodeURIComponent(
+        trackId
+      )}`,
       3, // max retries
-      1000, // initial delay (ms)
+      1000 // initial delay (ms)
     );
 
     // Handle 404: Audio features not found
@@ -277,7 +272,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
           message: "Audio features not found for this track",
           status: 404,
         } satisfies ErrorResponse,
-        404,
+        404
       );
     }
 
@@ -290,7 +285,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
             "ReccoBeats API rate limit exceeded. Please try again later.",
           status: 429,
         } satisfies ErrorResponse,
-        429,
+        429
       );
     }
 
@@ -302,7 +297,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
           message: "An unexpected error occurred while fetching audio features",
           status: 500,
         } satisfies ErrorResponse,
-        500,
+        500
       );
     }
 
@@ -314,13 +309,14 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
           message: "ReccoBeats API request timed out",
           status: 504,
         } satisfies ErrorResponse,
-        504,
+        504
       );
     }
 
     // Success: 200 OK
     if (response.ok) {
-      const audioFeatures = await response.json();
+      const data: ReccoBeatsAudioFeaturesResponse = await response.json();
+      const audioFeatures = data?.content[0] || null;
       return c.json(audioFeatures);
     }
 
@@ -331,7 +327,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
         message: `Unexpected response status: ${response.status}`,
         status: response.status,
       } satisfies ErrorResponse,
-      500,
+      500
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -348,7 +344,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
           message: "ReccoBeats API request timed out",
           status: 504,
         } satisfies ErrorResponse,
-        504,
+        504
       );
     }
 
