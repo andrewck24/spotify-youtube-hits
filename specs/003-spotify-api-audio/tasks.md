@@ -24,9 +24,9 @@
 
 **Purpose**: Verify environment and prepare for implementation
 
-- [ ] T001 Verify development environment (Node.js 18+, npm dependencies installed)
-- [ ] T002 Verify Cloudflare Wrangler CLI available (`npx wrangler --version`)
-- [ ] T003 Create feature branch `003-spotify-api-audio` if not exists
+- [x] T001 Verify development environment (Node.js 18+, npm dependencies installed)
+- [x] T002 Verify Cloudflare Wrangler CLI available (`npx wrangler --version`)
+- [x] T003 Create feature branch `003-spotify-api-audio` if not exists
 
 **Checkpoint**: Environment ready for implementation
 
@@ -38,9 +38,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Review existing Worker API structure in `worker/index.ts` (lines ~193-319 for audio-features routes)
-- [ ] T005 Review existing frontend service structure in `src/services/spotify-api.ts` (getAudioFeatures method)
-- [ ] T006 Review existing TypeScript types in `src/types/spotify.ts` (SpotifyAudioFeatures interface)
+- [x] T004 Review existing Worker API structure in `worker/index.ts` (lines ~193-319 for audio-features routes)
+- [x] T005 Review existing frontend service structure in `src/services/spotify-api.ts` (getAudioFeatures method)
+- [x] T006 Review existing TypeScript types in `src/types/spotify.ts` (SpotifyAudioFeatures interface)
 
 **Checkpoint**: Codebase understood - user story implementation can now begin
 
@@ -61,38 +61,38 @@
 
 #### Worker API Layer
 
-- [ ] T007 [US1] Create `fetchWithRetry` helper function in `worker/index.ts` for Exponential Backoff retry logic (handle 429, max 3 retries, 10s timeout per research.md)
-- [ ] T008 [US1] Update single audio-features route `GET /api/spotify/audio-features/:id` in `worker/index.ts` (~line 193-240) to call ReccoBeats API (`https://api.reccobeats.com/v1/audio-features?ids={id}`) instead of Spotify API
-- [ ] T009 [US1] Update error handling in audio-features route to map ReccoBeats errors (404, 429, 500, 504) to user-friendly messages per contracts/worker-audio-features-api.yaml
-- [ ] T010 [US1] Update Track ID validation in audio-features route to use existing `validateSpotifyId` function (should already exist in Worker)
+- [x] T007 [US1] Create `fetchWithRetry` helper function in `worker/index.ts` for Exponential Backoff retry logic (handle 429, max 3 retries, 10s timeout per research.md)
+- [x] T008 [US1] Update single audio-features route `GET /api/spotify/audio-features/:id` in `worker/index.ts` (~line 193-240) to call ReccoBeats API (`https://api.reccobeats.com/v1/audio-features?ids={id}`) instead of Spotify API
+- [x] T009 [US1] Update error handling in audio-features route to map ReccoBeats errors (404, 429, 500, 504) to user-friendly messages per contracts/worker-audio-features-api.yaml
+- [x] T010 [US1] Update Track ID validation in audio-features route to use existing `validateSpotifyId` function (should already exist in Worker)
 
 #### Frontend Type Definitions
 
-- [ ] T011 [P] [US1] Simplify `AudioFeatures` interface in `src/types/spotify.ts` to only include 9 core fields from ReccoBeats (acousticness, danceability, energy, instrumentalness, liveness, loudness, speechiness, tempo, valence) per data-model.md
-- [ ] T012 [P] [US1] Add `isValidAudioFeatures` type guard function to `src/types/spotify.ts` per data-model.md (validate field types and ranges)
-- [ ] T013 [P] [US1] Add `isValidTrackId` validation function to `src/types/spotify.ts` per data-model.md (validate 22-character Base-62 format)
+- [x] T011 [P] [US1] Simplify `AudioFeatures` interface in `src/types/spotify.ts` to only include 9 core fields from ReccoBeats (acousticness, danceability, energy, instrumentalness, liveness, loudness, speechiness, tempo, valence) per data-model.md
+- [x] T012 [P] [US1] Add `isValidAudioFeatures` type guard function to `src/types/spotify.ts` per data-model.md (validate field types and ranges)
+- [x] T013 [P] [US1] Add `isValidTrackId` validation function to `src/types/spotify.ts` per data-model.md (validate 22-character Base-62 format)
 
 #### Frontend Service Layer
 
-- [ ] T014 [US1] Review `getAudioFeatures` method in `src/services/spotify-api.ts` to ensure compatibility with simplified AudioFeatures type (should require no changes if using same 9 fields)
+- [x] T014 [US1] Review `getAudioFeatures` method in `src/services/spotify-api.ts` to ensure compatibility with simplified AudioFeatures type (should require no changes if using same 9 fields)
 
 #### Frontend Component Verification
 
-- [ ] T015 [US1] Review `FeatureChart` component in `src/components/track/feature-chart.tsx` to verify it only uses the 9 core AudioFeatures fields (should require no changes)
+- [x] T015 [US1] Review `FeatureChart` component in `src/components/track/feature-chart.tsx` to verify it only uses the 9 core AudioFeatures fields (should require no changes)
 
 #### US1 Testing & Validation
 
-- [ ] T016 [P] [US1] Update unit tests in `tests/unit/services/spotify-api.test.ts` to mock ReccoBeats API responses instead of Spotify API
-- [ ] T017 [P] [US1] Verify E2E test in `tests/e2e/track-details.spec.ts` passes with radar chart displaying correctly
+- [x] T016 [P] [US1] Update unit tests in `tests/unit/services/spotify-api.test.ts` to mock ReccoBeats API responses instead of Spotify API
+- [x] T017 [P] [US1] Verify E2E test in `tests/e2e/track-details.spec.ts` passes with radar chart displaying correctly
 
 #### Local Development Testing
 
-- [ ] T018 [US1] Test Worker locally with `npx wrangler dev`: verify single track query returns ReccoBeats data
-- [ ] T019 [US1] Test Worker error scenarios locally: invalid Track ID (400), non-existent Track ID (404), verify user-friendly error messages
-- [ ] T020 [US1] Test frontend integration locally with `npm run dev`: verify track details page displays radar chart with ReccoBeats data
-- [ ] T021 [US1] Run type check `npm run type-check` to verify no TypeScript errors
-- [ ] T022 [US1] Run unit tests `npm run test` to verify all tests pass
-- [ ] T023 [US1] Run E2E tests `npm run test:e2e` to verify radar chart displays correctly
+- [x] T018 [US1] Test Worker locally with `npx wrangler dev`: verify single track query returns ReccoBeats data
+- [x] T019 [US1] Test Worker error scenarios locally: invalid Track ID (400), non-existent Track ID (404), verify user-friendly error messages
+- [x] T020 [US1] Test frontend integration locally with `npm run dev`: verify track details page displays radar chart with ReccoBeats data
+- [x] T021 [US1] Run type check `npm run type-check` to verify no TypeScript errors
+- [x] T022 [US1] Run unit tests `npm run test` to verify all tests pass
+- [x] T023 [US1] Run E2E tests `npm run test:e2e` to verify radar chart displays correctly
 
 **Checkpoint**: At this point, User Story 1 should be fully functional - audio features display with ReccoBeats data
 
@@ -112,23 +112,23 @@
 
 #### Code Removal
 
-- [ ] T024 [P] [US2] Remove `getAudioFeaturesBatch` method from `src/services/spotify-api.ts` (~line 169-221 per quickstart.md)
-- [ ] T025 [P] [US2] Remove `getAudioFeaturesBatch` interface definition from `src/types/spotify.ts` (if exists)
-- [ ] T026 [P] [US2] Remove batch query route `GET /api/spotify/audio-features` (with query parameter ?ids=) from `worker/index.ts` (~line 241-319 per quickstart.md)
+- [x] T024 [P] [US2] Remove `getAudioFeaturesBatch` method from `src/services/spotify-api.ts` (~line 169-221 per quickstart.md)
+- [x] T025 [P] [US2] Remove `getAudioFeaturesBatch` interface definition from `src/types/spotify.ts` (if exists)
+- [x] T026 [P] [US2] Remove batch query route `GET /api/spotify/audio-features` (with query parameter ?ids=) from `worker/index.ts` (~line 241-319 per quickstart.md)
 
 #### Verification & Cleanup
 
-- [ ] T027 [US2] Search codebase for any remaining references to `getAudioFeaturesBatch` using `grep -r "getAudioFeaturesBatch" src/ tests/`
-- [ ] T028 [US2] Search codebase for any remaining batch query patterns using `grep -r "?ids=" worker/`
-- [ ] T029 [US2] Remove batch-related test code from `tests/unit/services/spotify-api.test.ts` (remove commented-out batch tests)
+- [x] T027 [US2] Search codebase for any remaining references to `getAudioFeaturesBatch` using `grep -r "getAudioFeaturesBatch" src/ tests/`
+- [x] T028 [US2] Search codebase for any remaining batch query patterns using `grep -r "?ids=" worker/`
+- [x] T029 [US2] Remove batch-related test code from `tests/unit/services/spotify-api.test.ts` (remove commented-out batch tests)
 
 #### US2 Testing & Validation
 
-- [ ] T030 [US2] Run type check `npm run type-check` to verify no TypeScript errors after removal
-- [ ] T031 [US2] Run unit tests `npm run test` to verify all tests pass after batch removal
-- [ ] T032 [US2] Run E2E tests `npm run test:e2e` to verify existing functionality unaffected
-- [ ] T033 [US2] Test Worker locally with `npx wrangler dev`: verify batch route no longer exists (should return 404)
-- [ ] T034 [US2] Test frontend locally with `npm run dev`: verify all track details pages work correctly
+- [x] T030 [US2] Run type check `npm run type-check` to verify no TypeScript errors after removal
+- [x] T031 [US2] Run unit tests `npm run test` to verify all tests pass after batch removal
+- [x] T032 [US2] Run E2E tests `npm run test:e2e` to verify existing functionality unaffected
+- [x] T033 [US2] Test Worker locally with `npx wrangler dev`: verify batch route no longer exists (should return 404)
+- [x] T034 [US2] Test frontend locally with `npm run dev`: verify all track details pages work correctly
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work - audio features display with ReccoBeats, batch code removed
 
@@ -138,12 +138,12 @@
 
 **Purpose**: Final validation and documentation
 
-- [ ] T035 [P] Run complete quickstart.md validation workflow from Step 1-6
-- [ ] T036 [P] Verify all error scenarios work correctly (404, 429, 500, invalid Track ID)
-- [ ] T037 Build project `npm run build` to verify production build succeeds
-- [ ] T038 Review and update feature documentation in `specs/003-spotify-api-audio/` if needed (spec.md, plan.md status)
-- [ ] T039 Final code review: check for any hardcoded values, console.logs, or debug code
-- [ ] T040 Run linting `npm run lint` to ensure code quality
+- [x] T035 [P] Run complete quickstart.md validation workflow from Step 1-6
+- [x] T036 [P] Verify all error scenarios work correctly (404, 429, 500, invalid Track ID)
+- [x] T037 Build project `npm run build` to verify production build succeeds
+- [x] T038 Review and update feature documentation in `specs/003-spotify-api-audio/` if needed (spec.md, plan.md status)
+- [x] T039 Final code review: check for any hardcoded values, console.logs, or debug code
+- [x] T040 Run linting `npm run lint` to ensure code quality
 
 **Checkpoint**: Feature complete and ready for deployment
 
