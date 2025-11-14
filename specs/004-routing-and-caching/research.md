@@ -110,7 +110,7 @@ export const store = configureStore({
 
 **實作細節**:
 
-```typescript
+```tsx
 // lib/router.tsx
 import { createBrowserRouter } from "react-router";
 import HomePage from "@/pages/home-page";
@@ -138,7 +138,7 @@ export const router = createBrowserRouter([
 ]);
 ```
 
-```typescript
+```tsx
 // main.tsx
 import { RouterProvider } from "react-router";
 import { router } from "@/lib/router";
@@ -148,7 +148,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 ```
 
@@ -172,7 +172,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 **實作模式**:
 
-```typescript
+```tsx
 // pages/artist-page.tsx
 import { useParams } from "react-router";
 import { useGetArtistQuery } from "@/features/api/spotify-api";
@@ -196,7 +196,7 @@ export default function ArtistPage() {
 }
 ```
 
-```typescript
+```tsx
 // pages/search-page.tsx
 import { useSearchParams } from "react-router";
 import { useAppSelector } from "@/lib/store";
@@ -254,7 +254,7 @@ export default function SearchPage() {
 
 **實作範例**:
 
-```typescript
+```tsx
 // components/search/search-bar.tsx
 import { useSearchParams } from "react-router";
 import { useState, useCallback } from "react";
@@ -336,7 +336,7 @@ export const RECOMMENDED_ARTIST_IDS = [
 export type RecommendedArtistId = (typeof RECOMMENDED_ARTIST_IDS)[number];
 ```
 
-```typescript
+```tsx
 // pages/home-page.tsx
 import { RECOMMENDED_ARTIST_IDS } from "@/features/recommendations/constants";
 import { useGetArtistQuery } from "@/features/api/spotify-api";
@@ -345,7 +345,7 @@ export default function HomePage() {
   return (
     <div>
       <h1>推薦歌手</h1>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {RECOMMENDED_ARTIST_IDS.map((artistId) => (
           <ArtistCard key={artistId} artistId={artistId} />
         ))}
@@ -411,7 +411,7 @@ npx shadcn@latest add input badge alert
 
 **使用範例**:
 
-```typescript
+```tsx
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';

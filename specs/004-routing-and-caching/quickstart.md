@@ -24,49 +24,46 @@
    - 整合至 Redux store
 
 2. **建立路由配置** (`lib/router.tsx`)
-   - 定義 4 個路由：`/`, `/search`, `/artist/:artistId`, `/artist/:artistId/track/:trackId`
+   - 定義 4 個路由：`/`, `/search`, `/artist/:artistId`, `/track/:trackId` (扁平結構)
    - 更新 `main.tsx` 使用 `<RouterProvider>`
 
 3. **建立頁面元件** (`pages/`)
    - `artist-page.tsx` - 使用 `useParams` + `useGetArtistQuery`
    - `track-page.tsx` - 使用 `useParams` + `useGetTrackQuery` + `useGetAudioFeaturesQuery`
 
-4. **建立 `_redirects`** (`public/_redirects`)
-   - 內容：`/* /index.html 200`
-
 ### Phase 2: 首頁推薦 (P2)
 
-5. **建立推薦常數** (`features/recommendations/constants.ts`)
+1. **建立推薦常數** (`features/recommendations/constants.ts`)
    - 硬編碼 8 位熱門歌手的 artistId
 
-6. **建立首頁** (`pages/home-page.tsx`)
+2. **建立首頁** (`pages/home-page.tsx`)
    - 使用 `RECOMMENDED_ARTIST_IDS` 渲染歌手卡片
 
-7. **建立歌手卡片** (`components/artist/artist-card.tsx`)
+3. **建立歌手卡片** (`components/artist/artist-card.tsx`)
    - 使用 `useGetArtistQuery` 獲取歌手資料
 
 ### Phase 3: 搜尋功能 (P3)
 
-8. **建立搜尋頁面** (`pages/search-page.tsx`)
+1. **建立搜尋頁面** (`pages/search-page.tsx`)
    - 使用 `useSearchParams` 讀取 query
    - 使用 `performSearch` 純函數執行搜尋
 
-9. **重構搜尋元件**
+2. **重構搜尋元件**
    - 更新 `search-bar.tsx` 使用 `setSearchParams(params, { replace: true })`
    - 更新 `search-results.tsx` 從 URL 讀取 query
 
 ### Phase 4: 清理舊程式碼
 
-10. **移除不必要的 slices**
-    - 移除 `features/artist/` (slice, selectors, types)
-    - 移除 `features/track/` (slice, selectors, types)
-    - 簡化 `features/search/` (移除 slice, selectors，保留 service)
+1. **移除不必要的 slices**
+   - 移除 `features/artist/` (slice, selectors, types)
+   - 移除 `features/track/` (slice, selectors, types)
+   - 簡化 `features/search/` (移除 slice, selectors，保留 service)
 
-11. **移除舊 hooks**
-    - 移除 `use-artist.ts`, `use-track.ts`, `use-search.ts`
+2. **移除舊 hooks**
+   - 移除 `use-artist.ts`, `use-track.ts`, `use-search.ts`
 
-12. **移除舊 service**
-    - 移除 `services/spotify-api.ts`
+3. **移除舊 service**
+   - 移除 `services/spotify-api.ts`
 
 ## Key Patterns
 
@@ -83,7 +80,7 @@ const { data, isLoading } = useGetArtistQuery(artistId!, { skip: !artistId });
 ```typescript
 // pages/search-page.tsx
 const [searchParams, setSearchParams] = useSearchParams();
-const query = searchParams.get('q') || '';
+const query = searchParams.get("q") || "";
 
 // 更新時使用 replace: true
 setSearchParams({ q: newQuery }, { replace: true });
@@ -122,11 +119,19 @@ npm run test:e2e -- caching.spec.ts
 # 建置
 npm run build
 
+# 本地預覽（測試 SPA 路由）
+npm run preview
+
 # 部署至 Cloudflare Pages
 npm run deploy:cf
 ```
 
-確認 `public/_redirects` 已包含在 build 輸出中。
+**SPA 路由配置**：
+
+- SPA 路由透過 `wrangler.jsonc` 的 `not_found_handling: "single-page-application"` 配置處理
+- 此配置已完成，無需額外建立檔案
+- 執行 `npm run preview` 可測試 production build 的路由功能
+- 確認深度連結（例如直接訪問 `/artist/xxx`）正常運作
 
 ## Next Steps
 

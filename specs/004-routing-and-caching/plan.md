@@ -99,7 +99,7 @@ _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 - ✅ 無需後端路由配置
 - ✅ 首頁推薦使用預定義的 8 位歌手 ID 常數（無需動態計算，符合靜態部署原則）
 - ✅ API 呼叫透過現有 Cloudflare Worker proxy
-- ✅ 部署至 Cloudflare Pages，設定 `_redirects` 處理 SPA 路由
+- ✅ 部署至 Cloudflare Pages，透過 `wrangler.jsonc` 的 Workers Assets 配置處理 SPA 路由
 
 **狀態**: PASS
 
@@ -210,9 +210,8 @@ src/
 └── main.tsx                       # 修改
 
 public/
-├── data/
-│   └── tracks.json                # 保留
-└── _redirects                     # 新增
+└── data/
+    └── tracks.json                # 保留
 ```
 
 **Structure Decision**: Web SPA 結構
@@ -224,9 +223,9 @@ public/
 - ⚠️ **部分移除**: search/ (刪除 slice/selectors，保留 service/types)
 - 🔍 **評估移除**: spotify/ (slice/selectors 可能移除，types 保留)
 
-### `_redirects` 檔案說明
+### SPA 路由配置說明
 
-**用途**：處理 Cloudflare Pages 的 SPA 路由重定向
+**用途**：處理 Cloudflare Pages 的 SPA 路由
 
 **問題背景**：
 在 SPA 應用中，使用者可能直接訪問深度連結（例如 `/artist/123` 或 `/track/456`）。但由於這些路徑在伺服器上並不存在實體檔案，伺服器會回傳 404 錯誤。為了讓 react-router 接管這些路由，需要配置伺服器將所有請求重定向到 `index.html`。
@@ -237,32 +236,38 @@ public/
 - 理由：Spotify track API 回應已包含完整 artist 資訊（包括 artists 陣列）
 - 簡化了深度連結並減少 URL 複雜度
 
-**實作內容**：
+**實作方式**：
 
-`public/_redirects` 檔案內容：
+透過 `wrangler.jsonc` 的 Workers Assets 配置：
 
-```text
-/* /index.html 200
+```jsonc
+{
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+  },
+}
 ```
 
-**語法說明**：
+**配置說明**：
 
-- `/*`: 匹配所有路徑（通配符）
-- `/index.html`: 重定向目標（SPA 入口）
-- `200`: HTTP 狀態碼（成功，但進行 URL rewrite，瀏覽器 URL 不變）
+- `not_found_handling: "single-page-application"`: 當請求的路徑找不到實體檔案時，自動回傳 `index.html`
+- 這是 Cloudflare Workers Assets 的原生功能，無需額外配置檔案
+- 靜態資源（圖片、CSS、JS）會優先於 SPA fallback，不受影響
+- API 路由（`/api/*`）由 Worker 處理，優先級高於 Assets
 
 **運作流程**：
 
 1. 使用者訪問 `https://example.com/artist/3AA28KZvwAUcZuOKwyblJQ`
-2. Cloudflare Pages 找不到 `/artist/3AA28KZvwAUcZuOKwyblJQ` 實體檔案
-3. 觸發 `_redirects` 規則，回傳 `index.html` 內容（狀態碼 200）
+2. Cloudflare Workers Assets 找不到 `/artist/3AA28KZvwAUcZuOKwyblJQ` 實體檔案
+3. 因為 `not_found_handling: "single-page-application"`，回傳 `index.html` 內容（狀態碼 200）
 4. 瀏覽器執行 `index.html` 中的 React 應用程式
 5. react-router 解析 URL 路徑 `/artist/3AA28KZvwAUcZuOKwyblJQ`
 6. 渲染對應的 `ArtistPage` 元件
 
 **注意事項**：
 
-- Cloudflare Pages 原生支援 `_redirects` 檔案（與 Netlify 相容）
-- 必須放在 `public/` 目錄（Vite 會將其複製到 `dist/`）
-- API 路由（`/api/*`）若由 Worker 處理，需確保 Worker 優先級高於此規則
-- 靜態資源（圖片、CSS、JS）會優先於 redirect 規則，不受影響
+- 此配置已在 `wrangler.jsonc` 中完成，無需建立 `_redirects` 檔案
+- 適用於所有部署到 Cloudflare Pages 的場景
+- 本地開發使用 Vite dev server，已原生支援 SPA 路由

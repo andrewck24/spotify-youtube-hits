@@ -8,13 +8,13 @@
 
 根據 spec.md 的 User Stories 優先級（P1 → P2 → P3 → P4）組織任務，每個 User Story 作為獨立的實作與測試單元。
 
-**總任務數**: 36
+**總任務數**: 34
 **User Story 分布**:
 
-- Setup & Foundational: 7 tasks
+- Setup & Foundational: 6 tasks
 - P1 (基本導航): 9 tasks
 - P2 (首頁推薦): 4 tasks
-- P3 (深度連結): 4 tasks
+- P3 (深度連結): 3 tasks
 - P4 (資料快取): 5 tasks
 - Polish (跨功能): 7 tasks
 
@@ -25,6 +25,7 @@
 - 首頁推薦使用預定義 8 位歌手清單
 - 使用 AbortController 管理請求取消
 - Track 頁面採用漸進式載入（skeleton UI）
+- SPA 路由透過 Cloudflare Workers Assets 的 `not_found_handling` 配置處理
 
 ---
 
@@ -108,16 +109,9 @@
 - [x] 使用 `as const` 確保型別不可變
 - [x] 匯出常數
 
-### T007: 建立 public/\_redirects 檔案 [Setup] ✅ DONE
+### ~~T007: 建立 public/\_redirects 檔案 [Setup]~~ ❌ 已移除
 
-**File**: `public/_redirects`
-**Description**: 設定 Cloudflare Pages SPA 路由重定向
-**Dependencies**: None
-**Checklist**:
-
-- [x] 建立 `_redirects` 檔案
-- [x] 加入規則: `/* /index.html 200`
-- [x] 確認檔案會被 Vite 複製到 dist/
+**說明**: 此任務已移除。SPA 路由透過 `wrangler.jsonc` 中的 Workers Assets 配置 (`not_found_handling: "single-page-application"`) 處理，不需要 `_redirects` 檔案。
 
 ---
 
@@ -366,18 +360,8 @@
 - [ ] 確認搜尋輸入框預填 "Beatles"
 - [ ] 重新整理頁面，確認搜尋關鍵字保持
 - [ ] 測試空白 query (`/search`)，確認顯示提示訊息
-
-### T024: 更新 \_redirects 規則驗證 [US3]
-
-**Description**: 確認 Cloudflare Pages redirect 規則正常運作
-**Dependencies**: T007
-**Checklist**:
-
-- [ ] 執行 `npm run build`
-- [ ] 確認 `dist/_redirects` 檔案存在
-- [ ] 使用 `npm run preview` 測試 SPA 路由
-- [ ] 測試深度連結（直接訪問 `/artist/xxx`, `/track/yyy`）
-- [ ] 確認所有路由返回 200 而非 404
+- [ ] 執行 `npm run build` 和 `npm run preview` 測試 SPA 路由
+- [ ] 確認所有路由在 production build 中正常運作
 
 **Checkpoint P3**: 所有頁面支援深度連結，URL 可分享與收藏。
 
@@ -567,10 +551,10 @@
 
 ### Phase Execution Order
 
-1. **Setup & Foundational** (T001-T007): 可平行執行，無相依性
+1. **Setup & Foundational** (T001-T006): 可平行執行，無相依性
 2. **P1 實作** (T008-T016): 按序執行 pages，平行執行 cleanup tasks
 3. **P2 實作** (T017-T020): 依賴 P1 完成
-4. **P3 驗證** (T021-T024): 依賴 P1 完成，可在 P2 之前或平行進行
+4. **P3 驗證** (T021-T023): 依賴 P1 完成，可在 P2 之前或平行進行
 5. **P4 優化** (T025-T029): 依賴 P1 完成，可在 P2/P3 之後進行
 6. **Polish** (T030-T036): 可逐步執行，不阻塞其他 phases
 
@@ -597,9 +581,6 @@ T004: 建立路由配置
 # Terminal 2
 T002: API index
 T006: 推薦常數
-
-# Terminal 3
-T007: _redirects 檔案
 ```
 
 **P1 Pages** (Parallel after setup):
@@ -636,7 +617,7 @@ T016: 簡化 search slice
 ## Dependencies Graph
 
 ```text
-Setup (T001-T007)
+Setup (T001-T006)
     ├─> P1 Core (T008-T011) [Can run in parallel]
     │     ├─> T012-T013 (Update components)
     │     └─> T014-T016 (Cleanup) [Can run in parallel]
@@ -644,7 +625,7 @@ Setup (T001-T007)
     ├─> P2 Home (T017-T020)
     │     └─ Requires: T006, P1 Complete
     │
-    ├─> P3 Deep Links (T021-T024) [Verification tasks]
+    ├─> P3 Deep Links (T021-T023) [Verification tasks]
     │     └─ Requires: P1 Complete
     │
     ├─> P4 Caching (T025-T029)
@@ -701,7 +682,7 @@ Setup (T001-T007)
 
 ## Notes
 
-1. **測試策略**: 規格未明確要求測試，因此任務清單不包含單元測試或 E2E 測試框架。驗證任務 (T021-T024, T027-T029) 為手動測試檢查點。
+1. **測試策略**: 規格未明確要求測試，因此任務清單不包含單元測試或 E2E 測試框架。驗證任務 (T021-T023, T027-T029) 為手動測試檢查點。
 
 2. **User Story 獨立性**: P2、P3、P4 均依賴 P1 完成，但彼此之間獨立。可根據優先級調整實作順序。
 
@@ -710,10 +691,11 @@ Setup (T001-T007)
    - 統一錯誤元件設計（T030-T031）
    - 漸進式載入策略（T032-T033）
    - AbortController 整合（T034）
+   - SPA 路由透過 Cloudflare Workers Assets 處理（移除 T007, T024）
 
 4. **Performance Goals**:
    - 首頁載入 <1 秒 (T018)
    - 深度連結載入 <2 秒 (T021-T023)
    - 快取命中切換 <0.5 秒 (T028)
 
-5. **Deployment**: 確保執行 T024 驗證 `_redirects` 在 Cloudflare Pages 正常運作。
+5. **Deployment**: SPA 路由透過 `wrangler.jsonc` 中的 `not_found_handling: "single-page-application"` 自動處理，無需額外配置。在 T023 中驗證 production build 的路由功能。
