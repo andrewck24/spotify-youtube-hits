@@ -23,10 +23,10 @@ interface ArtistPageParams {
   artistId: string; // Spotify Artist ID
 }
 
-// /artist/:artistId/track/:trackId
+// /track/:trackId
 interface TrackPageParams {
-  artistId: string; // Spotify Artist ID
   trackId: string; // Spotify Track ID
+  // 注意：不需要 artistId，因為 Spotify track API 回應已包含完整 artist 資訊
 }
 ```
 

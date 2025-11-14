@@ -11,10 +11,12 @@
 
 **核心技術方案**：
 
-- **路由管理**：使用 react-router-dom v7 的 `useParams` 和 `useSearchParams` hooks 將 URL 作為 Single Source of Truth
+- **路由管理**：使用 react-router-dom v7 的 `useParams` 和 `useSearchParams` hooks 將 URL 作為 Single Source of Truth。Track 頁面採用扁平結構 `/track/:trackId`，因為 Spotify API 回應已包含完整 artist 資訊
 - **資料快取**：遷移至 RTK Query API，利用其內建的自動快取、重複請求去除和標準化查詢機制
-- **UI 元件**：使用 shadcn/ui 元件庫構建一致的使用者介面
+- **UI 元件**：使用 shadcn/ui 元件庫構建一致的使用者介面，包含統一的錯誤處理元件與 skeleton UI
 - **搜尋體驗**：使用 `setSearchParams(newParams, { replace: true })` 避免污染瀏覽歷史
+- **請求管理**：使用 AbortController 取消 pending requests，避免快速導航時的競態條件
+- **漸進式載入**：Track 頁面先顯示 track API 的部分 artist 資料與 skeleton UI，待完整 artist 資料載入後更新
 
 ## Technical Context
 
@@ -95,7 +97,7 @@ _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - ✅ 純前端路由方案 (react-router-dom BrowserRouter)
 - ✅ 無需後端路由配置
-- ✅ 首頁推薦來自本地 JSON 檔案
+- ✅ 首頁推薦使用預定義的 8 位歌手 ID 常數（無需動態計算，符合靜態部署原則）
 - ✅ API 呼叫透過現有 Cloudflare Worker proxy
 - ✅ 部署至 Cloudflare Pages，設定 `_redirects` 處理 SPA 路由
 
@@ -178,12 +180,16 @@ src/
 ├── components/
 │   ├── artist/
 │   │   ├── artist-profile.tsx    # 修改
-│   │   └── artist-card.tsx       # 新增
+│   │   ├── artist-card.tsx       # 新增
+│   │   └── artist-skeleton.tsx   # 新增：skeleton UI
 │   ├── track/
 │   │   ├── track-detail.tsx      # 修改
 │   │   ├── track-list.tsx        # 修改
 │   │   ├── feature-chart.tsx     # 保留
 │   │   └── popularity-chart.tsx  # 保留
+│   ├── error/                    # 新增：錯誤處理元件
+│   │   ├── error-boundary.tsx   # 錯誤邊界
+│   │   └── error-display.tsx    # 統一錯誤元件（可重試/返回）
 │   └── [其他保留]
 │
 ├── hooks/
@@ -224,6 +230,12 @@ public/
 
 **問題背景**：
 在 SPA 應用中，使用者可能直接訪問深度連結（例如 `/artist/123` 或 `/track/456`）。但由於這些路徑在伺服器上並不存在實體檔案，伺服器會回傳 404 錯誤。為了讓 react-router 接管這些路由，需要配置伺服器將所有請求重定向到 `index.html`。
+
+**URL 設計決策** (基於 Clarifications):
+
+- Track 頁面採用扁平結構 `/track/:trackId`，無需 artistId
+- 理由：Spotify track API 回應已包含完整 artist 資訊（包括 artists 陣列）
+- 簡化了深度連結並減少 URL 複雜度
 
 **實作內容**：
 
