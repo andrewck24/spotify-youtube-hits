@@ -32,92 +32,92 @@
 
 基礎專案設定與工具配置。
 
-### T001: 建立 RTK Query API slice [Setup]
+### T001: 建立 RTK Query API slice [Setup] ✅ DONE
 
 **File**: `src/features/api/spotify-api.ts`
 **Description**: 建立 RTK Query API slice，定義 3 個 endpoints (getArtist, getTrack, getAudioFeatures)
 **Dependencies**: None
 **Checklist**:
 
-- [ ] 使用 `createApi` 與 `fetchBaseQuery`
-- [ ] Base URL 設定為 `/api/spotify`
-- [ ] 定義 tagTypes: `["Artist", "Track", "AudioFeatures"]`
-- [ ] 實作 getArtist endpoint (GET `/artists/:artistId`)
-- [ ] 實作 getTrack endpoint (GET `/tracks/:trackId`)
-- [ ] 實作 getAudioFeatures endpoint (GET `/audio-features/:trackId`)
-- [ ] 每個 endpoint 使用 `providesTags` 標記快取
-- [ ] 匯出自動生成的 hooks
+- [x] 使用 `createApi` 與 `fetchBaseQuery`
+- [x] Base URL 設定為 `/api/spotify`
+- [x] 定義 tagTypes: `["Artist", "Track", "AudioFeatures"]`
+- [x] 實作 getArtist endpoint (GET `/artists/:artistId`)
+- [x] 實作 getTrack endpoint (GET `/tracks/:trackId`)
+- [x] 實作 getAudioFeatures endpoint (GET `/audio-features/:trackId`)
+- [x] 每個 endpoint 使用 `providesTags` 標記快取
+- [x] 匯出自動生成的 hooks
 
-### T002: 建立 API index 檔案 [Setup] [P]
+### T002: 建立 API index 檔案 [Setup] ✅ DONE
 
 **File**: `src/features/api/index.ts`
 **Description**: 匯出 spotifyApi 與所有 hooks
 **Dependencies**: T001
 **Checklist**:
 
-- [ ] 匯出 `spotifyApi`
-- [ ] 匯出所有 auto-generated hooks
-- [ ] 使用 path alias `@/features/api`
+- [x] 匯出 `spotifyApi`
+- [x] 匯出所有 auto-generated hooks
+- [x] 使用 path alias `@/features/api`
 
-### T003: 整合 RTK Query 至 Redux store [Setup]
+### T003: 整合 RTK Query 至 Redux store [Setup] ✅ DONE
 
 **File**: `src/lib/store.ts`
 **Description**: 將 spotifyApi reducer 與 middleware 整合至 Redux store
 **Dependencies**: T001
 **Checklist**:
 
-- [ ] 加入 `spotifyApi.reducerPath` 至 reducer
-- [ ] 加入 `spotifyApi.middleware` 至 middleware
-- [ ] 保留現有的 data slice
-- [ ] 驗證 store 正常運作
+- [x] 加入 `spotifyApi.reducerPath` 至 reducer
+- [x] 加入 `spotifyApi.middleware` 至 middleware
+- [x] 保留現有的 data slice
+- [x] 驗證 store 正常運作
 
-### T004: 建立路由配置檔案 [Setup]
+### T004: 建立路由配置檔案 [Setup] ✅ DONE
 
 **File**: `src/lib/router.tsx`
 **Description**: 使用 react-router-dom v7 建立路由配置（4 個主要路由）
 **Dependencies**: None
 **Checklist**:
 
-- [ ] 使用 `createBrowserRouter`
-- [ ] 定義 4 個路由: `/`, `/search`, `/artist/:artistId`, `/track/:trackId` (扁平結構)
-- [ ] 每個路由對應一個頁面元件 (lazy import)
-- [ ] 使用 `<RouterProvider>` wrapper
-- [ ] 匯出 router instance
+- [x] 使用 `createBrowserRouter`
+- [x] 定義 4 個路由: `/`, `/search`, `/artist/:artistId`, `/track/:trackId` (扁平結構)
+- [x] 每個路由對應一個頁面元件 (lazy import)
+- [x] 使用 `<RouterProvider>` wrapper
+- [x] 匯出 router instance
 
-### T005: 更新 main.tsx 使用 RouterProvider [Setup]
+### T005: 更新 main.tsx 使用 RouterProvider [Setup] ✅ DONE
 
 **File**: `src/main.tsx`
 **Description**: 將 App 改為使用 RouterProvider
 **Dependencies**: T004
 **Checklist**:
 
-- [ ] 匯入 `router` from `@/lib/router`
-- [ ] 替換 `<App />` 為 `<RouterProvider router={router} />`
-- [ ] 保留 Redux Provider 包裹
-- [ ] 驗證應用程式正常啟動
+- [x] 匯入 `router` from `@/lib/router`
+- [x] 替換 `<App />` 為 `<RouterProvider router={router} />`
+- [x] 保留 Redux Provider 包裹
+- [x] 驗證應用程式正常啟動
 
-### T006: 建立首頁推薦常數 [Setup]
+### T006: 建立首頁推薦常數 [Setup] ✅ DONE
 
 **File**: `src/features/recommendations/constants.ts`
 **Description**: 定義預定義的 8 位歌手 ID 清單
 **Dependencies**: None
 **Checklist**:
 
-- [ ] 建立 `RECOMMENDED_ARTIST_IDS` 常數陣列
-- [ ] 包含 8 位歌手 ID (Gorillaz, Billie Eilish, The Weeknd, Bruno Mars, Ariana Grande, Taylor Swift, Drake, Adele)
-- [ ] 使用 `as const` 確保型別不可變
-- [ ] 匯出常數
+- [x] 建立 `RECOMMENDED_ARTIST_IDS` 常數陣列
+- [x] 包含 8 位歌手 ID (Gorillaz, Billie Eilish, The Weeknd, Bruno Mars, Ariana Grande, Taylor Swift, Drake, Adele)
+- [x] 使用 `as const` 確保型別不可變
+- [x] 匯出常數
 
-### T007: 建立 public/\_redirects 檔案 [Setup] [P]
+### T007: 建立 public/\_redirects 檔案 [Setup] ✅ DONE
 
 **File**: `public/_redirects`
 **Description**: 設定 Cloudflare Pages SPA 路由重定向
 **Dependencies**: None
 **Checklist**:
 
-- [ ] 建立 `_redirects` 檔案
-- [ ] 加入規則: `/* /index.html 200`
-- [ ] 確認檔案會被 Vite 複製到 dist/
+- [x] 建立 `_redirects` 檔案
+- [x] 加入規則: `/* /index.html 200`
+- [x] 確認檔案會被 Vite 複製到 dist/
 
 ---
 

@@ -9,6 +9,9 @@ import searchReducer from "@/features/search/search-slice";
 import spotifyReducer from "@/features/spotify/spotify-slice";
 import trackReducer from "@/features/track/track-slice";
 
+// RTK Query
+import { spotifyApi } from "@/features/api";
+
 /**
  * Redux Store Configuration
  *
@@ -36,6 +39,7 @@ export const store = configureStore({
     search: searchReducer,
     data: dataReducer,
     spotify: spotifyReducer,
+    [spotifyApi.reducerPath]: spotifyApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -45,7 +49,7 @@ export const store = configureStore({
         ignoredActions: ["search/initializeSearch"],
         ignoredPaths: ["search.fuseInstance"],
       },
-    }),
+    }).concat(spotifyApi.middleware),
   devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development
 });
 
