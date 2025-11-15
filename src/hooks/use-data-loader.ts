@@ -4,19 +4,16 @@ import {
   selectDataLoading,
 } from "@/features/data/data-selectors";
 import { loadLocalData } from "@/features/data/data-slice";
-import { createSearchIndex } from "@/features/search/search-service";
-import { initializeSearch } from "@/features/search/search-slice";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { useEffect } from "react";
 
 /**
  * Custom Hook: useDataLoader
  *
- * Purpose: 管理資料載入與搜尋索引初始化
+ * Purpose: 管理本地資料載入
  *
  * Features:
  * - 在 component mount 時載入資料
- * - 資料載入成功後初始化 Fuse.js 搜尋引擎
  * - 回傳載入狀態與錯誤訊息
  *
  * Usage:
@@ -47,21 +44,8 @@ export function useDataLoader(): UseDataLoaderReturn {
       return;
     }
 
-    // 開始載入資料（T027 & T028 整合）
-    const loadData = async () => {
-      const result = await dispatch(loadLocalData());
-
-      // 載入成功後初始化搜尋引擎
-      if (loadLocalData.fulfilled.match(result)) {
-        const tracksData = result.payload.tracks;
-        if (tracksData.length > 0) {
-          const fuseInstance = createSearchIndex(tracksData);
-          dispatch(initializeSearch(fuseInstance));
-        }
-      }
-    };
-
-    loadData();
+    // 開始載入資料
+    dispatch(loadLocalData());
   }, [dataLoaded, dispatch]);
 
   return {

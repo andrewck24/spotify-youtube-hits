@@ -37,7 +37,7 @@ function validateSpotifyId(id: string, type: "track" | "artist"): void {
 async function fetchWithRetry(
   url: string,
   maxRetries: number = 3,
-  initialDelayMs: number = 1000
+  initialDelayMs: number = 1000,
 ): Promise<Response> {
   let lastError: Error | undefined;
 
@@ -101,7 +101,7 @@ app.onError((err, c) => {
         message: err.message,
         status: err.status,
       } satisfies ErrorResponse,
-      err.status
+      err.status,
     );
   }
 
@@ -112,7 +112,7 @@ app.onError((err, c) => {
       message: err.message || "An unexpected error occurred",
       status: 500,
     } satisfies ErrorResponse,
-    500
+    500,
   );
 });
 
@@ -134,7 +134,7 @@ app.post("/api/spotify/token", async (c) => {
           message,
           status: 500,
         } satisfies ErrorResponse,
-        500
+        500,
       );
     }
 
@@ -145,7 +145,7 @@ app.post("/api/spotify/token", async (c) => {
           message,
           status: 502,
         } satisfies ErrorResponse,
-        502
+        502,
       );
     }
 
@@ -165,7 +165,7 @@ app.get("/api/spotify/tracks/:id", async (c) => {
     const trackData = await callSpotifyApi(
       `/v1/tracks/${trackId}`,
       c.env,
-      "track"
+      "track",
     );
     return c.json(trackData);
   } catch (error) {
@@ -178,7 +178,7 @@ app.get("/api/spotify/tracks/:id", async (c) => {
           message,
           status: 404,
         } satisfies ErrorResponse,
-        404
+        404,
       );
     }
 
@@ -189,7 +189,7 @@ app.get("/api/spotify/tracks/:id", async (c) => {
           message,
           status: 502,
         } satisfies ErrorResponse,
-        502
+        502,
       );
     }
 
@@ -209,7 +209,7 @@ app.get("/api/spotify/artists/:id", async (c) => {
     const artistData = await callSpotifyApi(
       `/v1/artists/${artistId}`,
       c.env,
-      "artist"
+      "artist",
     );
     return c.json(artistData);
   } catch (error) {
@@ -222,7 +222,7 @@ app.get("/api/spotify/artists/:id", async (c) => {
           message,
           status: 404,
         } satisfies ErrorResponse,
-        404
+        404,
       );
     }
 
@@ -233,7 +233,7 @@ app.get("/api/spotify/artists/:id", async (c) => {
           message,
           status: 502,
         } satisfies ErrorResponse,
-        502
+        502,
       );
     }
 
@@ -258,10 +258,10 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
     // ReccoBeats uses query parameter ?ids= instead of path parameter
     const response = await fetchWithRetry(
       `https://api.reccobeats.com/v1/audio-features?ids=${encodeURIComponent(
-        trackId
+        trackId,
       )}`,
       3, // max retries
-      1000 // initial delay (ms)
+      1000, // initial delay (ms)
     );
 
     // Handle 404: Audio features not found
@@ -272,7 +272,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
           message: "Audio features not found for this track",
           status: 404,
         } satisfies ErrorResponse,
-        404
+        404,
       );
     }
 
@@ -285,7 +285,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
             "ReccoBeats API rate limit exceeded. Please try again later.",
           status: 429,
         } satisfies ErrorResponse,
-        429
+        429,
       );
     }
 
@@ -297,7 +297,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
           message: "An unexpected error occurred while fetching audio features",
           status: 500,
         } satisfies ErrorResponse,
-        500
+        500,
       );
     }
 
@@ -309,7 +309,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
           message: "ReccoBeats API request timed out",
           status: 504,
         } satisfies ErrorResponse,
-        504
+        504,
       );
     }
 
@@ -327,7 +327,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
         message: `Unexpected response status: ${response.status}`,
         status: response.status,
       } satisfies ErrorResponse,
-      500
+      500,
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -344,7 +344,7 @@ app.get("/api/spotify/audio-features/:id", async (c) => {
           message: "ReccoBeats API request timed out",
           status: 504,
         } satisfies ErrorResponse,
-        504
+        504,
       );
     }
 

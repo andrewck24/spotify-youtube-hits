@@ -249,22 +249,34 @@ const { data: track } = useGetTrackQuery(trackId!);
 const { data: features } = useGetAudioFeaturesQuery(trackId!);
 ```
 
-#### spotify-slice (評估移除)
+#### spotify-slice (已移除)
 
-**評估**: Worker 已處理認證，前端可能不需要儲存 token
+**評估結果**: Worker 已完全處理認證，前端完全不需要儲存 token
 
 ```typescript
-// ❌ 可能移除
-interface SpotifyState {
-  token: string | null; // Worker 處理，前端不需要
-  tokenExpiry: number | null; // Worker 處理，前端不需要
-  tokenValid: boolean; // Worker 處理，前端不需要
-  loading: boolean;
-  error: string | null;
-}
+// ❌ 已移除 (2025-11-15)
+// 原因：
+// 1. Worker 完全處理 Spotify 認證 (worker/index.ts)
+// 2. 前端透過 RTK Query 呼叫 Worker API，不需要直接管理 token
+// 3. 搜尋結果顯示沒有任何地方使用 spotify-selectors 或 dispatch spotify actions
+// 4. Worker 的 /api/spotify/token 端點已經處理所有認證需求
+
+// interface SpotifyState {
+//   token: string | null;
+//   tokenExpiry: number | null;
+//   tokenValid: boolean;
+//   loading: boolean;
+//   error: string | null;
+// }
 ```
 
-**決策**: Phase 1 完成後評估，若無使用則移除
+**決策**: ✅ 已移除 (包括 spotify-slice.ts, spotify-selectors.ts, spotify-types.ts)
+
+**移除影響**:
+
+- ✅ [src/lib/store.ts](src/lib/store.ts) - 移除 spotifyReducer
+- ✅ [tests/utils/test-utils.tsx](tests/utils/test-utils.tsx) - 移除 spotifyReducer
+- ✅ Redux store 簡化，僅保留 data 和 spotifyApi
 
 ---
 
@@ -328,12 +340,17 @@ RECOMMENDED_ARTIST_IDS.map((artistId) => (
   },
 
   // 以下 slices 移除
-  // artist: { ... }   // ❌ 移除
-  // track: { ... }    // ❌ 移除
-  // search: { ... }   // ❌ 移除（fuseInstance 移至 data）
-  // spotify: { ... }  // 🔍 評估後可能移除
+  // artist: { ... }   // ❌ 已移除
+  // track: { ... }    // ❌ 已移除
+  // search: { ... }   // ❌ 已移除（fuseInstance 移至 data）
+  // spotify: { ... }  // ❌ 已移除（2025-11-15）
 }
 ```
+
+**變更說明**:
+
+- ✅ **保留**: `spotifyApi` (RTK Query), `data` (本地資料)
+- ❌ **移除**: `spotify` (認證由 Worker 處理)
 
 ---
 
@@ -548,7 +565,7 @@ const results = query ? performSearch(fuseInstance, query) : [];
 - [ ] 簡化 `features/search/` (移除 slice, selectors)
 - [ ] 移除 `hooks/use-artist.ts`, `use-track.ts`, `use-search.ts`
 - [ ] 移除 `services/spotify-api.ts`
-- [ ] 評估移除 `features/spotify/`
+- [x] 評估移除 `features/spotify/` (已完成移除 2025-11-15)
 
 ### Step 6: 測試與驗證
 

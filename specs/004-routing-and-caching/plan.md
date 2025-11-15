@@ -172,10 +172,10 @@ src/
 │   │   ├── [DELETE] track-selectors.ts
 │   │   └── [DELETE] track-types.ts
 │   │
-│   └── spotify/               # 評估移除
-│       ├── [EVALUATE] spotify-slice.ts
-│       ├── [EVALUATE] spotify-selectors.ts
-│       └── [KEEP] spotify-types.ts
+│   └── spotify/               # 完全移除（經評估後刪除）
+│       ├── [DELETED] spotify-slice.ts
+│       ├── [DELETED] spotify-selectors.ts
+│       └── [DELETED] spotify-types.ts
 │
 ├── components/
 │   ├── artist/
@@ -219,9 +219,9 @@ public/
 **核心變更**：
 
 - ✅ **完全保留**: data/ (slice, selectors, types 全保留)
-- ❌ **完全移除**: artist/, track/ (slice, selectors, types 全刪除)
+- ❌ **完全移除**: artist/, track/, spotify/ (slice, selectors, types 全刪除)
 - ⚠️ **部分移除**: search/ (刪除 slice/selectors，保留 service/types)
-- 🔍 **評估移除**: spotify/ (slice/selectors 可能移除，types 保留)
+- 💡 **移除原因 (spotify/)**: Worker 已完全處理 Spotify 認證，前端無需管理 token
 
 ### SPA 路由配置說明
 

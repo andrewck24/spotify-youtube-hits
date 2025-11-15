@@ -253,6 +253,26 @@
 - [ ] 保留 `search-types.ts`
 - [ ] 驗證 SearchPage 正常運作
 
+---
+
+**Note**: ✅ Spotify slice 已於 2025-11-15 評估後提前移除
+
+**原因**: Worker 完全處理 Spotify 認證，前端無需管理 token
+**移除檔案**:
+
+- `src/features/spotify/spotify-slice.ts`
+- `src/features/spotify/spotify-selectors.ts`
+- `src/features/spotify/spotify-types.ts`
+
+**更新檔案**:
+
+- `src/lib/store.ts` - 移除 spotifyReducer
+- `tests/utils/test-utils.tsx` - 移除 spotifyReducer
+
+**決策依據**: 參見 [data-model.md](./data-model.md#spotify-slice-已移除)
+
+---
+
 **Checkpoint P1**: 所有 4 個頁面可導航，瀏覽器上一頁/下一頁功能正常。
 
 ---
