@@ -1,8 +1,5 @@
 import { Card } from "@/components/ui/card";
-import {
-  createSearchIndex,
-  searchArtists,
-} from "@/features/search/search-service";
+import { createSearchIndex, searchArtists } from "@/lib/search";
 import type { tracksLoader } from "@/loaders/tracks-loader";
 import { useMemo, useState } from "react";
 import { Link, useRouteLoaderData, useSearchParams } from "react-router-dom";

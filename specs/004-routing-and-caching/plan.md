@@ -143,36 +143,32 @@ src/
 │   ├── artist-page.tsx        # 歌手資訊頁
 │   └── track-page.tsx         # 歌曲資訊頁
 │
-├── features/
-│   ├── api/                   # 新增：RTK Query API 定義
-│   │   ├── spotify-api.ts    # RTK Query endpoints
-│   │   └── index.ts          # 匯出 API 和 hooks
-│   │
-│   ├── recommendations/       # 新增：首頁推薦
-│   │   └── constants.ts      # 硬編碼 artistId 清單
-│   │
-│   ├── data/                  # 完全移除（改用 React Router loader）
+├── features/                  # 完全移除（重構至其他目錄）
+│   ├── data/                  # [DELETED] 改用 React Router loader
 │   │   ├── [DELETED] data-slice.ts
 │   │   ├── [DELETED] data-selectors.ts
 │   │   └── [DELETED] data-types.ts
 │   │
-│   ├── search/                # 簡化
-│   │   ├── search-service.ts # 保留
-│   │   ├── search-types.ts   # 簡化
-│   │   ├── [DELETE] search-slice.ts
-│   │   └── [DELETE] search-selectors.ts
+│   ├── search/                # [DELETED] 移至 lib/
+│   │   ├── [DELETED] search-slice.ts
+│   │   ├── [DELETED] search-selectors.ts
+│   │   ├── [DELETED] search-types.ts      # 未使用
+│   │   └── [MOVE] search-service.ts → lib/search.ts
 │   │
-│   ├── artist/                # 完全移除
-│   │   ├── [DELETE] artist-slice.ts
-│   │   ├── [DELETE] artist-selectors.ts
-│   │   └── [DELETE] artist-types.ts
+│   ├── recommendations/       # [DELETED] 移至 lib/constants.ts
+│   │   └── [MOVE] constants.ts → lib/constants.ts (合併 RECOMMENDED_ARTIST_IDS)
 │   │
-│   ├── track/                 # 完全移除
-│   │   ├── [DELETE] track-slice.ts
-│   │   ├── [DELETE] track-selectors.ts
-│   │   └── [DELETE] track-types.ts
+│   ├── artist/                # [DELETED] 改用 RTK Query
+│   │   ├── [DELETED] artist-slice.ts
+│   │   ├── [DELETED] artist-selectors.ts
+│   │   └── [DELETED] artist-types.ts
 │   │
-│   └── spotify/               # 完全移除（經評估後刪除）
+│   ├── track/                 # [DELETED] 改用 RTK Query
+│   │   ├── [DELETED] track-slice.ts
+│   │   ├── [DELETED] track-selectors.ts
+│   │   └── [DELETED] track-types.ts
+│   │
+│   └── spotify/               # [DELETED] 改用 RTK Query
 │       ├── [DELETED] spotify-slice.ts
 │       ├── [DELETED] spotify-selectors.ts
 │       └── [DELETED] spotify-types.ts
@@ -199,16 +195,25 @@ src/
 │   └── [DELETED] use-data-loader.ts
 │
 ├── lib/
-│   ├── store.ts                   # 修改：移除 data reducer
-│   └── router.tsx                 # 新增
+│   ├── constants.ts               # 修改：新增 RECOMMENDED_ARTIST_IDS，移除未使用之 Application Constants
+│   ├── formatters.ts              # 修改：新增 formatCompactNumber (從 utils 整合)
+│   ├── search.ts                  # 新增：Fuse.js 搜尋邏輯 (從 features/search 移動)
+│   ├── store.ts                   # 修改：整合 RTK Query API
+│   ├── router.tsx                 # 新增
+│   └── utils.ts                   # 保留
 │
-├── loaders/                        # 新增：React Router loaders
+├── loaders/                       # 新增：React Router loaders
 │   └── tracks-loader.ts           # 載入 tracks.json 資料
 │
 ├── services/
-│   ├── [DELETE] spotify-api.ts
+│   ├── spotify-api.ts             # 修改：改為使用 RTK Query API
+│   ├── index.ts                   # 修改：匯出 RTK Query hooks
 │   ├── [DELETED] data-loader.ts   # 改用 loaders/tracks-loader.ts
-│   └── storage.ts                 # 保留
+│   └── [DELETED] storage.ts       # tracks-loader 直接使用原生 sessionStorage
+│
+├── utils/                            # 完全移除
+│   ├── [DELETED] numberFormatter.js  # 功能已整合至 lib/formatters.ts
+│   └── [DELETED] timeFormatter.js    # 與 lib/formatters.ts 重複
 │
 └── main.tsx                       # 修改
 
@@ -221,12 +226,17 @@ public/
 
 **核心變更**：
 
-- ❌ **完全移除**: data/, artist/, track/, spotify/ (slice, selectors, types 全刪除)
-- ⚠️ **部分移除**: search/ (刪除 slice/selectors，保留 service/types)
+- ❌ **完全移除 features/ 目錄**: 所有 Redux slices 轉移至其他架構
+- 🔄 **目錄重組**:
+  - **RTK Query API**: services/spotify-api.ts (符合官方最佳實踐)
+  - **搜尋邏輯**: features/search → lib/search.ts (核心業務邏輯)
+  - **推薦常數**: features/recommendations → lib/constants.ts (應用配置)
+  - **格式化工具**: utils/*.js → lib/formatters.ts (統一使用 TypeScript)
 - 💡 **移除原因**:
   - **data/**: 改用 React Router loader (loaders/tracks-loader.ts) 載入本地資料
   - **spotify/**: Worker 已完全處理 Spotify 認證，前端無需管理 token
-  - **artist/, track/**: 改用 RTK Query API endpoints 替代 Redux slices
+  - **artist/, track/, search/**: 改用 RTK Query API endpoints 替代 Redux slices
+  - **utils/**: 功能重複或已整合至 lib/formatters.ts，完全移除
 
 ### SPA 路由配置說明
 

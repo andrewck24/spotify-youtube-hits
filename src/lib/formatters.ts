@@ -34,3 +34,32 @@ export function formatDate(date: string): string {
     day: 'numeric',
   });
 }
+
+/**
+ * 格式化數字為緊湊格式（K/M/B）
+ * @example formatCompactNumber(107884367) // "107.9M"
+ * @example formatCompactNumber(5234) // "5.2K"
+ */
+export function formatCompactNumber(num: number | null | undefined): string {
+  if (typeof num === 'undefined' || num === null) {
+    return '';
+  }
+
+  const rounded = Math.round(num);
+
+  if (rounded > 10_000_000_000) {
+    return (rounded / 1_000_000_000).toFixed(0) + 'B';
+  } else if (rounded > 1_000_000_000) {
+    return (rounded / 1_000_000_000).toFixed(1) + 'B';
+  } else if (rounded > 10_000_000) {
+    return (rounded / 1_000_000).toFixed(0) + 'M';
+  } else if (rounded > 1_000_000) {
+    return (rounded / 1_000_000).toFixed(1) + 'M';
+  } else if (rounded > 10_000) {
+    return (rounded / 1_000).toFixed(0) + 'K';
+  } else if (rounded > 1_000) {
+    return (rounded / 1_000).toFixed(1) + 'K';
+  } else {
+    return rounded.toFixed(0);
+  }
+}

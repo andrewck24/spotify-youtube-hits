@@ -305,7 +305,7 @@
 **Dependencies**: T006, T017
 **Checklist**:
 
-- [ ] 匯入 `RECOMMENDED_ARTIST_IDS` from `@/features/recommendations/constants`
+- [ ] 匯入 `RECOMMENDED_ARTIST_IDS` from `@/lib/constants`
 - [ ] 使用 `.map()` 渲染每個 artistId 為 `<ArtistCard>`
 - [ ] 使用 Grid 或 Flex 佈局（響應式）
 - [ ] 移除暫時的佔位內容

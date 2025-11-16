@@ -9,7 +9,6 @@
  */
 
 export {
-  default,
   spotifyApi,
   useGetArtistQuery,
   useGetAudioFeaturesQuery,
