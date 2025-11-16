@@ -211,47 +211,47 @@
 - [x] 更新 artist 連結格式為 `/artist/:artistId`
 - [x] 驗證元件正常渲染
 
-### T014: 移除舊的 artist slice 與相關檔案 [US1] [P]
+### T014: 移除舊的 artist slice 與相關檔案 [US1] [P] ✅ DONE
 
 **Files**: `src/features/artist/artist-slice.ts`, `src/features/artist/artist-selectors.ts`, `src/features/artist/artist-types.ts`, `src/hooks/use-artist.ts`
 **Description**: 刪除已被 RTK Query 取代的 artist slice
 **Dependencies**: T010, T012
 **Checklist**:
 
-- [ ] 刪除 `artist-slice.ts`
-- [ ] 刪除 `artist-selectors.ts`
-- [ ] 刪除 `artist-types.ts`
-- [ ] 刪除 `use-artist.ts`
-- [ ] 從 store.ts 移除 artist reducer
-- [ ] 驗證無 import 錯誤
+- [x] 刪除 `artist-slice.ts`
+- [x] 刪除 `artist-selectors.ts`
+- [x] 刪除 `artist-types.ts`
+- [x] 刪除 `use-artist.ts`
+- [x] 從 store.ts 移除 artist reducer
+- [x] 驗證無 import 錯誤
 
-### T015: 移除舊的 track slice 與相關檔案 [US1] [P]
+### T015: 移除舊的 track slice 與相關檔案 [US1] [P] ✅ DONE
 
 **Files**: `src/features/track/track-slice.ts`, `src/features/track/track-selectors.ts`, `src/features/track/track-types.ts`, `src/hooks/use-track.ts`
 **Description**: 刪除已被 RTK Query 取代的 track slice
 **Dependencies**: T011, T013
 **Checklist**:
 
-- [ ] 刪除 `track-slice.ts`
-- [ ] 刪除 `track-selectors.ts`
-- [ ] 刪除 `track-types.ts`
-- [ ] 刪除 `use-track.ts`
-- [ ] 從 store.ts 移除 track reducer
-- [ ] 驗證無 import 錯誤
+- [x] 刪除 `track-slice.ts`
+- [x] 刪除 `track-selectors.ts`
+- [x] 刪除 `track-types.ts`
+- [x] 刪除 `use-track.ts`
+- [x] 從 store.ts 移除 track reducer
+- [x] 驗證無 import 錯誤
 
-### T016: 簡化 search slice [US1] [P]
+### T016: 簡化 search slice [US1] [P] ✅ DONE
 
 **Files**: `src/features/search/search-slice.ts`, `src/features/search/search-selectors.ts`
 **Description**: 移除 search slice（query 已改用 URL），保留 search service
 **Dependencies**: T009
 **Checklist**:
 
-- [ ] 刪除 `search-slice.ts`
-- [ ] 刪除 `search-selectors.ts`
-- [ ] 從 store.ts 移除 search reducer
-- [ ] 保留 `search-service.ts` (performSearch, createFuseInstance)
-- [ ] 保留 `search-types.ts`
-- [ ] 驗證 SearchPage 正常運作
+- [x] 刪除 `search-slice.ts`
+- [x] 刪除 `search-selectors.ts`
+- [x] 從 store.ts 移除 search reducer
+- [x] 保留 `search-service.ts` (performSearch, createFuseInstance)
+- [x] 保留 `search-types.ts`
+- [x] 驗證 SearchPage 正常運作
 
 ---
 
