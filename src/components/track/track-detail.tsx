@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDuration } from "@/lib/formatters";
-import type { SpotifyTrack } from "@/types/spotify";
+import type { SpotifyAudioFeatures, SpotifyTrack } from "@/types/spotify";
 
 /**
  * TrackDetail Component
@@ -12,31 +12,38 @@ import type { SpotifyTrack } from "@/types/spotify";
  * - Album cover
  * - Track info (name, artist, album, year)
  * - Duration
+ * - Audio features (optional)
  * - Responsive layout
  *
  * Props:
  * - track: Spotify track object
+ * - audioFeatures: Optional Spotify audio features object
  * - loading: Loading state
  *
  * Usage:
- *   <TrackDetail track={track} loading={false} />
+ *   <TrackDetail track={track} audioFeatures={features} loading={false} />
  */
 
 interface TrackDetailProps {
   track?: SpotifyTrack | null;
+  audioFeatures?: SpotifyAudioFeatures | null;
   loading?: boolean;
 }
 
-export function TrackDetail({ track, loading }: TrackDetailProps) {
+export function TrackDetail({
+  track,
+  audioFeatures: _audioFeatures,
+  loading,
+}: TrackDetailProps) {
   if (loading) {
     return (
       <Card className="p-6">
         <div className="flex gap-4">
-          <Skeleton className="w-32 h-32 rounded" />
+          <Skeleton className="h-32 w-32 rounded" />
           <div className="flex-1 space-y-2">
-            <Skeleton className="w-full h-6" />
-            <Skeleton className="w-3/4 h-4" />
-            <Skeleton className="w-1/2 h-4" />
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-1/2" />
           </div>
         </div>
       </Card>
@@ -56,14 +63,14 @@ export function TrackDetail({ track, loading }: TrackDetailProps) {
 
   return (
     <Card className="p-6">
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col gap-6 md:flex-row">
         {/* Album Cover */}
         {albumCover && (
           <div className="flex-shrink-0">
             <img
               src={albumCover.url}
               alt={track.album?.name}
-              className="w-40 h-40 rounded-lg object-cover shadow-lg"
+              className="h-40 w-40 rounded-lg object-cover shadow-lg"
             />
           </div>
         )}
@@ -71,10 +78,10 @@ export function TrackDetail({ track, loading }: TrackDetailProps) {
         {/* Track Info */}
         <div className="flex-1">
           {/* Track Name */}
-          <h2 className="text-3xl font-bold text-white mb-2">{track.name}</h2>
+          <h2 className="mb-2 text-3xl font-bold text-white">{track.name}</h2>
 
           {/* Artist */}
-          <div className="text-lg text-[#1DB954] mb-4">
+          <div className="mb-4 text-lg text-[#1DB954]">
             {track.artists?.map((a) => a.name).join(", ")}
           </div>
 
@@ -102,7 +109,7 @@ export function TrackDetail({ track, loading }: TrackDetailProps) {
               href={track.external_urls.spotify}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block mt-4 px-4 py-2 bg-[#1DB954] text-white rounded-full text-sm font-semibold hover:bg-[#1ed760] transition-colors"
+              className="mt-4 inline-block rounded-full bg-[#1DB954] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1ed760]"
             >
               在 Spotify 上開啟
             </a>

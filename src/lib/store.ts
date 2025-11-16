@@ -1,13 +1,7 @@
+import { spotifyApi } from "@/services";
 import { configureStore } from "@reduxjs/toolkit";
 import type { TypedUseSelectorHook } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
-
-// Import all reducers
-import artistReducer from "@/features/artist/artist-slice";
-import dataReducer from "@/features/data/data-slice";
-import searchReducer from "@/features/search/search-slice";
-import spotifyReducer from "@/features/spotify/spotify-slice";
-import trackReducer from "@/features/track/track-slice";
 
 /**
  * Redux Store Configuration
@@ -15,15 +9,13 @@ import trackReducer from "@/features/track/track-slice";
  * Purpose: Central state management for the application
  * Features:
  * - Type-safe hooks (useAppDispatch, useAppSelector)
- * - Middleware configuration for handling non-serializable data (Fuse.js instance)
  * - Redux DevTools integration (enabled in development)
  *
  * State Structure:
- * - artist: Current selected artist and Spotify data
- * - track: Current selected track and audio features
- * - search: Search query and results (with Fuse.js instance)
- * - data: Local tracks database
- * - spotify: API authentication token
+ * - spotifyApi: RTK Query cache for Spotify API data
+ *
+ * Note: Local tracks database (tracks.json) is now loaded via React Router loader
+ * instead of Redux state. See @/loaders/tracks-loader.ts
  *
  * Usage:
  *   import { store, useAppDispatch, useAppSelector } from '@/lib/store'
@@ -31,21 +23,10 @@ import trackReducer from "@/features/track/track-slice";
 
 export const store = configureStore({
   reducer: {
-    artist: artistReducer,
-    track: trackReducer,
-    search: searchReducer,
-    data: dataReducer,
-    spotify: spotifyReducer,
+    [spotifyApi.reducerPath]: spotifyApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore these paths in the state for serialization checks
-        // Required for storing Fuse.js instance in search slice
-        ignoredActions: ["search/initializeSearch"],
-        ignoredPaths: ["search.fuseInstance"],
-      },
-    }),
+    getDefaultMiddleware().concat(spotifyApi.middleware),
   devTools: process.env.NODE_ENV !== "production", // Enable Redux DevTools in development
 });
 
