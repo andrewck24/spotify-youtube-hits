@@ -1,4 +1,4 @@
-# Spotify YouTube Hits
+# Music Hits
 
 A web application that visualizes and compares Spotify track data with YouTube statistics, deployed on Cloudflare Workers with global CDN acceleration.
 
@@ -30,7 +30,7 @@ A web application that visualizes and compares Spotify track data with YouTube s
 
 ## Live Demo
 
-🚀 **Production**: [https://spotify-youtube-hits.andrewck24.workers.dev](https://spotify-youtube-hits.andrewck24.workers.dev)
+🚀 **Production**: [https://music-hits.andrewck24.workers.dev](https://music-hits.andrewck24.workers.dev)
 
 ## Local Development
 
@@ -218,7 +218,7 @@ If migrating from GitHub Pages:
 ## Project Structure
 
 ```text
-spotify-youtube-hits/
+music-hits/
 ├── src/                          # Frontend React application
 │   ├── app.tsx                   # Main app component
 │   ├── components/               # React components

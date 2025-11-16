@@ -13,7 +13,7 @@
 在開始之前，確認以下前置條件：
 
 - ✅ Node.js 18+ 安裝
-- ✅ 專案已 clone 至本地：`/Users/andrew/projects/spotify-youtube-hits`
+- ✅ 專案已 clone 至本地：`/Users/andrew/projects/music-hits`
 - ✅ 依賴已安裝：`npm install`
 - ✅ Cloudflare Wrangler CLI 已安裝（透過 `npm install` 自動安裝）
 - ✅ 已切換到功能分支：`git checkout 003-spotify-api-audio`
@@ -270,10 +270,10 @@ npx wrangler deploy
 
 ```bash
 # 測試線上 Worker API
-curl https://spotify-youtube-hits.andrewck24.workers.dev/api/spotify/audio-features/06HL4z0CvFAxyc27GXpf02
+curl https://music-hits.andrewck24.workers.dev/api/spotify/audio-features/06HL4z0CvFAxyc27GXpf02
 
 # 訪問線上應用
-# https://spotify-youtube-hits.andrewck24.workers.dev/track/0V3wPSX9ygBnCm8psDIegu
+# https://music-hits.andrewck24.workers.dev/track/0V3wPSX9ygBnCm8psDIegu
 ```
 
 ## Troubleshooting

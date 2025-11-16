@@ -36,7 +36,7 @@
 
 ```bash
 # Navigate to project root
-cd /path/to/spotify-youtube-hits
+cd /path/to/music-hits
 
 # Install wrangler CLI
 npm install -D wrangler
@@ -51,7 +51,7 @@ Create `wrangler.jsonc` in project root:
 
 ```jsonc
 {
-  "name": "spotify-youtube-hits",
+  "name": "music-hits",
   "compatibility_date": "2025-01-09",
   "assets": {
     "directory": "./dist",
@@ -62,7 +62,7 @@ Create `wrangler.jsonc` in project root:
 
 **Key Configuration**:
 
-- `name`: Worker 名稱（會變成 `spotify-youtube-hits.workers.dev`）
+- `name`: Worker 名稱（會變成 `music-hits.workers.dev`）
 - `not_found_handling`: SPA 路由支援（所有未匹配路由返回 index.html）
 
 ### 3. Update Vite Configuration
@@ -71,7 +71,7 @@ Edit `vite.config.ts`:
 
 ```typescript
 export default defineConfig({
-  base: "/", // 改為根路徑（從 '/spotify-youtube-hits/' 改為 '/'）
+  base: "/", // 改為根路徑（從 '/music-hits/' 改為 '/'）
   plugins: [react(), tailwindcss(), svgr()],
   // ... rest of config
 });
@@ -244,7 +244,7 @@ async function handleSpotifyAPI(request: Request, env: Env): Promise<Response> {
 
 ```jsonc
 {
-  "name": "spotify-youtube-hits",
+  "name": "music-hits",
   "main": "worker/index.ts", // Add Worker entry point
   "compatibility_date": "2025-01-09",
   "assets": {
@@ -368,13 +368,13 @@ After deployment, verify basic functionality:
 
 ```bash
 # 1. Check homepage loads
-curl https://spotify-youtube-hits.workers.dev/
+curl https://music-hits.workers.dev/
 
 # 2. Check static assets
-curl https://spotify-youtube-hits.workers.dev/assets/index.js
+curl https://music-hits.workers.dev/assets/index.js
 
 # 3. Check JSON data
-curl https://spotify-youtube-hits.workers.dev/data/tracks.json
+curl https://music-hits.workers.dev/data/tracks.json
 ```
 
 **Expected**:
@@ -387,7 +387,7 @@ curl https://spotify-youtube-hits.workers.dev/data/tracks.json
 
 ```bash
 # Direct access to client-side routes should return index.html
-curl https://spotify-youtube-hits.workers.dev/track/0d28khcov6AiegSCpG5TuT
+curl https://music-hits.workers.dev/track/0d28khcov6AiegSCpG5TuT
 
 # Should return HTML (not 404)
 ```
@@ -444,7 +444,7 @@ Use VPN or proxy to test from different regions:
 
 1. 前往 [Cloudflare Dashboard](https://dash.cloudflare.com/)
 2. 選擇 **Workers & Pages**
-3. 點擊 **spotify-youtube-hits**
+3. 點擊 **music-hits**
 
 **Available Metrics**:
 
@@ -650,5 +650,5 @@ ls -lh dist/assets/*.js
 ---
 
 **Last Updated**: 2025-11-09
-**Maintainer**: Spotify YouTube Hits Team
+**Maintainer**: Music Hits Team
 **Status**: ✅ Ready for Implementation

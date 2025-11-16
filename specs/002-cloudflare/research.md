@@ -172,10 +172,10 @@ on:
 
 **Deployment Strategy**:
 
-| Trigger          | 行為           | URL                                        | 保留時間          |
-| ---------------- | -------------- | ------------------------------------------ | ----------------- |
-| `push` to `main` | 部署到生產環境 | `spotify-youtube-hits.workers.dev`         | 永久              |
-| `pull_request`   | 建立預覽環境   | `<pr-id>.spotify-youtube-hits.workers.dev` | PR 關閉後 24 小時 |
+| Trigger          | 行為           | URL                              | 保留時間          |
+| ---------------- | -------------- | -------------------------------- | ----------------- |
+| `push` to `main` | 部署到生產環境 | `music-hits.workers.dev`         | 永久              |
+| `pull_request`   | 建立預覽環境   | `<pr-id>.music-hits.workers.dev` | PR 關閉後 24 小時 |
 
 **Pipeline Steps**:
 
@@ -453,7 +453,7 @@ SPOTIFY_CLIENT_SECRET=yyy
 
 ### High-Risk Areas
 
-1. **URL 路由變更**（`/spotify-youtube-hits/*` → `/*`）
+1. **URL 路由變更**（`/music-hits/*` → `/*`）
    - **風險**：已分享的連結失效
    - **緩解**：已在規格中接受此風險（見 spec.md Risks #2）
 

@@ -43,7 +43,7 @@ package.json             # 依賴管理（已更新）
 - [x] T001 [P] [Setup] 安裝 wrangler CLI: `npm install -D wrangler`
 - [x] T002 [P] [Setup] 移除 gh-pages 依賴: `npm uninstall gh-pages`
 - [x] T003 [P] [Setup] 建立 wrangler.jsonc 配置檔案於專案根目錄
-  - 設定 `name: "spotify-youtube-hits"`
+  - 設定 `name: "music-hits"`
   - 設定 `compatibility_date: "2025-11-09"`
   - 設定 `assets.directory: "./dist"`
   - 設定 `assets.not_found_handling: "single-page-application"`
@@ -66,7 +66,7 @@ package.json             # 依賴管理（已更新）
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
 - [x] T006 [Foundation] 更新 vite.config.ts
-  - 將 `base` 從 `'/spotify-youtube-hits/'` 改為 `'/'`
+  - 將 `base` 從 `'/music-hits/'` 改為 `'/'`
   - 保留現有 plugins 配置（react, tailwindcss, svgr）
   - 保留現有 alias 配置（`@` → `./src`）
 - [x] T007 [Foundation] 更新 package.json scripts
@@ -74,7 +74,7 @@ package.json             # 依賴管理（已更新）
   - 新增 `deploy:cf: "npm run build && wrangler deploy"` script
 - [x] T008 [Foundation] 執行 `npm run build` 驗證建置成功
   - 確認 dist/ 目錄產生
-  - 確認資源使用相對路徑（而非 `/spotify-youtube-hits/` prefix）
+  - 確認資源使用相對路徑（而非 `/music-hits/` prefix）
 
 **Checkpoint**: Foundation ready - 前端建置配置完成，可開始 user story 實作
 
@@ -100,7 +100,7 @@ package.json             # 依賴管理（已更新）
 
 - [x] T009 [US1] 手動部署測試：執行 `npm run build && npx wrangler deploy`
   - 驗證部署成功 ✅
-  - 記錄部署 URL：[https://spotify-youtube-hits.andrewck24.workers.dev](https://spotify-youtube-hits.andrewck24.workers.dev) ✅
+  - 記錄部署 URL：[https://music-hits.andrewck24.workers.dev](https://music-hits.andrewck24.workers.dev) ✅
   - 註：SSL 證書配置中，需等待 5-10 分鐘後進行後續驗證
 - [x] T010 [US1] 驗證首頁載入
   - 瀏覽器訪問部署 URL ✅
@@ -156,8 +156,8 @@ package.json             # 依賴管理（已更新）
 - [x] T015 [US3] 設定 Cloudflare Git Integration
   - 前往 Cloudflare Dashboard → Workers & Pages → 建立應用程式
   - 選擇「連接到 Git」
-  - 授權並選擇 GitHub repository: `andrewck24/spotify-youtube-hits` ✅
-  - 設定專案名稱: `spotify-youtube-hits` ✅
+  - 授權並選擇 GitHub repository: `andrewck24/music-hits` ✅
+  - 設定專案名稱: `music-hits` ✅
 - [x] T016 [US3] 配置建置設定
   - 組建命令: `npm run build` ✅
   - 部署命令: `npx wrangler deploy` ✅
@@ -208,7 +208,7 @@ package.json             # 依賴管理（已更新）
 ### Implementation for User Story 2
 
 - [x] T022 [US2] 驗證 Cloudflare Dashboard 監控功能
-  - 前往 Cloudflare Dashboard → Workers & Pages → spotify-youtube-hits
+  - 前往 Cloudflare Dashboard → Workers & Pages → music-hits
   - 確認可查看以下指標：
     - 請求數量（Requests per second）
     - 回應時間（P50, P95, P99）
@@ -351,7 +351,7 @@ package.json             # 依賴管理（已更新）
   - 設定 Cloudflare Secrets:
     - `SPOTIFY_CLIENT_ID` (使用 `wrangler secret put`) ✅
     - `SPOTIFY_CLIENT_SECRET` (使用 `wrangler secret put`) ✅
-  - 部署 URL: [https://spotify-youtube-hits.andrewck24.workers.dev](https://spotify-youtube-hits.andrewck24.workers.dev) ✅
+  - 部署 URL: [https://music-hits.andrewck24.workers.dev](https://music-hits.andrewck24.workers.dev) ✅
   - Version ID: f6dce15f-e745-4a1a-92e2-b810baba26dc ✅
   - API 端點驗證:
     - ✅ Token API 運作正常

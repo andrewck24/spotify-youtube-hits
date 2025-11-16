@@ -21,7 +21,7 @@
 
 ## 專案概述
 
-本專案將現有的 Spotify YouTube Hits 應用從 **JavaScript + Emotion + Recoil** 技術棧重構為 **TypeScript + Tailwind CSS 4.x + Redux Toolkit**，並採用現代化的 Dashboard 設計風格。
+本專案將現有的 Music Hits 應用從 **JavaScript + Emotion + Recoil** 技術棧重構為 **TypeScript + Tailwind CSS 4.x + Redux Toolkit**，並採用現代化的 Dashboard 設計風格。
 
 ### 核心技術棧
 
@@ -92,8 +92,8 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/spotify-youtube-hits.git
-cd spotify-youtube-hits
+git clone https://github.com/YOUR_USERNAME/music-hits.git
+cd music-hits
 
 # 切換到重構分支
 git checkout 001-1-typescript-tailwindcss
@@ -263,7 +263,7 @@ git commit -m "fix(scope): fix bug description"
 ### 完整目錄結構
 
 ```text
-spotify-youtube-hits/
+music-hits/
 ├── public/                          # 靜態資源（不經過 Vite 處理）
 │   ├── data/
 │   │   └── tracks.json              # 5.5MB 歌曲資料庫 (2023 年快照)
@@ -405,7 +405,7 @@ export const fetchArtist = createAsyncThunk(
   "artist/fetchArtist",
   async (artistId: string) => {
     return await spotifyApi.getArtist(artistId);
-  }
+  },
 );
 
 const artistSlice = createSlice({
@@ -462,8 +462,8 @@ export function ArtistProfile({ artist }: ArtistProfileProps) {
       <div className="flex items-center gap-4">
         <Avatar src={artist.images[0]?.url} alt={artist.name} size="lg" />
         <div>
-          <h2 className="text-2xl font-bold text-foreground">{artist.name}</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-foreground text-2xl font-bold">{artist.name}</h2>
+          <p className="text-muted-foreground text-sm">
             {artist.followers.total.toLocaleString()} followers
           </p>
         </div>
@@ -842,7 +842,7 @@ jobs:
 
 如遇到問題或 bug，請在 GitHub 建立 issue：
 
-1. 前往 [GitHub Issues](https://github.com/YOUR_USERNAME/spotify-youtube-hits/issues)
+1. 前往 [GitHub Issues](https://github.com/YOUR_USERNAME/music-hits/issues)
 2. 點擊 "New issue"
 3. 選擇適當的 issue template
 4. 填寫問題描述（包含錯誤訊息、重現步驟、環境資訊）
@@ -851,7 +851,7 @@ jobs:
 
 - **GitHub Discussions**: 技術討論與問答
 - **Email**: [your-email@example.com]
-- **Slack**: #spotify-youtube-hits (如有團隊 Slack)
+- **Slack**: #music-hits (如有團隊 Slack)
 
 ---
 

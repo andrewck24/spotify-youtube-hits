@@ -7,7 +7,7 @@
 
 ## Summary
 
-將 Spotify YouTube Hits 應用從 GitHub Pages 遷移至 Cloudflare Workers + Workers Assets，實現全球內容分發網路加速、自動化 CI/CD 部署，並建立伺服器端 API 代理以安全管理 Spotify API 憑證。此遷移專注於基礎架構優化，不改變應用功能，目標是將亞洲地區首次載入時間從 3-5 秒降低至 1-2 秒（60% 提升），並達成 99.9% 服務可用性。
+將 Music Hits 應用從 GitHub Pages 遷移至 Cloudflare Workers + Workers Assets，實現全球內容分發網路加速、自動化 CI/CD 部署，並建立伺服器端 API 代理以安全管理 Spotify API 憑證。此遷移專注於基礎架構優化，不改變應用功能，目標是將亞洲地區首次載入時間從 3-5 秒降低至 1-2 秒（60% 提升），並達成 99.9% 服務可用性。
 
 ## Technical Context
 
@@ -211,7 +211,7 @@ wrangler.jsonc         # Cloudflare Workers configuration (new)
 .dev.vars.example      # Environment variables template (new)
 
 # Existing build/config files (updated)
-vite.config.ts         # Update: base path from '/spotify-youtube-hits/' to '/'
+vite.config.ts         # Update: base path from '/music-hits/' to '/'
 package.json           # Update: add wrangler, remove gh-pages
 .gitignore             # Update: add .wrangler/, .dev.vars
 ```

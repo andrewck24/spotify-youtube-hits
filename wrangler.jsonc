@@ -1,8 +1,8 @@
 {
-  // Cloudflare Workers configuration for spotify-youtube-hits
+  // Cloudflare Workers configuration for music-hits
   // See: https://developers.cloudflare.com/workers/wrangler/configuration/
 
-  "name": "spotify-youtube-hits",
+  "name": "music-hits",
   "compatibility_date": "2025-11-09",
 
   // Worker entry point with custom logic
