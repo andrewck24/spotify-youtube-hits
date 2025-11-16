@@ -208,7 +208,7 @@ src/
 ├── services/
 │   ├── [DELETE] spotify-api.ts
 │   ├── [DELETED] data-loader.ts   # 改用 loaders/tracks-loader.ts
-│   └── storage.ts                 # 保留
+│   └── [DELETED] storage.ts       # tracks-loader 直接使用原生 sessionStorage
 │
 └── main.tsx                       # 修改
 
