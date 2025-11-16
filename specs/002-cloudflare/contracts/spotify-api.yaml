@@ -1,15 +1,15 @@
 openapi: 3.0.3
 info:
-  title: Spotify YouTube Hits - Spotify API Proxy
+  title: Music Hits - Spotify API Proxy
   description: |
     Cloudflare Workers API 代理層，安全管理 Spotify API 憑證並提供前端存取介面。
 
     **Security**: Client ID 與 Client Secret 僅存於 Cloudflare Workers Secrets，永不暴露於前端。
 
-    **Base URL**: Same origin as SPA (e.g., `https://spotify-youtube-hits.workers.dev`)
+    **Base URL**: Same origin as SPA (e.g., `https://music-hits.workers.dev`)
   version: 1.0.0
   contact:
-    name: Spotify YouTube Hits Team
+    name: Music Hits Team
   license:
     name: MIT
 

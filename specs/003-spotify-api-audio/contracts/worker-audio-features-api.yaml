@@ -7,9 +7,9 @@ info:
     本 API 提供單一歌曲的音樂特徵查詢功能，作為前端與 ReccoBeats API 之間的代理層。
   version: 1.0.0
   contact:
-    name: Spotify YouTube Hits
+    name: Music Hits
 servers:
-  - url: https://spotify-youtube-hits.andrewck24.workers.dev/api/spotify
+  - url: https://music-hits.andrewck24.workers.dev/api/spotify
     description: Production (Cloudflare Workers)
   - url: http://localhost:8787/api/spotify
     description: Development (Local Wrangler)

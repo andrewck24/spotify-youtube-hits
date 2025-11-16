@@ -25,8 +25,8 @@ import {
  *   >;
  */
 
-const STORAGE_KEY = "spotify-youtube-hits:tracks-data";
-const VERSION_KEY = "spotify-youtube-hits:data-version";
+const STORAGE_KEY = "music-hits:tracks-data";
+const VERSION_KEY = "music-hits:data-version";
 
 export async function tracksLoader() {
   try {

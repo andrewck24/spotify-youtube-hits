@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Spotify YouTube Hits - Static Assets Service
+  title: Music Hits - Static Assets Service
   description: |
     Cloudflare Workers Assets 提供的靜態資源服務規格。
 
