@@ -506,17 +506,10 @@ export interface LocalTracksDatabase {
 }
 ```
 
-### 搜尋型別（簡化）
+### 搜尋型別（移除）
 
-```typescript
-// features/search/search-types.ts
-export interface SearchResult {
-  artist: LocalTrackData;
-  score?: number;
-}
-
-// 移除：SearchState（改用 URL）
-```
+- 移除：SearchResult（未使用）
+- 移除：SearchState（改用 URL 作為狀態來源）
 
 ---
 

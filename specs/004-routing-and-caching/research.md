@@ -310,7 +310,7 @@ export function SearchBar() {
 **實作**:
 
 ```typescript
-// features/recommendations/constants.ts
+// lib/constants.ts
 /**
  * 首頁推薦歌手清單
  *
