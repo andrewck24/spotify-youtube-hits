@@ -455,14 +455,14 @@
 - [x] Production build 成功（1.84s）
 - [x] 所有元件使用 Tailwind CSS 變數（`text-muted-foreground`, `bg-secondary`）
 - [x] 遵循 Spotify Design Guidelines
-- [ ] **手動測試待執行**：
-  - Header 搜尋框測試（輸入、導航、URL 更新）
-  - 搜尋結果測試（藝人+歌曲、去重）
-  - 分類篩選測試（切換不重新搜尋）
-  - 導航測試（點擊、上一頁）
-  - 邊界情況測試（清空、無結果）
-  - 響應式測試（桌面/平板/手機）
-  - 動態 Title 測試（各頁面 title 正確顯示）
+- [x] **手動測試已完成** (2025-11-19)：
+  - [x] Header 搜尋框測試（輸入、導航、URL 更新） ✅ 成功
+  - [x] 搜尋結果測試（藝人+歌曲、去重） ✅ 成功
+  - [x] 分類篩選測試（切換不重新搜尋） ✅ 成功
+  - [x] 導航測試（點擊、上一頁） ✅ 成功
+  - [x] 邊界情況測試（清空、無結果） ✅ 成功
+  - [x] 響應式測試（桌面/平板/手機） ✅ 成功
+  - [x] 動態 Title 測試（各頁面 title 正確顯示） ✅ 成功
 
 **Checkpoint US1.5**: 全局搜尋功能完整，分類篩選正常，元件可重用，動態 title 正確顯示。
 
@@ -759,7 +759,7 @@
 - [ ] 同時發起 `useGetTrackQuery` 和 `useGetAudioFeaturesQuery`
 - [ ] 從 track 資料提取 `artists[0].id` 和 `artists[0].name`
 - [ ] 使用該 id 發起 `useGetArtistQuery` (獨立請求)
-- [ ] Track 資料載入完成時，顯示基本資訊 + artist name
+- [ ] Track 資料載入完成時，顯示基本��訊 + artist name
 - [ ] Artist 資料未載入時，顯示 `<ArtistSkeleton>`
 - [ ] Artist 資料載入完成後，更新為完整 artist 資訊
 - [ ] 驗證漸進式載入流程順暢
