@@ -7,7 +7,7 @@ import Fuse from "fuse.js";
  * Purpose: 使用 Fuse.js 實現客戶端搜尋引擎
  *
  * Features:
- * - 建立搜尋索引（使用 artistName）
+ * - 建立搜尋索引（使用 artistName 和 trackName）
  * - 模糊搜尋（threshold: 0.3）
  * - 限制結果數量
  *
@@ -20,7 +20,7 @@ import Fuse from "fuse.js";
  * Fuse.js 搜尋引擎配置
  */
 const FUSE_OPTIONS = {
-  keys: ["artistName"],
+  keys: ["artistName", "trackName"],
   threshold: 0.3, // 容許 30% 的偏差（模糊匹配）
   includeScore: true,
   minMatchCharLength: 1, // 最少匹配字元數
@@ -60,18 +60,4 @@ export function searchArtists(
 
   // 限制結果數量並回傳
   return results.slice(0, limit);
-}
-
-/**
- * 根據藝人名稱過濾歌曲
- * 用於在選擇藝人後過濾本地資料庫中的歌曲
- * @param tracks - 本地追蹤資料
- * @param artistName - 藝人名稱
- * @returns 該藝人的歌曲陣列
- */
-export function getTracksByArtist(
-  tracks: LocalTrackData[],
-  artistName: string,
-): LocalTrackData[] {
-  return tracks.filter((track) => track.artistName === artistName);
 }

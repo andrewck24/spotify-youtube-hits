@@ -37,7 +37,7 @@
 
   /* Muted - soft gray for disabled states or backgrounds */
   --color-muted: oklch(0.22 0 0); /* #242424 */
-  --color-muted-foreground: oklch(0.6 0 0); /* #a0a0a0 medium gray text */
+  --color-muted-foreground: oklch(0.72 0 0); /* #B3B3B3 Spotify secondary text */
 
   /* Accent - emphasis color for hover states */
   --color-accent: oklch(0.2 0 0); /* #202020 */

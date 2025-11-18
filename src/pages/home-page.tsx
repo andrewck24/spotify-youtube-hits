@@ -1,5 +1,6 @@
 import { LoadingFallback } from "@/components/layout/loading-fallback";
 import { Card } from "@/components/ui/card";
+import { useDocumentTitle } from "@/hooks/use-document-title";
 import { Suspense } from "react";
 import { Link } from "react-router-dom";
 
@@ -11,6 +12,7 @@ import { Link } from "react-router-dom";
  * Features:
  * - Link to search page
  * - Placeholder for artist recommendations (to be implemented in P2)
+ * - Dynamic page title
  *
  * Route: /
  */
@@ -24,6 +26,9 @@ export function HomePage() {
 }
 
 function HomePageContent() {
+  // Set document title
+  useDocumentTitle("Music Hits");
+
   return (
     <div className="bg-background p-6">
       <div className="mx-auto max-w-6xl">

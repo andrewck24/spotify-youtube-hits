@@ -17,7 +17,7 @@
 - **搜尋體驗**：使用 `setSearchParams(newParams, { replace: true })` 避免污染瀏覽歷史
 - **請求管理**：使用 AbortController 取消 pending requests，避免快速導航時的競態條件
 - **漸進式載入**：Track 頁面先顯示 track API 的部分 artist 資料與 skeleton UI，待完整 artist 資料載入後更新
-- **搜尋增強**（US1.5）：重構搜尋邏輯使用方案 B（一次搜尋，過濾顯示）。全局 SearchBar 整合至 Header，支援即時導航。建立可重用的 ArtistCard 和 TrackItem 元件，遵循 Spotify Design Guidelines。實作動態頁面 title 提升辨識度
+- **搜尋增強**（US1.5）：重構搜尋邏輯使用「一次搜尋，過濾顯示」。全局 SearchBar 整合至 Header，支援即時導航。建立可重用的 ArtistCard 和 TrackItem 元件，遵循 Spotify Design Guidelines。實作動態頁面 title 提升辨識度
 
 ## Technical Context
 

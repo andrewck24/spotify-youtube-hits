@@ -2,6 +2,7 @@ import { LoadingFallback } from "@/components/layout/loading-fallback";
 import { TrackDetail } from "@/components/track/track-detail";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
+import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useGetAudioFeaturesQuery, useGetTrackQuery } from "@/services";
 import { Suspense } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -15,6 +16,7 @@ import { Link, useParams } from "react-router-dom";
  * - Load track data and audio features from RTK Query
  * - Display track details with TrackDetail component
  * - Show artist link
+ * - Dynamic page title
  * - Support browser back/forward navigation
  *
  * Route: /track/:trackId (flat structure, no artistId in URL)
@@ -41,6 +43,9 @@ function TrackPageContent() {
   const { data: audioFeatures } = useGetAudioFeaturesQuery(trackId || "", {
     skip: !trackId,
   });
+
+  // Set document title
+  useDocumentTitle(track ? `${track.name} | Music Hits` : "Music Hits");
 
   if (!trackId) {
     return (

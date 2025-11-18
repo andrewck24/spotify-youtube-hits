@@ -1,28 +1,30 @@
 import { LoadingFallback } from "@/components/layout/loading-fallback";
 import { Card } from "@/components/ui/card";
-import { createSearchIndex, searchArtists } from "@/lib/search";
+import { Button } from "@/components/ui/button";
+import { ArtistCard } from "@/components/artist/card";
+import { TrackItem } from "@/components/track/item";
+import { useSearch } from "@/hooks/use-search";
+import { useDocumentTitle } from "@/hooks/use-document-title";
 import type { tracksLoader } from "@/loaders/tracks-loader";
-import { Suspense, useMemo, useState } from "react";
-import { Link, useRouteLoaderData, useSearchParams } from "react-router-dom";
+import { Suspense, useState } from "react";
+import { useRouteLoaderData, useSearchParams } from "react-router-dom";
 
 /**
  * SearchPage Component
  *
- * Purpose: Search results page with artist listing
+ * Purpose: 搜尋結果頁（藝人 + 歌曲）
  *
  * Features:
- * - Read search query from URL (?q=keyword)
- * - Display search input with URL synchronization
- * - Show search results as unique artists
- * - Link to artist detail pages
+ * - 從 URL 讀取搜尋查詢 (?q=keyword)
+ * - 使用 useSearch hook（一次搜尋，過濾顯示）
+ * - 分類篩選（全部 / 藝人 / 歌曲）
+ * - 使用 ArtistCard 和 TrackItem 元件渲染結果
+ * - 動態頁面 title
  *
  * Route: /search?q=keyword
  */
 
-interface UniqueArtist {
-  artistName: string;
-  artistId: string;
-}
+type Category = "all" | "artists" | "tracks";
 
 export function SearchPage() {
   return (
@@ -33,102 +35,117 @@ export function SearchPage() {
 }
 
 function SearchPageContent() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
-  const [searchInput, setSearchInput] = useState(query);
+  const [category, setCategory] = useState<Category>("all");
+
+  // Set document title
+  useDocumentTitle("搜尋 | Music Hits");
 
   // Get tracks from loader (loaded before page render)
   const { tracks: tracksDatabase } = useRouteLoaderData("root") as Awaited<
     ReturnType<typeof tracksLoader>
   >;
 
-  // Create search index from tracks
-  const fuseInstance = useMemo(() => {
-    return createSearchIndex(tracksDatabase.tracks);
-  }, [tracksDatabase]);
+  // Use search hook (single search, filter display)
+  const results = useSearch(tracksDatabase.tracks, query);
 
-  // Perform search and get unique artists
-  const searchResults = useMemo(() => {
-    if (!query.trim() || !fuseInstance) {
-      return [];
-    }
-
-    const results = searchArtists(fuseInstance, query);
-
-    // Extract unique artists
-    const uniqueArtists = new Map<string, UniqueArtist>();
-
-    results.forEach((result) => {
-      const key = result.item.artistId;
-      if (!uniqueArtists.has(key)) {
-        uniqueArtists.set(key, {
-          artistName: result.item.artistName,
-          artistId: result.item.artistId,
-        });
-      }
-    });
-
-    return Array.from(uniqueArtists.values());
-  }, [query, fuseInstance]);
-
-  // Handle search input change
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setSearchInput(newValue);
-    setSearchParams({ q: newValue }, { replace: true });
-  };
+  // Filter results by category
+  const displayResults =
+    category === "artists"
+      ? { artists: results.artists, tracks: [] }
+      : category === "tracks"
+        ? { artists: [], tracks: results.tracks }
+        : results;
 
   return (
     <div className="bg-background p-6">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-foreground mb-4 text-4xl font-bold">搜尋</h1>
-          <p className="text-muted-foreground">搜尋資料庫中的藝人</p>
+        <div>
+          <h1 className="text-foreground mb-2 text-4xl font-bold">搜尋</h1>
+          <p className="text-muted-foreground">在資料庫中搜尋藝人和歌曲</p>
         </div>
 
-        {/* Search Input */}
-        <div className="bg-secondary text-foreground placeholder-muted-foreground focus-within:ring-foreground flex w-full items-center gap-2 rounded-lg px-4 py-3 focus-within:ring-2">
-          <input
-            type="text"
-            value={searchInput}
-            onChange={handleSearchChange}
-            placeholder="輸入藝人名稱..."
-            className="bg-secondary text-foreground placeholder-muted-foreground flex-1 focus:outline-none"
-          />
-        </div>
+        {/* Category Filters */}
+        {query.trim() && (results.artists.length > 0 || results.tracks.length > 0) && (
+          <div className="flex gap-2">
+            <Button
+              variant={category === "all" ? "default" : "outline"}
+              onClick={() => setCategory("all")}
+            >
+              全部
+            </Button>
+            <Button
+              variant={category === "artists" ? "default" : "outline"}
+              onClick={() => setCategory("artists")}
+            >
+              藝人 ({results.artists.length})
+            </Button>
+            <Button
+              variant={category === "tracks" ? "default" : "outline"}
+              onClick={() => setCategory("tracks")}
+            >
+              歌曲 ({results.tracks.length})
+            </Button>
+          </div>
+        )}
 
         {/* Search Results */}
         {!query.trim() ? (
           <Card className="p-8 text-center">
-            <p className="text-muted-foreground text-lg">輸入藝人名稱以搜尋</p>
+            <p className="text-muted-foreground text-lg">
+              在上方搜尋框輸入藝人或歌曲名稱以開始搜尋
+            </p>
           </Card>
-        ) : searchResults.length === 0 ? (
+        ) : displayResults.artists.length === 0 &&
+          displayResults.tracks.length === 0 ? (
           <Card className="p-8 text-center">
             <p className="text-muted-foreground text-lg">
               未找到 &quot;{query}&quot; 相關結果
             </p>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {searchResults.map((artist) => (
-              <Link
-                key={artist.artistId}
-                to={`/artist/${artist.artistId}`}
-                className="group"
-              >
-                <Card className="hover:bg-secondary h-full cursor-pointer p-4 transition-colors">
-                  <div className="space-y-2">
-                    <h3 className="text-foreground group-hover:text-primary truncate text-lg font-semibold transition-colors">
-                      {artist.artistName}
-                    </h3>
-                    <p className="text-muted-foreground text-sm">
-                      點擊查看詳細資訊
-                    </p>
-                  </div>
-                </Card>
-              </Link>
-            ))}
+          <div className="space-y-8">
+            {/* Artists Section */}
+            {displayResults.artists.length > 0 && (
+              <div>
+                <h2 className="text-foreground mb-4 text-2xl font-semibold">
+                  藝人
+                </h2>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                  {displayResults.artists.map((artist) => (
+                    <ArtistCard
+                      key={artist.artistId}
+                      artistId={artist.artistId}
+                      artistName={artist.artistName}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Tracks Section */}
+            {displayResults.tracks.length > 0 && (
+              <div>
+                <h2 className="text-foreground mb-4 text-2xl font-semibold">
+                  歌曲
+                </h2>
+                <div className="space-y-2">
+                  {displayResults.tracks.map((track) => (
+                    <TrackItem
+                      key={track.trackId}
+                      trackId={track.trackId}
+                      trackName={track.trackName}
+                      artistName={track.artistName}
+                      artistId={track.artistId}
+                      releaseYear={track.releaseYear}
+                      showArtistLink={true}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
