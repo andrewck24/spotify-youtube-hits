@@ -1,16 +1,10 @@
-import { LoadingFallback } from "@/components/layout/loading-fallback";
 import { tracksLoader } from "@/loaders/tracks-loader";
-import { lazy, Suspense } from "react";
-import {
-  createBrowserRouter,
-  Outlet,
-  type RouteObject,
-} from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 
 /**
  * Router Configuration for Spotify YouTube Hits
  *
- * This module defines all routes for the application using react-router-dom v7.
+ * This module defines all routes for the application using react-router v7.
  * Routes are organized to support deep linking and browser history navigation.
  *
  * Route Structure:
@@ -29,60 +23,44 @@ import {
  * - Track URL uses flat structure (/track/:trackId) because Spotify track API
  *   responses already contain complete artist information
  * - All routes are lazy-loaded for optimal code splitting
- * - Fallback UI is shown while components load
+ * - Each page component can define its own Suspense fallback for customization
  */
 
-// Lazy load page components
-const HomePage = lazy(() => import("@/pages/home-page"));
-const SearchPage = lazy(() => import("@/pages/search-page"));
-const ArtistPage = lazy(() => import("@/pages/artist-page"));
-const TrackPage = lazy(() => import("@/pages/track-page"));
-
 // Route definitions
-const routes: RouteObject[] = [
+export const routes: RouteObject[] = [
   {
     id: "root",
     path: "/",
     loader: tracksLoader, // Load tracks.json at root level
-    element: <Outlet />, // Render child routes
     children: [
       {
         index: true,
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <HomePage />
-          </Suspense>
-        ),
+        lazy: async () => {
+          const { HomePage } = await import("@/pages/home-page");
+          return { Component: HomePage };
+        },
       },
       {
         path: "search",
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <SearchPage />
-          </Suspense>
-        ),
+        lazy: async () => {
+          const { SearchPage } = await import("@/pages/search-page");
+          return { Component: SearchPage };
+        },
       },
       {
         path: "artist/:artistId",
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <ArtistPage />
-          </Suspense>
-        ),
+        lazy: async () => {
+          const { ArtistPage } = await import("@/pages/artist-page");
+          return { Component: ArtistPage };
+        },
       },
       {
         path: "track/:trackId",
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <TrackPage />
-          </Suspense>
-        ),
+        lazy: async () => {
+          const { TrackPage } = await import("@/pages/track-page");
+          return { Component: TrackPage };
+        },
       },
     ],
   },
 ];
-
-// Create and export router
-const router = createBrowserRouter(routes);
-
-export { router };

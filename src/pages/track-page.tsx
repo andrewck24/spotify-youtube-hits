@@ -1,7 +1,9 @@
+import { LoadingFallback } from "@/components/layout/loading-fallback";
 import { TrackDetail } from "@/components/track/track-detail";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { useGetAudioFeaturesQuery, useGetTrackQuery } from "@/services";
+import { Suspense } from "react";
 import { Link, useParams } from "react-router-dom";
 
 /**
@@ -18,7 +20,14 @@ import { Link, useParams } from "react-router-dom";
  * Route: /track/:trackId (flat structure, no artistId in URL)
  */
 
-export default function TrackPage() {
+export function TrackPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <TrackPageContent />
+    </Suspense>
+  );
+}
+function TrackPageContent() {
   const { trackId } = useParams<{ trackId: string }>();
 
   // Get track data from Spotify API

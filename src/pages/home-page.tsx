@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { LoadingFallback } from "@/components/layout/loading-fallback";
 import { Card } from "@/components/ui/card";
+import { Suspense } from "react";
+import { Link } from "react-router-dom";
 
 /**
  * HomePage Component
@@ -13,13 +15,21 @@ import { Card } from "@/components/ui/card";
  * Route: /
  */
 
-export default function HomePage() {
+export function HomePage() {
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-6xl mx-auto">
+    <Suspense fallback={<LoadingFallback />}>
+      <HomePageContent />
+    </Suspense>
+  );
+}
+
+function HomePageContent() {
+  return (
+    <div className="bg-background min-h-screen p-6">
+      <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">首頁</h1>
+          <h1 className="text-foreground mb-4 text-4xl font-bold">首頁</h1>
           <p className="text-muted-foreground text-lg">
             探索 Spotify 上的熱門歌手
           </p>
@@ -29,7 +39,7 @@ export default function HomePage() {
         <div className="mb-8">
           <Link
             to="/search"
-            className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary/90 transition-colors"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-block rounded-full px-6 py-3 font-semibold transition-colors"
           >
             前往搜尋
           </Link>
@@ -40,7 +50,7 @@ export default function HomePage() {
           <p className="text-muted-foreground text-lg">
             熱門歌手推薦清單將在此顯示 (P2 實作)
           </p>
-          <p className="text-muted-foreground text-sm mt-4">
+          <p className="text-muted-foreground mt-4 text-sm">
             在 P2 階段，將顯示 8 位預定義的熱門歌手卡片
           </p>
         </Card>

@@ -1,8 +1,10 @@
 import { ArtistProfile } from "@/components/artist/artist-profile";
+import { LoadingFallback } from "@/components/layout/loading-fallback";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import type { tracksLoader } from "@/loaders/tracks-loader";
 import { useGetArtistQuery } from "@/services";
+import { Suspense } from "react";
 import { Link, useParams, useRouteLoaderData } from "react-router-dom";
 
 /**
@@ -20,7 +22,15 @@ import { Link, useParams, useRouteLoaderData } from "react-router-dom";
  * Route: /artist/:artistId
  */
 
-export default function ArtistPage() {
+export function ArtistPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <ArtistPageContent />
+    </Suspense>
+  );
+}
+
+function ArtistPageContent() {
   const { artistId } = useParams<{ artistId: string }>();
 
   // Get tracks from loader (loaded before page render)

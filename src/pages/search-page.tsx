@@ -1,7 +1,8 @@
+import { LoadingFallback } from "@/components/layout/loading-fallback";
 import { Card } from "@/components/ui/card";
 import { createSearchIndex, searchArtists } from "@/lib/search";
 import type { tracksLoader } from "@/loaders/tracks-loader";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { Link, useRouteLoaderData, useSearchParams } from "react-router-dom";
 
 /**
@@ -23,7 +24,15 @@ interface UniqueArtist {
   artistId: string;
 }
 
-export default function SearchPage() {
+export function SearchPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <SearchPageContent />
+    </Suspense>
+  );
+}
+
+function SearchPageContent() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
   const [searchInput, setSearchInput] = useState(query);
