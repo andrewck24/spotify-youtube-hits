@@ -222,8 +222,10 @@ music-hits/
 ├── src/                          # Frontend React application
 │   ├── app.tsx                   # Main app component
 │   ├── components/               # React components
-│   ├── features/                 # Redux slices and logic
 │   ├── hooks/                    # Custom React hooks
+│   ├── lib/                      # Utility functions and helpers
+│   ├── loaders/                  # Route loaders
+│   ├── pages/                    # Page components
 │   ├── services/                 # API services
 │   ├── types/                    # TypeScript types
 │   └── vite-env.d.ts            # Vite environment types
@@ -297,10 +299,11 @@ npm test
 
 ## License
 
-[Add your license here]
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ## Credits
 
-- **Spotify Web API** - Music data
-- **YouTube Data** - Video statistics (from local dataset)
+- **ReccoBeats API** - Tracks audio features data
+- **Spotify Web API** - Artists and tracks data
+- **YouTube Data** - Video statistics (from local dataset 2023.04)
 - **Cloudflare Workers** - Edge computing platform
