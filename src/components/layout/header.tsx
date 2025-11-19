@@ -1,5 +1,6 @@
 import Spotify from "@/components/icons/spotify.svg?react";
 import { SearchBar } from "@/components/layout/search-bar";
+import { Button } from "@/components/ui/button";
 import { RiGithubFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
@@ -30,26 +31,31 @@ export function Header() {
         to="/"
         className="flex items-center gap-2 transition-opacity hover:opacity-80"
       >
-        <Spotify className="size-8" />
+        <Spotify className="size-10" />
         <h1 className="text-foreground text-xl font-bold max-lg:hidden">
           Music Hits
         </h1>
       </Link>
 
       {/* Search Bar (centered, visible on sm+) */}
-      <SearchBar className="hidden flex-1 sm:block" />
+      <SearchBar className="flex-1 max-sm:hidden" />
 
       {/* Navigation */}
       <nav className="flex items-center gap-4">
-        <Link
-          to="https://github.com/andrewck24/music-hits"
-          className="text-foreground hover:text-muted-foreground transition-colors"
-          aria-label="GitHub"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Button
+          asChild
+          className="text-foreground hover:text-muted-foreground size-12 rounded-full p-0 transition-colors [&>svg]:size-8"
+          variant="secondary"
         >
-          <RiGithubFill className="size-6" />
-        </Link>
+          <Link
+            to="https://github.com/andrewck24/music-hits"
+            aria-label="GitHub"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <RiGithubFill />
+          </Link>
+        </Button>
       </nav>
     </header>
   );
