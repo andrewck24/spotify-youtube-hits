@@ -5,7 +5,7 @@ import { useMemo } from "react";
 /**
  * 搜尋結果中的唯一藝人
  */
-interface UniqueArtist {
+export interface UniqueArtist {
   artistName: string;
   artistId: string;
 }
