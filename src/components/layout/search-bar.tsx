@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { RiCloseLine, RiSearchLine } from "react-icons/ri";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useKeyboardHeight } from "@/hooks/use-keyboard-height";
 
 /**
  * SearchBar Component
@@ -13,17 +14,22 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
  * - White ring on focus
  * - Clears input when navigating away from search page
  * - Responsive display
+ * - Mobile keyboard handling via useKeyboardHeight hook
  */
 
 interface SearchBarProps {
   className?: string;
+  isBottomBar?: boolean;
 }
 
-export function SearchBar({ className }: SearchBarProps) {
+export function SearchBar({ className, isBottomBar }: SearchBarProps) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const [inputValue, setInputValue] = useState(searchParams.get("q") || "");
+
+  // 使用自定義 hook 管理鍵盤高度
+  const keyboard = useKeyboardHeight(isBottomBar ?? false);
 
   // Sync input with URL param 'q' and clear if not on search page
   useEffect(() => {
@@ -56,12 +62,15 @@ export function SearchBar({ className }: SearchBarProps) {
         "hover:bg-muted/80 transition-all",
         className,
       )}
+      style={{ transform: `translateY(${keyboard.translateY}px)` }}
     >
       <RiSearchLine className="text-muted-foreground mr-3 h-6 w-6 shrink-0" />
       <input
         type="text"
         value={inputValue}
         onChange={handleChange}
+        onFocus={keyboard.onInputFocus}
+        onBlur={keyboard.onInputBlur}
         placeholder="搜尋歌曲或藝人..."
         className="placeholder:text-muted-foreground flex-1 bg-transparent text-base text-white outline-none"
       />

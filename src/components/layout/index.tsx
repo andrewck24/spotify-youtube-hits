@@ -26,7 +26,7 @@ export function Layout() {
 
       {/* Mobile Bottom Search Bar */}
       <div className="fixed right-0 bottom-0 left-0 z-50 p-4 sm:hidden">
-        <SearchBar className="w-full" />
+        <SearchBar className="w-full" isBottomBar />
       </div>
     </div>
   );
