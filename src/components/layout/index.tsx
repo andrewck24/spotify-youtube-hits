@@ -16,11 +16,11 @@ import { Outlet } from "react-router-dom";
 
 export function Layout() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-[100dvh] flex-col overflow-hidden">
       <Header />
 
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden pt-16 pb-24 sm:pb-0">
+      <main className="flex-1 overflow-y-auto pt-16 pb-24 sm:pb-0">
         <Outlet />
       </main>
 
