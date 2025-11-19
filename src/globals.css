@@ -25,7 +25,9 @@
 
   /* Primary - Spotify Green (#1DB954) */
   --color-primary: oklch(0.7697 0.2124 148.67); /* Spotify Green */
-  --color-primary-foreground: oklch(0.1822 0 0); /* Black text (high contrast) */
+  --color-primary-foreground: oklch(
+    0.1822 0 0
+  ); /* Black text (high contrast) */
 
   /* ============================================
    * Secondary Colors
@@ -37,7 +39,9 @@
 
   /* Muted - soft gray for disabled states or backgrounds */
   --color-muted: oklch(0.22 0 0); /* #242424 */
-  --color-muted-foreground: oklch(0.72 0 0); /* #B3B3B3 Spotify secondary text */
+  --color-muted-foreground: oklch(
+    0.72 0 0
+  ); /* #B3B3B3 Spotify secondary text */
 
   /* Accent - emphasis color for hover states */
   --color-accent: oklch(0.2 0 0); /* #202020 */
@@ -111,7 +115,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground h-full;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;

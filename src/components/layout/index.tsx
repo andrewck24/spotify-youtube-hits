@@ -16,7 +16,7 @@ import { Outlet } from "react-router-dom";
 
 export function Layout() {
   return (
-    <div className="flex h-[100dvh] flex-col overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden">
       <Header />
 
       {/* Main Content */}
