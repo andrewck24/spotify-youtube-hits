@@ -21,8 +21,14 @@ dist-ssr
 .wrangler/
 .dev.vars
 
-# Claude Code local settings
-.claude/settings.local.json
+# AI Agents Commands
+.claude/*
+.gemini/*
+.agent/*
+.github/prompts/*
+CLAUDE.md
+GEMINI.md
+AGENT.md
 
 # Editor directories and files
 .vscode/*

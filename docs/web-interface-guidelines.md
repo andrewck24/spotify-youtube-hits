@@ -1,14 +1,8 @@
-# Guidelines
-
-## General Principles
-
-開發時應符合 [constitution](/.specify/memory/constitution.md) 中的原則與規範。
-
-## Web Interface Guidelines
+# Web Interface Guidelines
 
 <!-- See https://vercel.com/design/guidelines -->
 
-### Interactions
+## Interactions
 
 - Keyboard
   - MUST: Full keyboard support per [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/patterns/)
@@ -62,7 +56,7 @@
 - Autofocus
   - SHOULD: Autofocus on desktop when there’s a single primary input; rarely on mobile (to avoid layout shift)
 
-### Animation
+## Animation
 
 - MUST: Honor `prefers-reduced-motion` (provide reduced variant)
 - SHOULD: Prefer CSS > Web Animations API > JS libraries
@@ -72,7 +66,7 @@
 - MUST: Animations are interruptible and input-driven (avoid autoplay)
 - MUST: Correct `transform-origin` (motion starts where it “physically” should)
 
-### Layout
+## Layout
 
 - SHOULD: Optical alignment; adjust by ±1px when perception beats geometry
 - MUST: Deliberate alignment to grid/baseline/edges/optical centers—no accidental placement
@@ -102,7 +96,7 @@
 - SHOULD: Right-clicking the nav logo surfaces brand assets
 - MUST: Use non-breaking spaces to glue terms: `10&nbsp;MB`, `⌘&nbsp;+&nbsp;K`, `Vercel&nbsp;SDK`
 
-### Performance
+## Performance
 
 - SHOULD: Test iOS Low Power Mode and macOS Safari
 - MUST: Measure reliably (disable extensions that skew runtime)
@@ -115,7 +109,7 @@
 - MUST: Preload only above-the-fold images; lazy-load the rest
 - MUST: Prevent CLS from images (explicit dimensions or reserved space)
 
-### Design
+## Design
 
 - SHOULD: Layered shadows (ambient + direct)
 - SHOULD: Crisp edges via semi-transparent borders + shadows

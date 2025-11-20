@@ -1,21 +1,26 @@
 <!--
 Sync Impact Report:
-Version: 1.0.0 → 1.1.0
-Rationale: Added path alias import requirement to TypeScript best practices
+Version: 1.1.0 → 1.2.0
+Rationale: Documentation structure refactoring and agent script updates
 
-Modified principles:
-- I. TypeScript 生態系最佳實踐 - Added path alias requirement
+Modified principles: None
 
-Added sections: None
+Added sections: 
+- Git Commit & PR Message
 
 Removed sections: None
 
 Templates status:
-✅ plan-template.md - Constitution Check section present
-✅ spec-template.md - Requirements alignment verified
-✅ tasks-template.md - Task categorization verified
+✅ agent-file-template.md - Formatting and syntax highlighting updates
+✅ plan-template.md - Formatting updates
+✅ tasks-template.md - Formatting updates
 
-Follow-up TODOs: None
+Renamed files:
+- CLAUDE.md → docs/web-interface-guidelines.md
+- docs/design-guideline*.md → docs/design-guidelines*.md
+
+Tooling updates:
+- update-agent-files.sh: Added support for multiple new agents (codebuddy, amp, shai) and fixed cursor naming
 -->
 
 # Spotify YouTube Hits Constitution
@@ -59,16 +64,14 @@ Follow-up TODOs: None
 
 **理由**：可測試性確保程式碼品質、重構安全性，以及長期維護性。
 
-### IV. 靜態部署優先
+### IV. 標準化前端元件開發
 
-在技術選型時優先考慮靜態部署方案：
+- 應遵循 [Design Guidelines](../../docs/design-guidelines.md), [Web Interface Guidelines](../../docs/web-interface-guidelines.md) 的指引進行開發
+- 優先使用共用 UI (以 shadcn/ui 為主) 進行元件開發
+- 若功能元件內部邏輯過於複雜，應拆分元件
+- 應避免自定義 UI，除非有特殊需求
 
-- 優先使用靜態資料方案（JSON 檔案、CDN）
-- 若需後端，優先考慮 BaaS（Backend as a Service）或 Serverless Functions
-- 避免過早引入完整後端架構
-- 保持部署簡單化（GitHub Pages、Vercel、Netlify）
-
-**理由**：靜態部署成本低、維護簡單、效能優異；符合專案當前規模與資源限制。
+**理由**：遵循設計指引確保一致的使用者體驗；使用共用 UI 提高開發效率；拆分元件有助於重構與維護。
 
 ### V. 命名與文件撰寫規則
 
@@ -79,9 +82,6 @@ Follow-up TODOs: None
 - 文件（README、spec、計畫）：必須使用繁體中文（zh-tw）
   1. 用語需注意使用台灣繁體中文用法 (e.g., "程式" 非 "程序", "元件" 非 "組件")
 - 程式碼註解：盡量避免使用，極為複雜的函式可以先以具有敘述性名稱之函式進行拆解，真的需要註解時必須使用繁體中文（zh-tw）
-- Git commit message：使用英文（遵循 Angular Commit Convention），應包含 scope 元素
-  1. 範例：`feat(auth): add user login functionality`
-- Pull request 內文：英文標題與內文 + 中文概要說明
 
 **理由**：提升團隊溝通效率，降低理解成本；符合在地化需求。
 
@@ -96,10 +96,13 @@ Follow-up TODOs: None
 ### 功能開發流程
 
 1. 建立功能規格（spec.md）使用 `/speckit.specify`
-2. 產生實作計畫（plan.md）使用 `/speckit.plan`
-3. 產生任務清單（tasks.md）使用 `/speckit.tasks`
-4. 依優先順序實作（P1 → P2 → P3）
-5. 每個 User Story 獨立可測試與交付
+2. (可選) 使用 `/speckit.clarify` 進行規格澄清
+3. 產生實作計畫（plan.md）使用 `/speckit.plan`
+4. (可選) 產生品質驗證清單使用 `/speckit.checklist`
+5. 產生任務清單（tasks.md）使用 `/speckit.tasks`
+6. (可選) 產生 Cross-artifact consistency & alignment report 使用 `/speckit.analyze`
+7. 依優先順序（e.g. P1 → P2 → P3）手動實作或使用 `/speckit.implement`
+8. 每個 User Story 獨立可測試與交付
 
 ### 重構原則
 
@@ -107,6 +110,43 @@ Follow-up TODOs: None
 - 小步快跑：每次重構範圍有限，頻繁提交
 - 重構不與新功能開發混合
 - 記錄重構原因與影響範圍
+
+### Git Commit & PR Message
+
+- Pull request 內文：英文標題與內文 + 中文概要說明
+- Git commit message：使用英文，遵循 Angular Commit Convention
+
+```text
+<type>(<scope>): <short summary>
+  │       │             │
+  │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
+  │       │
+  │       └─⫸ Commit Scope: animations|bazel|benchpress|common|compiler|compiler-cli|core|
+  │                          elements|forms|http|language-service|localize|platform-browser|
+  │                          platform-browser-dynamic|platform-server|router|service-worker|
+  │                          upgrade|zone.js|packaging|changelog|docs-infra|migrations|
+  │                          components|hooks|utils|services|workers|styles|
+  │                          home|search|artist|track
+  │
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
+```
+
+The `<type>`,`(<scope>)` and `<summary>` fields are mandatory.
+
+Must be one of the following:
+
+| Type         | Description                                                                                         |
+| ------------ | --------------------------------------------------------------------------------------------------- |
+| **build**    | Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm) |
+| **ci**       | Changes to our CI configuration files and scripts (examples: Github Actions, SauceLabs)             |
+| **docs**     | Documentation only changes                                                                          |
+| **feat**     | A new feature                                                                                       |
+| **fix**      | A bug fix                                                                                           |
+| **perf**     | A code change that improves performance                                                             |
+| **refactor** | A code change that neither fixes a bug nor adds a feature                                           |
+| **test**     | Adding missing tests or correcting existing tests                                                   |
+
+範例：`feat(auth): add user login functionality`
 
 ## Governance
 
@@ -136,4 +176,4 @@ Follow-up TODOs: None
 3. **靜態部署**在成本/規模允許下優先
 4. 記錄衝突決策與權衡理由
 
-**Version**: 1.1.0 | **Ratified**: 2025-10-08 | **Last Amended**: 2025-10-09
+**Version**: 1.2.0 | **Ratified**: 2025-11-20 | **Last Amended**: 2025-11-20
