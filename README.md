@@ -85,6 +85,19 @@ A web application that visualizes and compares Spotify track data with YouTube s
    echo "VITE_API_BASE_URL=http://localhost:9000/api/spotify" > .env.local
    ```
 
+6. **(Optional) Generate AI Agent Workflows**:
+
+   This project utilizes spec-kit in conjunction with AI agents for development. To generate AI agent workflows, please follow these steps:
+   - Install spec-kit
+
+   ```bash
+   uvx --from git+https://github.com/github/spec-kit.git specify init --here
+   ```
+
+   - Select your AI agent and follow the instructions
+   - Revert spec-kit's changes to the [constitution](./.specify/memory/constitution.md)
+   - Develop according to the [workflows](./.specify/memory/constitution.md###功能開發流程)
+
 ### Running the Development Server
 
 The application requires **two separate processes** to run locally:
