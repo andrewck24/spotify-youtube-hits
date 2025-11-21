@@ -19,8 +19,8 @@
 
 **目的**：專案初始化與工具函式
 
-- [ ] T001 [P] 在 src/lib/utils.ts 建立 chunking 工具函式
-- [ ] T002 [P] 在 src/components/ui/placeholder-image.tsx 新增 placeholder 圖片元件（ArtistPlaceholder、TrackPlaceholder）
+- [x] T001 [P] 在 src/lib/utils.ts 建立 chunking 工具函式
+- [x] T002 [P] 在 src/components/ui/placeholder-image.tsx 新增 placeholder 圖片元件（ArtistPlaceholder、TrackPlaceholder）
 
 ---
 
