@@ -154,6 +154,160 @@ app.post("/api/spotify/token", async (c) => {
 });
 
 /**
+ * Route: GET /api/spotify/artists
+ * Returns multiple artists from Spotify API (batch endpoint)
+ *
+ * Query Parameters:
+ * - ids: Comma-separated list of Spotify artist IDs (max 20)
+ *
+ * @example GET /api/spotify/artists?ids=id1,id2,id3
+ */
+app.get("/api/spotify/artists", async (c) => {
+  const ids = c.req.query("ids");
+
+  // Validate ids parameter exists
+  if (!ids) {
+    return c.json(
+      {
+        error: "MISSING_IDS",
+        message: "Missing ids parameter",
+        status: 400,
+      } satisfies ErrorResponse,
+      400,
+    );
+  }
+
+  const idArray = ids.split(",").filter((id) => id.trim());
+
+  // Validate ids count (1-20)
+  if (idArray.length === 0 || idArray.length > 20) {
+    return c.json(
+      {
+        error: "INVALID_IDS_COUNT",
+        message: `Invalid ids count: ${idArray.length}. Must be between 1 and 20.`,
+        status: 400,
+      } satisfies ErrorResponse,
+      400,
+    );
+  }
+
+  // Validate each ID format
+  for (const id of idArray) {
+    if (!SPOTIFY_ID_REGEX.test(id)) {
+      return c.json(
+        {
+          error: "INVALID_ID_FORMAT",
+          message: `Invalid artist ID format: "${id}". Must be 22 alphanumeric characters.`,
+          status: 400,
+        } satisfies ErrorResponse,
+        400,
+      );
+    }
+  }
+
+  try {
+    const artistsData = await callSpotifyApi(
+      `/v1/artists?ids=${ids}`,
+      c.env,
+      "artists",
+    );
+    return c.json(artistsData);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+
+    if (message.includes("SPOTIFY_API_ERROR")) {
+      return c.json(
+        {
+          error: "SPOTIFY_API_ERROR",
+          message,
+          status: 502,
+        } satisfies ErrorResponse,
+        502,
+      );
+    }
+
+    throw new HTTPException(500, { message });
+  }
+});
+
+/**
+ * Route: GET /api/spotify/tracks
+ * Returns multiple tracks from Spotify API (batch endpoint)
+ *
+ * Query Parameters:
+ * - ids: Comma-separated list of Spotify track IDs (max 20)
+ *
+ * @example GET /api/spotify/tracks?ids=id1,id2,id3
+ */
+app.get("/api/spotify/tracks", async (c) => {
+  const ids = c.req.query("ids");
+
+  // Validate ids parameter exists
+  if (!ids) {
+    return c.json(
+      {
+        error: "MISSING_IDS",
+        message: "Missing ids parameter",
+        status: 400,
+      } satisfies ErrorResponse,
+      400,
+    );
+  }
+
+  const idArray = ids.split(",").filter((id) => id.trim());
+
+  // Validate ids count (1-20)
+  if (idArray.length === 0 || idArray.length > 20) {
+    return c.json(
+      {
+        error: "INVALID_IDS_COUNT",
+        message: `Invalid ids count: ${idArray.length}. Must be between 1 and 20.`,
+        status: 400,
+      } satisfies ErrorResponse,
+      400,
+    );
+  }
+
+  // Validate each ID format
+  for (const id of idArray) {
+    if (!SPOTIFY_ID_REGEX.test(id)) {
+      return c.json(
+        {
+          error: "INVALID_ID_FORMAT",
+          message: `Invalid track ID format: "${id}". Must be 22 alphanumeric characters.`,
+          status: 400,
+        } satisfies ErrorResponse,
+        400,
+      );
+    }
+  }
+
+  try {
+    const tracksData = await callSpotifyApi(
+      `/v1/tracks?ids=${ids}`,
+      c.env,
+      "tracks",
+    );
+    return c.json(tracksData);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+
+    if (message.includes("SPOTIFY_API_ERROR")) {
+      return c.json(
+        {
+          error: "SPOTIFY_API_ERROR",
+          message,
+          status: 502,
+        } satisfies ErrorResponse,
+        502,
+      );
+    }
+
+    throw new HTTPException(500, { message });
+  }
+});
+
+/**
  * Route: GET /api/spotify/tracks/:id
  * Returns track information from Spotify API
  */

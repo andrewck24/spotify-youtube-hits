@@ -30,8 +30,8 @@
 
 **注意**：批次 API 端點是基礎——所有前端功能都依賴於此。
 
-- [ ] T003 在 worker/src/routes/spotify.ts 實作 GET /api/spotify/artists 批次端點（含 ID 數量驗證，>20 回傳 400）
-- [ ] T004 在 worker/src/routes/spotify.ts 實作 GET /api/spotify/tracks 批次端點（含 ID 數量驗證，>20 回傳 400）
+- [x] T003 在 worker/src/routes/spotify.ts 實作 GET /api/spotify/artists 批次端點（含 ID 數量驗證，>20 回傳 400）
+- [x] T004 在 worker/src/routes/spotify.ts 實作 GET /api/spotify/tracks 批次端點（含 ID 數量驗證，>20 回傳 400）
 
 **檢查點**：後端就緒——現在可以實作 RTK Query 端點
 
