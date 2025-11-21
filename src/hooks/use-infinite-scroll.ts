@@ -8,13 +8,14 @@ import { useCallback, useEffect, useRef } from "react";
  *
  * Features:
  * - Uses native IntersectionObserver API for optimal performance
+ * - Uses callback ref to handle dynamic sentinel elements (e.g., when viewMode changes)
  * - Prevents duplicate triggers with isLoading guard
  * - Configurable threshold and root margin
  * - Cleanup on unmount
  *
  * @param callback - Function to call when sentinel element is visible
  * @param options - IntersectionObserver options
- * @returns Ref to attach to the sentinel element
+ * @returns Callback ref to attach to the sentinel element
  *
  * @example
  * ```tsx
@@ -50,40 +51,52 @@ export function useInfiniteScroll(
   callback: () => void,
   options?: IntersectionObserverInit,
 ) {
-  const targetRef = useRef<HTMLDivElement>(null);
   const callbackRef = useRef(callback);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Keep callback ref up to date without causing effect re-runs
   useEffect(() => {
     callbackRef.current = callback;
   }, [callback]);
 
-  const handleIntersect = useCallback(
-    (entries: IntersectionObserverEntry[]) => {
-      const [entry] = entries;
-      if (entry.isIntersecting) {
-        callbackRef.current();
+  // Callback ref pattern: automatically handles DOM element appearing/disappearing
+  // This fixes the issue where sentinel element doesn't exist on initial render
+  // (e.g., when viewMode="preview") but appears later (when viewMode="full")
+  const sentinelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      // Disconnect existing observer
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+
+      // Create new observer if node exists
+      if (node) {
+        observerRef.current = new IntersectionObserver(
+          (entries) => {
+            const [entry] = entries;
+            if (entry.isIntersecting) {
+              callbackRef.current();
+            }
+          },
+          {
+            threshold: 0.1,
+            rootMargin: "300px", // Trigger 300px before reaching the sentinel
+            ...options,
+          },
+        );
+        observerRef.current.observe(node);
       }
     },
-    [],
+    [options],
   );
 
+  // Cleanup on unmount
   useEffect(() => {
-    const target = targetRef.current;
-    if (!target) return undefined;
-
-    const observer = new IntersectionObserver(handleIntersect, {
-      threshold: 0.1,
-      rootMargin: "300px", // Trigger 300px before reaching the sentinel
-      ...options,
-    });
-
-    observer.observe(target);
-
     return () => {
-      observer.disconnect();
+      observerRef.current?.disconnect();
     };
-  }, [handleIntersect, options]);
+  }, []);
 
-  return targetRef;
+  return sentinelRef;
 }

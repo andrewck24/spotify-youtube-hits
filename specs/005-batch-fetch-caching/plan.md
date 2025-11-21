@@ -95,4 +95,18 @@ src/
 
 ## Complexity Tracking
 
-> 無違規需記錄
+### Bug Fix: useInfiniteScroll hook 動態元素處理問題（2025-11-22）
+
+**問題**：原始實作使用 `useRef` + `useEffect` pattern，無法正確處理 sentinel 元素的動態出現（從 `viewMode="preview"` 切換到 `viewMode="full"` 時）。
+
+**技術細節**：
+
+- `useEffect` 依賴項 `[handleIntersect, options]` 不包含 ref 變化
+- 首次執行時 `targetRef.current` 為 `null`，observer 從未被創建
+- 後續 ref 指向新元素時，effect 不會重新執行
+
+**解決方案**：改用 **callback ref pattern**，React 會在 DOM 元素掛載/卸載時自動調用 callback，確保 IntersectionObserver 正確設置。
+
+**學習要點**：當 ref 指向的 DOM 元素可能動態出現/消失時，應使用 callback ref 而非 `useRef` + `useEffect`。
+
+**相關檔案**：[src/hooks/use-infinite-scroll.ts](../../src/hooks/use-infinite-scroll.ts)

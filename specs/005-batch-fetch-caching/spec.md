@@ -165,6 +165,13 @@ As a user, I want to see smooth placeholder animations while data is loading, in
 - Q: View All 按鈕？ → A: 已於現有實作中完成（ghost button, 標題右側）
 - Q: Skeleton 動畫效果？ → A: Pulse（shadcn/ui 預設）
 
+### Session 2025-11-22 (Bug Fix)
+
+- **Bug**: Infinite scroll 從 preview 模式切換到 full 模式後不觸發
+- **根因**: `useInfiniteScroll` hook 使用 `useRef` + `useEffect`，當 sentinel 元素動態出現時，effect 不會重新執行，導致 IntersectionObserver 從未被創建
+- **修復**: 改用 callback ref pattern，確保 DOM 元素出現時自動設置 observer
+- **影響檔案**: `src/hooks/use-infinite-scroll.ts`
+
 ## Assumptions
 
 - The backend forwards batch requests correctly to the external provider.

@@ -236,6 +236,33 @@ Task: "在 src/components/track/skeleton.tsx 建立 TrackSkeleton 元件"
 
 ---
 
+## 第九階段：Bug 修復
+
+**目的**：修復實作過程中發現的問題
+
+### Bug Fix: Infinite Scroll 不觸發問題（2025-11-22）
+
+**問題描述**：當使用者從 preview 模式切換到 full 模式（點擊「藝人」或「歌曲」tab）後，向下滾動至底部時，infinite scroll 不會觸發載入更多內容。
+
+**根本原因**：`useInfiniteScroll` hook 使用 `useRef` + `useEffect` 的方式有缺陷：
+
+1. 在 `viewMode="preview"` 時，sentinel 元素不會被渲染
+2. `useEffect` 首次執行時 `targetRef.current` 為 `null`，導致 IntersectionObserver 從未被創建
+3. 當 `viewMode` 切換為 `"full"` 時，sentinel 元素出現，但 `useEffect` 的依賴項 `[handleIntersect, options]` 沒有改變，effect 不會重新執行
+4. 結果是 IntersectionObserver 永遠不會被創建
+
+**解決方案**：將 `useRef` 改為 **callback ref pattern**，當 DOM 元素出現/消失時自動被調用，確保 IntersectionObserver 能正確設置。
+
+- [x] T031 [BugFix] 重構 src/hooks/use-infinite-scroll.ts，將 useRef 改為 callback ref pattern
+
+**驗證結果**：
+
+- ✅ 從 preview 切換到 full 模式後，infinite scroll 正常觸發
+- ✅ 藝人數量持續載入（20 → 40 → 60...）
+- ✅ Lint 和 type-check 通過
+
+---
+
 ## 備註
 
 - [P] 任務 = 不同檔案、無相依性
