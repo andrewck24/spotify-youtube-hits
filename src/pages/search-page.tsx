@@ -3,13 +3,18 @@ import { SearchBar } from "@/components/layout/search-bar";
 import { ArtistSearchResults } from "@/components/search/artist-results";
 import { SearchCategoryTabs } from "@/components/search/category-tabs";
 import { TrackSearchResults } from "@/components/search/track-results";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useSearch } from "@/hooks/use-search";
 import type { tracksLoader } from "@/loaders/tracks-loader";
 import { Suspense, useState } from "react";
-import { RiMusicLine, RiSearchLine } from "react-icons/ri";
-import { useRouteLoaderData, useSearchParams } from "react-router-dom";
+import { RiCloseLargeFill, RiMusicLine, RiSearchLine } from "react-icons/ri";
+import {
+  useNavigate,
+  useRouteLoaderData,
+  useSearchParams,
+} from "react-router-dom";
 
 /**
  * SearchPage Component
@@ -40,6 +45,7 @@ function SearchPageContent() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
   const [category, setCategory] = useState<Category>("all");
+  const navigate = useNavigate();
 
   // Set document title
   useDocumentTitle("搜尋 | Music Hits");
@@ -62,8 +68,15 @@ function SearchPageContent() {
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 pt-20 pb-4 sm:pt-4">
       {/* SearchBar (visible on mobile devices) */}
-      <div className="fixed top-18 right-0 left-0 z-40 px-6 py-2 sm:hidden">
-        <SearchBar />
+      <div className="fixed top-18 right-0 left-0 z-40 flex flex-row items-center gap-2 px-6 py-2 sm:hidden">
+        <SearchBar className="flex-1" />
+        <Button
+          variant="secondary"
+          className="size-12 rounded-full"
+          onClick={() => navigate(-1)}
+        >
+          <RiCloseLargeFill className="size-8" />
+        </Button>
       </div>
 
       {/* Category Filters */}
