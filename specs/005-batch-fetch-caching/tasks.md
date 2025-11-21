@@ -91,11 +91,11 @@
 
 ### 使用者故事 3 實作
 
-- [ ] T013 [US3] 在 src/hooks/use-infinite-scroll.ts 建立使用 IntersectionObserver 的 useInfiniteScroll hook（含防重複觸發機制）
-- [ ] T014 [US3] 在 src/components/search/artist-results.tsx 為 category="artists" 檢視實作無限捲動
-- [ ] T015 [US3] 在 src/components/search/track-results.tsx 為 category="tracks" 檢視實作無限捲動
-- [ ] T016 [US3] 在 src/components/search/artist-results.tsx 新增「已顯示全部結果」訊息與重試按鈕 UI
-- [ ] T017 [US3] 在 src/components/search/track-results.tsx 新增「已顯示全部結果」訊息與重試按鈕 UI
+- [x] T013 [US3] 在 src/hooks/use-infinite-scroll.ts 建立使用 IntersectionObserver 的 useInfiniteScroll hook（含防重複觸發機制）
+- [x] T014 [US3] 在 src/components/search/artist-results.tsx 為 category="artists" 檢視實作無限捲動
+- [x] T015 [US3] 在 src/components/search/track-results.tsx 為 category="tracks" 檢視實作無限捲動
+- [x] T016 [US3] 在 src/components/search/artist-results.tsx 新增「已顯示全部結果」訊息與重試按鈕 UI
+- [x] T017 [US3] 在 src/components/search/track-results.tsx 新增「已顯示全部結果」訊息與重試按鈕 UI
 
 **檢查點**：完整結果檢視支援 100+ 項目並自動載入
 
@@ -113,8 +113,8 @@
 
 ### 使用者故事 4 實作
 
-- [ ] T018 [P] [US4] 在 src/components/search/artist-results.tsx 整合無限捲動的 skeleton 載入（底部載入器）
-- [ ] T019 [P] [US4] 在 src/components/search/track-results.tsx 整合無限捲動的 skeleton 載入（底部載入器）
+- [x] T018 [P] [US4] 在 src/components/search/artist-results.tsx 整合無限捲動的 skeleton 載入（底部載入器）
+- [x] T019 [P] [US4] 在 src/components/search/track-results.tsx 整合無限捲動的 skeleton 載入（底部載入器）
 
 **檢查點**：載入時顯示 skeleton 載入器，CLS < 0.1
 
