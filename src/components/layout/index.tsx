@@ -1,5 +1,5 @@
 import { Header } from "@/components/layout/header";
-import { Outlet } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 
 /**
  * Layout Component
@@ -10,11 +10,13 @@ import { Outlet } from "react-router-dom";
  * - Responsive layout
  * - Mobile-first design
  * - Fixed Header
+ * - Scroll Restoration
  */
 
 export function Layout() {
   return (
     <div className="flex min-h-screen flex-col">
+      <ScrollRestoration />
       <Header />
       <main className="pt-16">
         <Outlet />
