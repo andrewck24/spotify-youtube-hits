@@ -66,7 +66,7 @@ function SearchPageContent() {
   const showTracks = category === "all" || category === "tracks";
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 pt-20 pb-4 sm:pt-4">
+    <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 pt-20 pb-4 sm:pt-4">
       {/* SearchBar (visible on mobile devices) */}
       <div className="fixed top-18 right-0 left-0 z-40 flex flex-row items-center gap-2 px-6 py-2 sm:hidden">
         <SearchBar className="flex-1" />

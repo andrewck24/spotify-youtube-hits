@@ -49,7 +49,7 @@ function TrackPageContent() {
 
   if (!trackId) {
     return (
-      <div className="bg-background p-6">
+      <div className="p-6">
         <Card className="p-8 text-center">
           <p className="text-muted-foreground text-lg">找不到歌曲ID</p>
         </Card>
@@ -58,68 +58,53 @@ function TrackPageContent() {
   }
 
   return (
-    <div className="bg-background p-6">
-      <div className="mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="mb-8">
-          <Link
-            to="/"
-            className="text-primary hover:text-primary/80 mb-4 inline-block"
-          >
-            ← 返回首頁
-          </Link>
-          <h1 className="text-foreground text-4xl font-bold">歌曲詳情</h1>
-        </div>
-
-        {/* Track Info Section */}
-        <div className="mb-8">
-          {trackLoading ? (
-            <div className="flex justify-center py-12">
-              <Spinner />
-            </div>
-          ) : trackError ? (
-            <Card className="p-8 text-center">
-              <p className="text-destructive mb-4 text-lg">無法載入歌曲資訊</p>
-              <p className="text-muted-foreground text-sm">
-                {trackError &&
-                typeof trackError === "object" &&
-                "message" in trackError
-                  ? (trackError.message as string)
-                  : String(trackError)}
-              </p>
-            </Card>
-          ) : (
-            <TrackDetail track={track} audioFeatures={audioFeatures} />
-          )}
-        </div>
-
-        {/* Artist Info Section */}
-        {track && track.artists && track.artists.length > 0 && (
-          <div className="border-border mt-8 border-t pt-8">
-            <h2 className="text-foreground mb-4 text-2xl font-bold">
-              藝人資訊
-            </h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {track.artists.map((artist) => (
-                <Link
-                  key={artist.id}
-                  to={`/artist/${artist.id}`}
-                  className="group"
-                >
-                  <Card className="hover:bg-secondary h-full cursor-pointer p-6 transition-colors">
-                    <h3 className="text-foreground group-hover:text-primary text-lg font-semibold transition-colors">
-                      {artist.name}
-                    </h3>
-                    <p className="text-muted-foreground mt-2 text-sm">
-                      點擊查看藝人詳細資訊
-                    </p>
-                  </Card>
-                </Link>
-              ))}
-            </div>
+    <div className="mx-auto max-w-7xl px-6 pb-20">
+      {/* Track Info Section */}
+      <div className="mb-8">
+        {trackLoading ? (
+          <div className="flex justify-center py-12">
+            <Spinner />
           </div>
+        ) : trackError ? (
+          <Card className="p-8 text-center">
+            <p className="text-destructive mb-4 text-lg">無法載入歌曲資訊</p>
+            <p className="text-muted-foreground text-sm">
+              {trackError &&
+              typeof trackError === "object" &&
+              "message" in trackError
+                ? (trackError.message as string)
+                : String(trackError)}
+            </p>
+          </Card>
+        ) : (
+          <TrackDetail track={track} audioFeatures={audioFeatures} />
         )}
       </div>
+
+      {/* Artist Info Section */}
+      {track && track.artists && track.artists.length > 0 && (
+        <div className="border-border mt-8 border-t pt-8">
+          <h2 className="text-foreground mb-4 text-2xl font-bold">藝人資訊</h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {track.artists.map((artist) => (
+              <Link
+                key={artist.id}
+                to={`/artist/${artist.id}`}
+                className="group"
+              >
+                <Card className="hover:bg-secondary h-full cursor-pointer p-6 transition-colors">
+                  <h3 className="text-foreground group-hover:text-primary text-lg font-semibold transition-colors">
+                    {artist.name}
+                  </h3>
+                  <p className="text-muted-foreground mt-2 text-sm">
+                    點擊查看藝人詳細資訊
+                  </p>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

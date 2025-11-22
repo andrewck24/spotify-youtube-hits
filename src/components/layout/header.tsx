@@ -27,7 +27,7 @@ export function Header() {
   const location = useLocation();
 
   return (
-    <header className="from-background fixed top-0 z-50 flex w-full items-center justify-between gap-4 bg-linear-to-b to-transparent px-6 py-4">
+    <header className="from-background h-header-height fixed top-0 z-50 flex w-full items-center justify-between gap-4 bg-linear-to-b to-transparent px-6 py-4">
       {/* Logo */}
       <Link
         to="/"

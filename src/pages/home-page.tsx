@@ -31,12 +31,10 @@ function HomePageContent() {
   useDocumentTitle("Music Hits");
 
   return (
-    <div className="min-h-screen p-6 pb-20">
-      <div className="mx-auto max-w-7xl">
-        <Hero />
-        <PopularArtists className="mb-12" />
-        <PopularTracks className="mb-12" />
-      </div>
+    <div className="mx-auto min-h-screen max-w-7xl px-6 pb-20">
+      <Hero />
+      <PopularArtists className="mb-12" />
+      <PopularTracks className="mb-12" />
     </div>
   );
 }

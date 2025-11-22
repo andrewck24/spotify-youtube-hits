@@ -18,7 +18,7 @@ export function Layout() {
     <div className="flex min-h-screen flex-col">
       <ScrollRestoration />
       <Header />
-      <main className="pt-16">
+      <main className="pt-header-height">
         <Outlet />
       </main>
     </div>
